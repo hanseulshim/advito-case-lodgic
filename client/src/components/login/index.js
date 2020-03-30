@@ -4,7 +4,7 @@ import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Redirect } from 'react-router-dom'
 import { useMutation } from '@apollo/client'
-import advitoLogo from 'assets/advitoLogo.png'
+import bcdLogo from 'assets/bcdLogo.png'
 import Footer from './Footer'
 import ResetPasswordModal from './ResetPasswordModal'
 import { LOGIN } from 'api'
@@ -87,10 +87,10 @@ const Login = () => {
 	return (
 		<Container>
 			<Logo>
-				<img src={advitoLogo} alt="logo" />
+				<img src={bcdLogo} alt="logo" />
 			</Logo>
 			<Title>
-				Welcome to the <br /> Advito Ingestion Console
+				Welcome to <br /> CASE Lodgic
 			</Title>
 			<FormContainer>
 				<Form onFinish={handleSubmit}>
