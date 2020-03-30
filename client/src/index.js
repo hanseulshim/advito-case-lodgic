@@ -26,17 +26,17 @@ const errorLink = onError(({ graphQLErrors }) => {
 	}
 })
 
-// const sessionMiddleware = new ApolloLink((operation, forward) => {
-// 	const sessiontoken = getToken()
-// 	if (sessiontoken) {
-// 		operation.setContext({
-// 			headers: {
-// 				sessiontoken
-// 			}
-// 		})
-// 	}
-// 	return forward(operation)
-// })
+const sessionMiddleware = new ApolloLink((operation, forward) => {
+	const sessiontoken = getToken()
+	if (sessiontoken) {
+		operation.setContext({
+			headers: {
+				sessiontoken
+			}
+		})
+	}
+	return forward(operation)
+})
 
 const authMiddleware = new ApolloLink((operation, forward) => {
 	const Authorization = getToken()
@@ -51,19 +51,19 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 	return forward(operation)
 })
 
-// const httpLink = new HttpLink({
-// 	uri: getApi()
-// })
+const httpLink = new HttpLink({
+	uri: getApi()
+})
 
 const authHttpLink = new HttpLink({
 	uri: getAuthApi()
 })
 
-// const client = new ApolloClient({
-// 	cache: new InMemoryCache(),
-// 	link: from([errorLink, sessionMiddleware, httpLink]),
-// 	fetchOptions: { fetch }
-// })
+const client = new ApolloClient({
+	cache: new InMemoryCache(),
+	link: from([errorLink, sessionMiddleware, httpLink]),
+	fetchOptions: { fetch }
+})
 
 export const authClient = new ApolloClient({
 	cache: new InMemoryCache(),
@@ -72,7 +72,7 @@ export const authClient = new ApolloClient({
 })
 
 ReactDOM.render(
-	<ApolloProvider client={authClient}>
+	<ApolloProvider client={client}>
 		<Router history={history}>
 			<App />
 		</Router>

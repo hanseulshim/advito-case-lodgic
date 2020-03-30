@@ -41,18 +41,16 @@ export const removeUser = () => {
 	history.push('/login')
 }
 
-// export const getApi = () => {
-// 	const REACT_APP_STAGE = process.env.REACT_APP_STAGE
-// 	return REACT_APP_STAGE === 'dev'
-// 		? 'https://sp0owoqyr0.execute-api.us-east-2.amazonaws.com/dev/graphql'
-// 		: REACT_APP_STAGE === 'alpha'
-// 		? 'https://8t09b8y0q4.execute-api.us-east-2.amazonaws.com/alpha/graphql'
-// 		: REACT_APP_STAGE === 'beta'
-// 		? 'https://q0x8h2ty95.execute-api.us-east-2.amazonaws.com/beta/graphql'
-// 		: REACT_APP_STAGE === 'prod'
-// 		? 'https://2h33cdp67l.execute-api.us-east-2.amazonaws.com/prod/graphql'
-// 		: 'http://localhost:4000/graphql'
-// }
+export const getApi = () => {
+	const REACT_APP_STAGE = process.env.REACT_APP_STAGE
+	return REACT_APP_STAGE === 'dev'
+		? 'https://y0md40ljt5.execute-api.us-east-2.amazonaws.com/dev/graphql'
+		: REACT_APP_STAGE === 'staging'
+		? 'https://xsq8e72w5m.execute-api.us-east-2.amazonaws.com/staging/graphql'
+		: REACT_APP_STAGE === 'prod'
+		? 'https://otnrpe76ni.execute-api.us-east-2.amazonaws.com/production/graphql'
+		: 'http://localhost:4000/local/graphql'
+}
 
 export const getAuthApi = () => {
 	const REACT_APP_STAGE = process.env.REACT_APP_STAGE
@@ -62,5 +60,5 @@ export const getAuthApi = () => {
 		? 'https://sewnh0p54a.execute-api.us-east-2.amazonaws.com/staging/graphql'
 		: REACT_APP_STAGE === 'prod'
 		? 'https://lkkkz4lxwc.execute-api.us-east-2.amazonaws.com/production/graphql'
-		: 'http://localhost:4000/local/graphql'
+		: 'http://localhost:8080/local/graphql'
 }
