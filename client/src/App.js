@@ -1,26 +1,33 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import PropTypes from 'prop-types'
+import { ThemeProvider } from 'styled-components'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import theme from 'styles/variables'
+import GlobalStyle from 'styles/GlobalStyle'
+import Login from 'components/login'
+import { getToken } from 'helper'
+// import Main from 'components/main'
+// import ResetPassword from 'components/login/ResetPassword'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const PrivateRoute = ({ component: Component }) => (
+	<Route
+		render={() => (getToken() ? <Component /> : <Redirect to="/login" />)}
+	/>
+)
+
+const App = () => (
+	<ThemeProvider theme={theme}>
+		<GlobalStyle />
+		<Switch>
+			<Route path="/" component={Login} />
+			{/* <Route path="/resetpassword" component={ResetPassword} />
+			<PrivateRoute path="/" exact component={Main} /> */}
+		</Switch>
+	</ThemeProvider>
+)
+
+PrivateRoute.propTypes = {
+	component: PropTypes.func.isRequired
 }
 
-export default App;
+export default App
