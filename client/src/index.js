@@ -41,9 +41,9 @@ const errorLink = onError(({ graphQLErrors }) => {
 const authMiddleware = new ApolloLink((operation, forward) => {
 	const Authorization = getToken()
 	const headers = Authorization
-		? { Authorization, application: 4 }
+		? { Authorization, application: 5 }
 		: {
-				application: 4
+				application: 5
 		  }
 	operation.setContext({
 		headers
