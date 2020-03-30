@@ -4,7 +4,7 @@ import { Form, Icon, Input, Button } from 'antd'
 import { useHistory, useLocation } from 'react-router'
 import { useMutation } from '@apollo/client'
 import queryString from 'query-string'
-import advitoLogo from 'assets/advitoLogo.png'
+import bcdLogo from 'assets/bcdLogo.png'
 import Footer from './Footer'
 import { RESET_PASSWORD } from 'api'
 import ErrorMessage from 'components/common/ErrorMessage'
@@ -81,7 +81,7 @@ const RestPassword = ({ form }) => {
 
 	return (
 		<Container>
-			<Logo src={advitoLogo} />
+			<Logo src={bcdLogo} />
 			<Title>Reset Password</Title>
 			<FormContainer>
 				<Form onFinish={handleSubmit}>

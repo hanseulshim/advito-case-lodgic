@@ -6,8 +6,8 @@ import theme from 'styles/variables'
 import GlobalStyle from 'styles/GlobalStyle'
 import Login from 'components/login'
 import { getToken } from 'helper'
-// import Main from 'components/main'
-// import ResetPassword from 'components/login/ResetPassword'
+import Main from 'components/main'
+import ResetPassword from 'components/login/ResetPassword'
 
 const PrivateRoute = ({ component: Component }) => (
 	<Route
@@ -19,9 +19,9 @@ const App = () => (
 	<ThemeProvider theme={theme}>
 		<GlobalStyle />
 		<Switch>
-			<Route path="/" component={Login} />
-			{/* <Route path="/resetpassword" component={ResetPassword} />
-			<PrivateRoute path="/" exact component={Main} /> */}
+			<Route path="/login" component={Login} />
+			<Route path="/resetpassword" component={ResetPassword} />
+			<PrivateRoute path="/" exact component={Main} />
 		</Switch>
 	</ThemeProvider>
 )
