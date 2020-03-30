@@ -6,17 +6,15 @@ export const formatDate = date => {
 }
 
 export const getToken = () => {
-	if (localStorage.getItem('advito-case-user')) {
-		const { sessionToken } = JSON.parse(
-			localStorage.getItem('advito-case-user')
-		)
+	if (localStorage.getItem('advito-user')) {
+		const { sessionToken } = JSON.parse(localStorage.getItem('advito-user'))
 		return sessionToken
 	} else return ''
 }
 
 export const getUser = () => {
-	if (localStorage.getItem('advito-case-user')) {
-		const user = JSON.parse(localStorage.getItem('advito-case-user'))
+	if (localStorage.getItem('advito-user')) {
+		const user = JSON.parse(localStorage.getItem('advito-user'))
 		return { ...user }
 	} else {
 		return {}
@@ -24,22 +22,22 @@ export const getUser = () => {
 }
 
 export const updateUserName = displayName => {
-	if (localStorage.getItem('advito-case-user')) {
-		const user = JSON.parse(localStorage.getItem('advito-case-user'))
+	if (localStorage.getItem('advito-user')) {
+		const user = JSON.parse(localStorage.getItem('advito-user'))
 		user.displayName = displayName
-		localStorage.setItem('advito-case-user', JSON.stringify(user))
+		localStorage.setItem('advito-user', JSON.stringify(user))
 	}
 }
 
 export const setUser = user => {
-	if (localStorage.getItem('advito-case-user')) {
-		localStorage.removeItem('advito-case-user')
+	if (localStorage.getItem('advito-user')) {
+		localStorage.removeItem('advito-user')
 	}
-	localStorage.setItem('advito-case-user', JSON.stringify(user))
+	localStorage.setItem('advito-user', JSON.stringify(user))
 }
 
 export const removeUser = () => {
-	localStorage.removeItem('advito-case-user')
+	localStorage.removeItem('advito-user')
 	history.push('/login')
 }
 
