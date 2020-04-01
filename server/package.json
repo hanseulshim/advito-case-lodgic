@@ -16,6 +16,7 @@
 	"dependencies": {
 		"apollo-server-lambda": "^2.11.0",
 		"aws-sdk": "^2.645.0",
+		"faker": "^4.1.0",
 		"graphql": "^14.6.0",
 		"knex": "^0.20.13",
 		"lodash.merge": "^4.6.2",
