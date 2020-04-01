@@ -15,11 +15,11 @@
 		"deploy:client:dev": "cd ./client && yarn deploy:dev",
 		"deploy:client:staging": "cd ./client && yarn deploy:staging",
 		"deploy:client:production": "cd ./client && yarn deploy:production",
-		"deploy:client:release": "yarn deploy:client:dev && yarn deploy:client:staging && yarn deploy:client:production",
+		"deploy:client:release": "yarn deploy:client:dev && yarn deploy:client:staging",
 		"deploy:server:dev": "cd ./server && yarn deploy:dev",
 		"deploy:server:staging": "cd ./server && yarn deploy:staging",
 		"deploy:server:production": "cd ./server && yarn deploy:production",
-		"deploy:server:release": "yarn deploy:server:dev && yarn deploy:server:staging && yarn deploy:server:production"
+		"deploy:server:release": "yarn deploy:server:dev && yarn deploy:server:staging"
 	},
 	"repository": {
 		"type": "git",
