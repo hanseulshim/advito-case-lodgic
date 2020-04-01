@@ -1,9 +1,11 @@
 import { AuthenticationError } from 'apollo-server-lambda'
 import { AdvitoUserSession, AdvitoUser } from '../models'
-import { User } from '../types'
+import { UserType } from '../types'
 import moment from 'moment'
 
-export const authenticateUser = async (sessionToken: string): Promise<User> => {
+export const authenticateUser = async (
+	sessionToken: string
+): Promise<UserType> => {
 	if (!sessionToken) return null
 	const session = await AdvitoUserSession.query()
 		.where('sessionToken', sessionToken)

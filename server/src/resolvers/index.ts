@@ -1,7 +1,6 @@
 import merge from 'lodash.merge'
-import login from './login'
-import password from './password'
+import client from './client'
 
 export default {
-	...merge(login, password)
+	...merge(client)
 }

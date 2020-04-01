@@ -1,12 +1,13 @@
 import 'source-map-support/register'
-import { ApolloServer, ForbiddenError } from 'apollo-server-lambda'
+import { ApolloServer } from 'apollo-server-lambda'
 import typeDefs from './src/typeDefs'
 import resolvers from './src/resolvers'
 import playground from './src/playground'
 import Knex from 'knex'
-import { Context } from './src/types'
+import { ContextType } from './src/types'
 import { Model, knexSnakeCaseMappers } from 'objection'
 import { authenticateUser } from './src/utils'
+import RequireAuthDirective from './src/authDirective'
 
 Model.knex(
 	Knex({
@@ -25,14 +26,13 @@ const server = new ApolloServer({
 	typeDefs,
 	resolvers,
 	playground,
-	context: async ({ event }): Promise<Context> => {
+	context: async ({ event }): Promise<ContextType> => {
 		const sessionToken = event.headers.Authorization || ''
-		const applicationId = +event.headers.application || null
-		if (applicationId === null) {
-			throw new ForbiddenError('Application id must be passed in')
-		}
 		const user = await authenticateUser(sessionToken)
-		return { user, applicationId }
+		return { user }
+	},
+	schemaDirectives: {
+		auth: RequireAuthDirective
 	}
 })
 
