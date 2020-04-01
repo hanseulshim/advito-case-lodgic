@@ -1,6 +1,5 @@
-import login from './login'
-import password from './password'
+import client from './client'
 
 export default {
-	tabs: [login.Mutation, password.Mutation]
+	tabs: [client.Query]
 }
