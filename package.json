@@ -1,0 +1,34 @@
+{
+	"name": "advito-case-lodgic",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"start": "cd ./client && yarn start",
+		"start:dev": "cd ./client && yarn start:dev",
+		"start:staging": "cd ./client && yarn start:staging",
+		"start:production": "cd ./client && yarn start:production",
+		"server": "cd ./server && yarn start",
+		"server:dev": "cd ./server && yarn start:dev",
+		"server:staging": "cd ./server && yarn start:staging",
+		"server:production": "cd ./server && yarn start:production",
+		"deploy:client:dev": "cd ./client && yarn deploy:dev",
+		"deploy:client:staging": "cd ./client && yarn deploy:staging",
+		"deploy:client:production": "cd ./client && yarn deploy:production",
+		"deploy:client:release": "yarn deploy:client:dev && yarn deploy:client:staging && yarn deploy:client:production",
+		"deploy:server:dev": "cd ./server && yarn deploy:dev",
+		"deploy:server:staging": "cd ./server && yarn deploy:staging",
+		"deploy:server:production": "cd ./server && yarn deploy:production",
+		"deploy:server:release": "yarn deploy:server:dev && yarn deploy:server:staging && yarn deploy:server:production"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/boostlabscom/advito-case-lodgic.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/boostlabscom/advito-case-lodgic/issues"
+	},
+	"homepage": "https://github.com/boostlabscom/advito-case-lodgic#readme"
+}
