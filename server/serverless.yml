@@ -1,0 +1,67 @@
+service:
+  name: advito-case-lodgic
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  environment: ${file(env.yml):${self:custom.stage}, file(env.yml):default}
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+  serverless-offline:
+    httpPort: 4000
+
+plugins:
+  - serverless-webpack
+  - serverless-offline
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-2
+  apiGateway:
+    minimumCompressionSize: 1024
+  environment:
+    AWS_NODEJS_CONNECTION_REUSE_ENABLED: 1
+    DB_HOST: ${self:custom.environment.DB_HOST}
+    DB_USER: ${self:custom.environment.DB_USER}
+    DB_PASSWORD: ${self:custom.environment.DB_PASSWORD}
+    DB_NAME: ${self:custom.environment.DB_NAME}
+    ENVIRONMENT: ${self:custom.environment.ENVIRONMENT}
+    ACCESS_KEY_ID: ${self:custom.environment.ACCESS_KEY_ID}
+    SECRET_ACCESS_KEY: ${self:custom.environment.SECRET_ACCESS_KEY}
+    REGION: ${self:custom.environment.REGION}
+  vpc:
+    securityGroupIds:
+      - 'sg-09b7d9888c893594d'
+    subnetIds:
+      - 'subnet-08c1aacead6928c9f'
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - 'ses:*'
+      Resource: '*'
+
+functions:
+  graphql:
+    handler: handler.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - application
+              - Authorization
+              - Content-Type
+            allowCredentials: false
+      - http:
+          path: graphql
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - application
+              - Authorization
+              - Content-Type
+            allowCredentials: false

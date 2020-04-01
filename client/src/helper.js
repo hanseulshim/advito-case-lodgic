@@ -47,7 +47,7 @@ export const getApi = () => {
 		? 'https://y0md40ljt5.execute-api.us-east-2.amazonaws.com/dev/graphql'
 		: REACT_APP_STAGE === 'staging'
 		? 'https://xsq8e72w5m.execute-api.us-east-2.amazonaws.com/staging/graphql'
-		: REACT_APP_STAGE === 'prod'
+		: REACT_APP_STAGE === 'production'
 		? 'https://otnrpe76ni.execute-api.us-east-2.amazonaws.com/production/graphql'
 		: 'http://localhost:4000/local/graphql'
 }
@@ -58,7 +58,7 @@ export const getAuthApi = () => {
 		? 'https://mv3ohvxam8.execute-api.us-east-2.amazonaws.com/dev/graphql'
 		: REACT_APP_STAGE === 'staging'
 		? 'https://sewnh0p54a.execute-api.us-east-2.amazonaws.com/staging/graphql'
-		: REACT_APP_STAGE === 'prod'
+		: REACT_APP_STAGE === 'production'
 		? 'https://lkkkz4lxwc.execute-api.us-east-2.amazonaws.com/production/graphql'
 		: 'http://localhost:8080/local/graphql'
 }
