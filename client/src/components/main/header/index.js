@@ -7,6 +7,7 @@ import { Title } from 'components/common/Typography'
 const Container = styled.div`
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 	width: 75%;
 
 	img {
@@ -17,7 +18,7 @@ const Container = styled.div`
 const TitleStyled = styled(Title)`
 	position: relative;
 	top: 10px;
-	margin-left: 4em;
+	right: 20%;
 `
 
 const Header = () => {
