@@ -1,55 +1,33 @@
 const faker = require('faker')
 
-const jobIdList = [282, 280, 271]
-
-// const createRow = () => ({
-//   "job_ingestion_id": jobIdList[Math.floor(Math.random()*3)],
-//   "ingestion_type" varchar(255) COLLATE "pg_catalog"."default",
-//   "original_unmatched_count" int4,
-//   "original_unmatched_spend_usd" numeric(16,4),
-//   "unmatched_count" int4,
-//   "unmatched_spend_usd" numeric(16,4),
-//   "matched_count" int4,
-//   "matched_spend_usd" numeric(16,4),
-//   "ingestion_status" varchar(255) COLLATE "pg_catalog"."default",
-//   "is_dpm" bool NOT NULL,
-//   "status_dpm" varchar(255) COLLATE "pg_catalog"."default",
-//   "date_status_dpm" timestamp(6),
-//   "is_sourcing" bool NOT NULL,
-//   "status_sourcing" varchar(255) COLLATE "pg_catalog"."default",
-//   "date_status_sourcing" timestamp(6),
-//   "ingestion_note" text COLLATE "pg_catalog"."default",
-// })
-
-exports.seed = knex => {
-	// Deletes ALL existing entries
-	return knex('job_ingestion_hotel')
-		.del()
-		.then(() => {
-			// Inserts seed entries
-			return knex('job_ingestion_hotel').insert([
-				{
-					job_ingestion_id: 55,
-					is_dpm: true,
-					is_sourcing: false
-				}
-			])
-		})
+const createRow = () => {
+	const dpm = faker.random.boolean()
+	const sourcing = faker.random.boolean()
+	return {
+		job_ingestion_id: faker.random.arrayElement([282, 280, 271]),
+		currency_ingested: 'Local',
+		room_nights_total: faker.random.number(7000, 15000),
+		unmatched_count: faker.random.number(2000, 7000),
+		unmatched_spend: faker.finance.amount(20000, 100000, 2),
+		unmatched_spend_usd: faker.finance.amount(20000, 100000, 2),
+		matched_spend: faker.finance.amount(20000, 100000, 2),
+		matched_spend_usd: faker.finance.amount(20000, 100000, 2),
+		is_dpm: dpm,
+		status_dpm: dpm ? faker.random.arrayElement[('Loaded', 'Approved')] : null,
+		date_status_dpm: dpm ? faker.date.recent(10) : null,
+		is_sourcing: sourcing,
+		status_sourcing: sourcing
+			? faker.random.arrayElement[('Loaded', 'Approved')]
+			: null,
+		date_status_sourcing: sourcing ? faker.date.recent(10) : null
+	}
 }
 
-// "job_ingestion_id" int8 NOT NULL,
-// "ingestion_type" varchar(255) COLLATE "pg_catalog"."default",
-// "original_unmatched_count" int4,
-// "original_unmatched_spend_usd" numeric(16,4),
-// "unmatched_count" int4,
-// "unmatched_spend_usd" numeric(16,4),
-// "matched_count" int4,
-// "matched_spend_usd" numeric(16,4),
-// "ingestion_status" varchar(255) COLLATE "pg_catalog"."default",
-// "is_dpm" bool NOT NULL,
-// "status_dpm" varchar(255) COLLATE "pg_catalog"."default",
-// "date_status_dpm" timestamp(6),
-// "is_sourcing" bool NOT NULL,
-// "status_sourcing" varchar(255) COLLATE "pg_catalog"."default",
-// "date_status_sourcing" timestamp(6),
-// "ingestion_note" text COLLATE "pg_catalog"."default",
+exports.seed = async knex => {
+	const rows = []
+	for (i = 0; i < 1000; i++) {
+		rows.push(createRow())
+	}
+	await knex('job_ingestion_hotel').del()
+	await knex('job_ingestion_hotel').insert(rows)
+}
