@@ -1,10 +1,9 @@
 import { gql } from 'apollo-server-lambda'
-import login from './login'
-import password from './password'
+import client from './client'
 
 export default gql`
-	${login}
-	${password}
+	directive @auth on FIELD_DEFINITION
+	${client}
 	type Query {
 		_empty: String
 	}
