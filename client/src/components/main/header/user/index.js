@@ -10,8 +10,7 @@ const Container = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 100px;
-	margin-bottom: ${props => props.theme.verticalSpace};
+	margin-left: auto;
 `
 
 const Avatar = styled.div`
@@ -29,10 +28,10 @@ const TitleContainer = styled.div`
 	display: flex;
 	justify-content: center;
 	align-items: flex-end;
-	margin-bottom: 0.75em;
+	margin-bottom: 0.25em;
 `
 
-const SideBarUserInfo = () => {
+const User = () => {
 	const user = getUser()
 	return (
 		<Container>
@@ -49,4 +48,4 @@ const SideBarUserInfo = () => {
 	)
 }
 
-export default SideBarUserInfo
+export default User
