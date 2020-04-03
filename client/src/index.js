@@ -31,7 +31,7 @@ const sessionMiddleware = new ApolloLink((operation, forward) => {
 	if (sessiontoken) {
 		operation.setContext({
 			headers: {
-				sessiontoken
+				Authorization: sessiontoken
 			}
 		})
 	}

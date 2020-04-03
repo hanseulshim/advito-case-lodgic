@@ -7,25 +7,25 @@ import { Title } from 'components/common/Typography'
 const Container = styled.div`
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
-	width: 75%;
+	width: 100%;
 
 	img {
 		height: 55px;
+		margin-right: 100px;
 	}
 `
 
 const TitleStyled = styled(Title)`
 	position: relative;
 	top: 10px;
-	right: 20%;
+	margin-right: auto;
 `
 
 const Header = () => {
 	return (
 		<Container>
 			<img src={bcdLogo} />
-			<TitleStyled>Hotel Data Portal</TitleStyled>
+			<TitleStyled>CASE Lodgic</TitleStyled>
 			<User />
 		</Container>
 	)
