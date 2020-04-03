@@ -28,10 +28,10 @@ const Navigation = () => (
 			</Button>
 		</Controls>
 		<Tabs type="card">
-			<TabPane tab="Tab 1" key="1">
+			<TabPane tab="Ingestion History" key="1">
 				Ingesiton History
 			</TabPane>
-			<TabPane tab="Tab 2" key="2">
+			<TabPane tab="Unmatched Hotels" key="2">
 				Unmatched Hotels
 			</TabPane>
 		</Tabs>
