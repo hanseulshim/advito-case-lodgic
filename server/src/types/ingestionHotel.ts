@@ -17,10 +17,10 @@ export type IngestionHotelType = {
 	countRows: string
 	unmatchedCount: string
 	unmatchedCountPercent: () => number
-	isDpm: Boolean
-	statusDpm: String
-	dateStatusDpm: String
-	isSourcing: Boolean
-	statusSourcing: String
-	dateStatusSourcing: String
+	isDpm: boolean
+	statusDpm: string
+	dateStatusDpm: string
+	isSourcing: boolean
+	statusSourcing: string
+	dateStatusSourcing: string
 }
