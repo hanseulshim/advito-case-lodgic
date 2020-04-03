@@ -35,7 +35,16 @@ const SelectClient = () => {
 		<Container>
 			<SelectContainer>
 				<label>Select Client</label>
-				<Select placeholder="Select a client" onChange={onChange}>
+				<Select
+					showSearch
+					placeholder="Select a client"
+					onChange={onChange}
+					filterOption={(input, option) =>
+						option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
+						0
+					}
+					optionFilterProp="children"
+				>
 					{data.clientList.map((client, i) => {
 						return (
 							<Option key={'client' + i} value={client.id}>
