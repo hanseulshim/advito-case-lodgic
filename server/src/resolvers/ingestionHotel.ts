@@ -16,7 +16,7 @@ export default {
 				.andWhere('dataEndDate', '<=', endDate)
 
 			return {
-				pageCount: Math.floor(+count / LIMIT),
+				pageCount: Math.ceil(+count / LIMIT),
 				data: await IngestionHotelView.query()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
