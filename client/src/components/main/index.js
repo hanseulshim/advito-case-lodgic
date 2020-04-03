@@ -1,27 +1,20 @@
 import React from 'react'
 import styled from 'styled-components'
-import bcdLogo from 'assets/bcdLogo.png'
-import Sidebar from 'components/sidebar'
+import Header from './header'
+import Navigation from './navigation'
 
 const MainContainer = styled.div`
-	width: 100%;
-	min-height: 100%;
-	display: flex;
+	padding: ${props => props.theme.padding};
+	height: 100%;
+	min-width: 1000px;
+	max-width: 1500px;
 `
 
-const Header = styled.div`
-	margin-bottom: ${props => props.theme.verticalSpace};
-`
-
-const Main = () => (
-	<>
-		<MainContainer>
-			<Header>
-				<img src={bcdLogo} alt="BCD logo" />
-				<Sidebar />
-			</Header>
-		</MainContainer>
-	</>
+const IngestionHistory = () => (
+	<MainContainer>
+		<Header />
+		<Navigation />
+	</MainContainer>
 )
 
-export default Main
+export default IngestionHistory
