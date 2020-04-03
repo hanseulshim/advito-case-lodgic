@@ -1,4 +1,5 @@
 export type ClientType = {
 	id: number
-	clientName: string
+	clientNameInitial: string
+	lanyonClientCode: string
 }

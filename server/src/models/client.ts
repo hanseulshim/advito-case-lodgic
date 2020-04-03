@@ -2,9 +2,14 @@ import { Model } from 'objection'
 
 export class Client extends Model {
 	id: number
-	clientName: string
+	clientNameInitial: string
+	lanyonClientCode: string
 
 	static tableName = 'client'
+
+	clientName(): string {
+		return `${this.clientNameInitial} (${this.lanyonClientCode})`
+	}
 
 	// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
 	static get relationMappings() {
