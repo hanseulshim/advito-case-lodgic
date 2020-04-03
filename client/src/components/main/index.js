@@ -6,6 +6,8 @@ import Navigation from './navigation'
 const MainContainer = styled.div`
 	padding: ${props => props.theme.padding};
 	height: 100%;
+	min-width: 1000px;
+	max-width: 1500px;
 `
 
 const IngestionHistory = () => (
