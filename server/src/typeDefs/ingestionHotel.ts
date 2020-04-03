@@ -1,5 +1,9 @@
 export default `
 type IngestionHotel {
+	pageCount: Int
+	data: [IngestionHotelView]
+}
+type IngestionHotelView {
   id: Int
   jobIngestionId: Int
 	templateNote: String
@@ -27,6 +31,11 @@ type IngestionHotel {
 }
 
 extend type Query {
-  ingestionHotelList(clientId: Int!, startDate: String!, endDate: String!): [IngestionHotel] @auth
+  ingestionHotelList(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+		pageNumber: Int
+	): IngestionHotel @auth
 }
 `

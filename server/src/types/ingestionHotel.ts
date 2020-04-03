@@ -1,4 +1,9 @@
 export type IngestionHotelType = {
+	pageCount: number
+	data: IngestionHotelView[]
+}
+
+type IngestionHotelView = {
 	id: string
 	jobIngestionId: string
 	templateNote: string

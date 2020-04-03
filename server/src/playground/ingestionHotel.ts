@@ -10,32 +10,36 @@ export default {
 			ingestionHotelList(
         clientId: 1,
         startDate: "2020-01-01",
-        endDate: "2020-12-31"
+        endDate: "2020-12-31",
+        pageNumber: null
       ) {
-        id
-        jobIngestionId
-        templateNote
-        templateCategory
-        sourceName
-        loadedBy
-        dataStartDate
-        dataEndDate
-        uploadTimestamp
-        roomNightsTotal
-        ingestedRoomSpend
-        currencyIngested
-        convertedRoomSpendUsd
-        convertedAbrUsd
-        conversionDate
-        countRows
-        unmatchedCount
-        unmatchedCountPercent
-        isDpm
-        statusDpm
-        dateStatusDpm
-        isSourcing
-        statusSourcing
-        dateStatusSourcing
+        pageCount
+        data {
+          id
+          jobIngestionId
+          templateNote
+          templateCategory
+          sourceName
+          loadedBy
+          dataStartDate
+          dataEndDate
+          uploadTimestamp
+          roomNightsTotal
+          ingestedRoomSpend
+          currencyIngested
+          convertedRoomSpendUsd
+          convertedAbrUsd
+          conversionDate
+          countRows
+          unmatchedCount
+          unmatchedCountPercent
+          isDpm
+          statusDpm
+          dateStatusDpm
+          isSourcing
+          statusSourcing
+          dateStatusSourcing
+        }
 			}
     }`
 	}

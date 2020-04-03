@@ -26,6 +26,7 @@ export class IngestionHotelView extends Model {
 	isSourcing: boolean
 	statusSourcing: string
 	dateStatusSourcing: string
+	count: string
 
 	static tableName = 'v_job_ingestion_hotel'
 
