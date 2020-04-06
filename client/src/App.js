@@ -21,13 +21,13 @@ const App = () => (
 		<Switch>
 			<Route path="/login" component={Login} />
 			<Route path="/resetpassword" component={ResetPassword} />
-			<PrivateRoute path="/" exact component={Main} />
+			<PrivateRoute path="/" component={Main} />
 		</Switch>
 	</ThemeProvider>
 )
 
 PrivateRoute.propTypes = {
-	component: PropTypes.func.isRequired
+	component: PropTypes.func.isRequired,
 }
 
 export default App
