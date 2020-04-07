@@ -15,8 +15,7 @@ const Container = styled.div`
 	}
 `
 
-const SelectDateRange = () => {
-	const onChange = v => console.log(v)
+const SelectDateRange = ({ onChange }) => {
 	const dateFormat = 'YYYY/MM/DD'
 	return (
 		<Container>

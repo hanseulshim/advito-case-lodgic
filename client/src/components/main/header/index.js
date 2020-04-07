@@ -24,7 +24,7 @@ const TitleStyled = styled(Title)`
 const Header = () => {
 	return (
 		<Container>
-			<img src={bcdLogo} />
+			<img src={bcdLogo} alt="BCD Logo" />
 			<TitleStyled>CASE Lodgic</TitleStyled>
 			<User />
 		</Container>

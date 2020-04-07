@@ -1,10 +1,12 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useLocation } from 'react-router-dom'
 import { Tabs } from 'antd'
 const { TabPane } = Tabs
 
 const Navigation = () => {
 	let history = useHistory()
+	let location = useLocation()
+
 	return (
 		<>
 			<Tabs
@@ -12,6 +14,8 @@ const Navigation = () => {
 				onChange={(key) => {
 					history.push(`/${key}`)
 				}}
+				activeKey={location.pathname.replace('/', '')}
+				animated
 			>
 				<TabPane tab="Ingestion History" key="ingestion-history" />
 				<TabPane tab="Unmatched Hotels" key="unmatched-hotels" />
