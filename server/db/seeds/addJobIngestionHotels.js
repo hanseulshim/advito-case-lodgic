@@ -1,10 +1,10 @@
 const faker = require('faker')
 
-const createRow = () => {
+const createRow = (id) => {
 	const dpm = faker.random.boolean()
 	const sourcing = faker.random.boolean()
 	return {
-		job_ingestion_id: faker.random.arrayElement([282, 280, 271]),
+		job_ingestion_id: id,
 		currency_ingested: 'Local',
 		room_nights_total: faker.random.number(7000, 15000),
 		unmatched_count: faker.random.number(500, 1000),
@@ -19,14 +19,15 @@ const createRow = () => {
 		status_sourcing: sourcing
 			? faker.random.arrayElement(['Loaded', 'Approved'])
 			: null,
-		date_status_sourcing: sourcing ? faker.date.recent(10) : null
+		date_status_sourcing: sourcing ? faker.date.recent(10) : null,
 	}
 }
 
-exports.seed = async knex => {
+exports.seed = async (knex) => {
 	const rows = []
-	for (i = 0; i < 1000; i++) {
-		rows.push(createRow())
+	const idList = await knex('job_ingestion').select('id')
+	for (const { id } of idList) {
+		rows.push(createRow(id))
 	}
 	await knex('job_ingestion_hotel').del()
 	await knex('job_ingestion_hotel').insert(rows)
