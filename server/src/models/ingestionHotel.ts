@@ -50,7 +50,7 @@ export class IngestionHotelView extends Model {
 	}
 
 	unmatchedCountPercent(): number {
-		return +this.unmatchedCount / +this.countRows
+		return +this.countRows ? +this.unmatchedCount / +this.countRows : 0
 	}
 
 	convertedAbrUsd(): number {
