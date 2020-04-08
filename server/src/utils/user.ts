@@ -41,6 +41,6 @@ export const authenticateUser = async (
 		displayName: user.fullName(),
 		clientId: user.clientId,
 		sessionToken,
-		roleIds: user.advitoUserRoleLink.map(role => role.advitoRoleId)
+		roleIds: user.advitoUserRoleLink.map((role) => role.advitoRoleId)
 	}
 }
