@@ -24,15 +24,15 @@ const Main = () => {
 		<MainContainer>
 			<Header />
 			<Controls />
-			<Navigation />
 			{clientId && dateRange.length ? (
-				<Switch>
-					<Route path={`/ingestion-history`} component={IngestionHistory} />
-					<Route path={`/unmatched-hotels`} component={UnmatchedHotels} />
-				</Switch>
-			) : (
-				<p>Please select a client and a date range</p>
-			)}
+				<>
+					<Navigation />
+					<Switch>
+						<Route path={`/ingestion-history`} component={IngestionHistory} />
+						<Route path={`/unmatched-hotels`} component={UnmatchedHotels} />
+					</Switch>
+				</>
+			) : null}
 		</MainContainer>
 	)
 }
