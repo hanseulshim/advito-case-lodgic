@@ -23,14 +23,11 @@ const SelectContainer = styled.div`
 	}
 `
 
-const SelectClient = () => {
+const SelectClient = ({ onChange }) => {
 	const { loading, error, data } = useQuery(CLIENT_LIST)
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
 
-	const onChange = v => {
-		console.log(v)
-	}
 	return (
 		<Container>
 			<SelectContainer>

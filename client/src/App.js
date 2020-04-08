@@ -8,6 +8,8 @@ import Login from 'components/login'
 import { getToken } from 'helper'
 import Main from 'components/main'
 import ResetPassword from 'components/login/ResetPassword'
+// Context
+import { StateProvider } from 'context/store'
 
 const PrivateRoute = ({ component: Component }) => (
 	<Route
@@ -17,17 +19,19 @@ const PrivateRoute = ({ component: Component }) => (
 
 const App = () => (
 	<ThemeProvider theme={theme}>
-		<GlobalStyle />
-		<Switch>
-			<Route path="/login" component={Login} />
-			<Route path="/resetpassword" component={ResetPassword} />
-			<PrivateRoute path="/" exact component={Main} />
-		</Switch>
+		<StateProvider>
+			<GlobalStyle />
+			<Switch>
+				<Route path="/login" component={Login} />
+				<Route path="/resetpassword" component={ResetPassword} />
+				<PrivateRoute path="/" component={Main} />
+			</Switch>
+		</StateProvider>
 	</ThemeProvider>
 )
 
 PrivateRoute.propTypes = {
-	component: PropTypes.func.isRequired
+	component: PropTypes.func.isRequired,
 }
 
 export default App

@@ -1,3 +1,5 @@
+import 'react-app-polyfill/ie11'
+import 'react-app-polyfill/stable'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
@@ -11,7 +13,7 @@ import {
 	ApolloProvider,
 	ApolloLink,
 	HttpLink,
-	from
+	from,
 } from '@apollo/client'
 import { onError } from '@apollo/link-error'
 import { getToken, removeUser, getApi, getAuthApi } from './helper'
@@ -31,8 +33,8 @@ const sessionMiddleware = new ApolloLink((operation, forward) => {
 	if (sessiontoken) {
 		operation.setContext({
 			headers: {
-				Authorization: sessiontoken
-			}
+				Authorization: sessiontoken,
+			},
 		})
 	}
 	return forward(operation)
@@ -43,32 +45,32 @@ const authMiddleware = new ApolloLink((operation, forward) => {
 	const headers = Authorization
 		? { Authorization, application: 5 }
 		: {
-				application: 5
+				application: 5,
 		  }
 	operation.setContext({
-		headers
+		headers,
 	})
 	return forward(operation)
 })
 
 const httpLink = new HttpLink({
-	uri: getApi()
+	uri: getApi(),
 })
 
 const authHttpLink = new HttpLink({
-	uri: getAuthApi()
+	uri: getAuthApi(),
 })
 
 const client = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: from([errorLink, sessionMiddleware, httpLink]),
-	fetchOptions: { fetch }
+	fetchOptions: { fetch },
 })
 
 export const authClient = new ApolloClient({
 	cache: new InMemoryCache(),
 	link: from([errorLink, authMiddleware, authHttpLink]),
-	fetchOptions: { fetch }
+	fetchOptions: { fetch },
 })
 
 ReactDOM.render(
