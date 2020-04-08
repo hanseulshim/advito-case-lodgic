@@ -1,5 +1,6 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { store } from 'context/store'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import Header from './header'
 import Navigation from './navigation'
@@ -16,9 +17,16 @@ const MainContainer = styled.div`
 `
 
 const Main = () => {
+	let history = useHistory()
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange } = state
+
+	useEffect(() => {
+		if (!clientId || !dateRange.length) {
+			history.push('/')
+		}
+	}, [clientId, dateRange, history])
 
 	return (
 		<MainContainer>
