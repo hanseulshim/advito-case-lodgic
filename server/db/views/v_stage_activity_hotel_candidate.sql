@@ -1,4 +1,4 @@
- SELECT ahc.id AS stage_activity_hotel_candidate_id,
+CREATE OR REPLACE VIEW v_stage_activity_hotel_candidate SELECT ahc.id AS stage_activity_hotel_candidate_id,
     ahc.stage_activity_hotel_id,
     ahc.hotel_property_id,
     ahc.match_score,
