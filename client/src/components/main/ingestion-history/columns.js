@@ -10,25 +10,25 @@ export const columns = [
 		title: 'Job ID',
 		width: 75,
 		dataIndex: 'jobIngestionId',
-		fixed: 'left',
+		// fixed: 'left',
 	},
 	{
 		title: 'Detail Level',
 		width: 150,
 		dataIndex: 'templateNote',
-		fixed: 'left',
+		// fixed: 'left',
 	},
 	{
 		title: 'Source Type',
 		dataIndex: 'templateCategory',
 		width: 150,
-		fixed: 'left',
+		// fixed: 'left',
 	},
 	{
 		title: 'Source Name',
 		dataIndex: 'sourceName',
 		width: 150,
-		fixed: 'left',
+		// fixed: 'left',
 	},
 	{
 		title: 'Loaded By',
@@ -107,12 +107,12 @@ export const columns = [
 	{
 		title: 'Status',
 		width: 200,
-		fixed: 'right',
+		// fixed: 'right',
 		render: (_, record) => getStatus(record),
 	},
 	{
 		title: 'Load Actions',
 		width: 150,
-		fixed: 'right',
+		// fixed: 'right',
 	},
 ]
