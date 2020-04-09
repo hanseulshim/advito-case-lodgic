@@ -1,6 +1,6 @@
 import { formatDate, formatNum, formatCurrency, formatPercent } from 'helper'
 //local helper
-import { getStaus, getStatus } from './helper'
+import { getStatus } from './helper'
 
 // Cell width (in pixels)
 // const [small, med, large] = [75, 100, 150]

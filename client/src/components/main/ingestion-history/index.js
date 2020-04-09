@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext } from 'react'
 import { useQuery } from '@apollo/client'
 import { store } from 'context/store'
 import { INGESTION_HOTEL_LIST } from 'api/queries'
