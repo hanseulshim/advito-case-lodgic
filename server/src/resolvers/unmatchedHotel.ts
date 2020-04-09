@@ -23,7 +23,7 @@ export default {
 					.andWhere('dataEndDate', '<=', endDate)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy('id')
+					.orderBy('uploadTimestamp', 'desc')
 			}
 		}
 	}
