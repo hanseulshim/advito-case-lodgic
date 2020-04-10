@@ -30,22 +30,9 @@ export class AdvitoUserSession extends Model {
 
 	static modifiers = {
 		sessionToken(builder): ModifyMethod<AnyQueryBuilder> {
-			return builder
-				.where('sessionEnd', null)
-				.first()
-				.select('sessionToken')
+			return builder.where('sessionEnd', null).first().select('sessionToken')
 		}
 	}
-}
-
-export class AccessToken extends Model {
-	isActive: boolean
-	tokenType: string
-	token: string
-	tokenExpiration: string
-	advitoUserId: number
-
-	static tableName = 'accessToken'
 }
 
 export class AdvitoUser extends Model {
@@ -59,7 +46,6 @@ export class AdvitoUser extends Model {
 	email: string
 	advitoUserSession: AdvitoUserSession[]
 	advitoUserRoleLink: AdvitoUserRoleLink[]
-	accessToken: AccessToken[]
 
 	static tableName = 'advitoUser'
 
@@ -88,14 +74,6 @@ export class AdvitoUser extends Model {
 			join: {
 				from: 'advitoUser.id',
 				to: 'advitoUserSession.advitoUserId'
-			}
-		},
-		accessToken: {
-			relation: Model.HasManyRelation,
-			modelClass: AccessToken,
-			join: {
-				from: 'advitoUser.id',
-				to: 'accessToken.advitoUserId'
 			}
 		}
 	}
