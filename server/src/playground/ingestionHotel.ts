@@ -8,7 +8,7 @@ export default {
 		query: `
     {
 			ingestionHotelList(
-        clientId: 1,
+        clientId: 41,
         startDate: "2020-01-01",
         endDate: "2020-12-31",
         pageNumber: null
