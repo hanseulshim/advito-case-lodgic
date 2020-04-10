@@ -13,10 +13,10 @@ type UnmatchedHotelView = {
 	sourceName: string
 	numberOfNights: number
 	uploadTimestamp: string
-	address1: string
-	address2: string
-	city: string
-	state: string
-	country: string
-	phonePrimary: string
+	addressLine1: string
+	addressLine2: string
+	cityName: string
+	stateCode: string
+	countryName: string
+	phoneNumber: string
 }

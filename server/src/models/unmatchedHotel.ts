@@ -10,12 +10,12 @@ export class UnmatchedHotelView extends Model {
 	sourceName: string
 	numberOfNights: number
 	uploadTimestamp: string
-	address1: string
-	address2: string
-	city: string
-	state: string
-	country: string
-	phonePrimary: string
+	addressLine1: string
+	addressLine2: string
+	cityName: string
+	stateCode: string
+	countryName: string
+	phoneNumber: string
 	count: string
 
 	static tableName = 'v_stage_activity_hotel'

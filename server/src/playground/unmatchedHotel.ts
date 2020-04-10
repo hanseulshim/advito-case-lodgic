@@ -24,12 +24,12 @@ export default {
           sourceName
           numberOfNights
           uploadTimestamp
-          address1
-          address2
-          city
-          state
-          country
-          phonePrimary
+          addressLine1
+          addressLine2
+          cityName
+          stateCode
+          countryName
+          phoneNumber
         }
 			}
     }`

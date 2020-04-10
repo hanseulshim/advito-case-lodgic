@@ -13,12 +13,12 @@ type UnmatchedHotelView {
 	sourceName: String
 	numberOfNights: Int
 	uploadTimestamp: String
-	address1: String
-	address2: String
-	city: String
-	state: String
-	country: String
-	phonePrimary: String
+	addressLine1: String
+	addressLine2: String
+	cityName: String
+	stateCode: String
+	countryName: String
+	phoneNumber: String
 }
 
 extend type Query {
