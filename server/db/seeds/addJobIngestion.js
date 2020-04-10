@@ -49,10 +49,12 @@ const createJobIngestionHotelRow = (id) => {
 
 exports.seed = async (knex) => {
 	const res = await Promise.all([
-		knex('client_advito_application_link')
-			.select('client_id')
-			.where('advito_application_id', 1)
-			.limit(10),
+		knex('client as c')
+			.leftJoin('client_advito_application_link as cl', 'cl.client_id', 'c.id')
+			.select('cl.client_id', 'c.client_name')
+			.where('cl.advito_application_id', 1)
+			.orderBy('client_name')
+			.limit(2),
 		knex('advito_application_template_source as ts')
 			.select('ts.id', 'a.application_name', 't.template_name')
 			.leftJoin(
