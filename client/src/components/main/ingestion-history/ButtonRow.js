@@ -20,7 +20,7 @@ const ButtonRow = () => {
 			<Button icon={<DownloadOutlined />}>Export Activity Data QC</Button>
 			<Button icon={<DownloadOutlined />}>Export Enhanced QC Report</Button>
 			<Button danger>Approve Files for DPM</Button>
-			<Button danger>Approve Files for DPM</Button>
+			<Button danger>Approve Files for Sourcing</Button>
 		</Container>
 	)
 }
