@@ -30,6 +30,11 @@ export default {
           stateCode
           countryName
           phoneNumber
+          brandName
+          sabreId
+          apolloId
+          amadeusId
+          worldspanId
         }
       }
       # unmatchedHotel(id: null) {
@@ -48,6 +53,11 @@ export default {
       #   stateCode
       #   countryName
       #   phoneNumber
+      #   brandName
+      #   sabreId
+      #   apolloId
+      #   amadeusId
+      #   worldspanId
 			# }
     }`
 	}

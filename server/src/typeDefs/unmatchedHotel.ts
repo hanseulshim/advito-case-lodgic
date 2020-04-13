@@ -19,6 +19,11 @@ type UnmatchedHotelView {
 	stateCode: String
 	countryName: String
 	phoneNumber: String
+	brandName: String
+	sabreId: Int
+	apolloId: Int
+	amadeusId: Int
+	worldspanId: Int
 }
 
 extend type Query {
