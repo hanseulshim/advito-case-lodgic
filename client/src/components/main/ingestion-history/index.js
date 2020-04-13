@@ -36,6 +36,7 @@ const IngestionHistory = () => {
 					position: ['bottomLeft'],
 					defaultCurrent: 1,
 					defaultPageSize: 25,
+					showSizeChanger: false,
 					current: pageNumber,
 					total: data.ingestionHotelList.pageCount * 25,
 					onChange: onPageChange,
