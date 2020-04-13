@@ -1,5 +1,5 @@
 import { UnmatchedHotelView } from '../models'
-import { UnmatchedHotelType } from '../types'
+import { UnmatchedHotelViewType, UnmatchedHotelType } from '../types'
 
 export default {
 	Query: {
@@ -25,6 +25,8 @@ export default {
 					.limit(LIMIT)
 					.orderBy('uploadTimestamp', 'desc')
 			}
-		}
+		},
+		unmatchedHotel: async (_: null, { id }): Promise<UnmatchedHotelViewType> =>
+			UnmatchedHotelView.query().findById(id)
 	}
 }

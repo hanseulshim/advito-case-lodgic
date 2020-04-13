@@ -1,9 +1,9 @@
 export type UnmatchedHotelType = {
 	pageCount: number
-	data: UnmatchedHotelView[]
+	data: UnmatchedHotelViewType[]
 }
 
-type UnmatchedHotelView = {
+export type UnmatchedHotelViewType = {
 	id: string
 	bestMatchScore: number
 	roomSpend: number

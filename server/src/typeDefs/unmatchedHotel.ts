@@ -28,5 +28,6 @@ extend type Query {
 		endDate: String!
 		pageNumber: Int
 	): UnmatchedHotel @auth
+	unmatchedHotel(id: Int!): UnmatchedHotelView @auth
 }
 `
