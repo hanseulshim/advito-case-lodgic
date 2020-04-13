@@ -16,7 +16,7 @@ const createJobIngestionRow = ([clientList, applicationTemplateSourceList]) => {
 		processing_start_timestamp: dataStartDate,
 		processing_end_timestamp: new Date(dataStartDate.valueOf() + 6000),
 		processing_dur_sec: 60,
-		count_rows: faker.random.number({ min: 100, max: 100 }),
+		count_rows: faker.random.number({ min: 100, max: 200 }),
 		file_size: faker.random.number({ min: 5000, max: 10000 }),
 		file_extension: '.xlsx',
 		is_complete: true,
@@ -54,8 +54,8 @@ exports.seed = async (knex) => {
 			.leftJoin('client_advito_application_link as cl', 'cl.client_id', 'c.id')
 			.select('cl.client_id', 'c.client_name')
 			.where('cl.advito_application_id', 1)
-			.orderBy('client_name')
-			.limit(2),
+			.andWhere('c.id', 348)
+			.orderBy('client_name'),
 		knex('advito_application_template_source as ts')
 			.select('ts.id', 'a.application_name', 't.template_name')
 			.leftJoin(
@@ -68,7 +68,7 @@ exports.seed = async (knex) => {
 	])
 	const jobIngestionRows = []
 	const jobIngestionHotelRows = []
-	for (i = 0; i < 200; i++) {
+	for (i = 0; i < 30; i++) {
 		jobIngestionRows.push(createJobIngestionRow(res))
 	}
 	await knex('stage_activity_hotel').del()
