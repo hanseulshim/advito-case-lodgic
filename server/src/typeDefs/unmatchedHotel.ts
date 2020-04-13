@@ -4,7 +4,7 @@ type UnmatchedHotel {
 	data: [UnmatchedHotelView]
 }
 type UnmatchedHotelView {
-	id: String
+	id: Int
 	bestMatchScore: Float
 	roomSpend: Float
 	hotelName: String
