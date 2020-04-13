@@ -3,9 +3,10 @@ import { useQuery } from '@apollo/client'
 import { store } from 'context/store'
 import { INGESTION_HOTEL_LIST } from 'api/queries'
 import { columns } from './columns'
-import { Table, Pagination } from 'antd'
+import { Table } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
+import ButtonRow from './ButtonRow'
 
 const IngestionHistory = () => {
 	const globalState = useContext(store)
@@ -29,6 +30,7 @@ const IngestionHistory = () => {
 
 	return (
 		<>
+			<ButtonRow />
 			<Table
 				columns={columns}
 				dataSource={data.ingestionHotelList.data}
