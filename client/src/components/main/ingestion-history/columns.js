@@ -111,7 +111,7 @@ export const columns = [
 		render: (_, record) => getStatus(record),
 	},
 	{
-		title: 'Load Actions',
+		title: 'Actions',
 		width: 150,
 		fixed: 'right',
 	},

@@ -12,8 +12,8 @@ import Controls from './controls'
 const MainContainer = styled.div`
 	padding: ${(props) => props.theme.padding};
 	height: 100%;
-	min-width: 1000px;
-	max-width: 1500px;
+	width: 1500px;
+	margin: 0em auto;
 `
 
 const Main = () => {
