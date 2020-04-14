@@ -39,5 +39,11 @@ extend type Query {
 		startDate: String!
 		endDate: String!
 	): [String] @auth
+
+	sourceNameList(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+	): [String] @auth
 }
 `

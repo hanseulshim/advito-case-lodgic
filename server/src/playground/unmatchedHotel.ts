@@ -60,11 +60,17 @@ export default {
       #   worldspanPropertyId
       # }
       
-      sourceTypeList(
-        clientId: 348,
-        startDate: "2020-01-01",
-        endDate: "2020-12-31"
-      )
+      # sourceTypeList(
+      #   clientId: 348,
+      #   startDate: "2020-01-01",
+      #   endDate: "2020-12-31"
+      # )
+
+      # sourceNameList(
+      #   clientId: 348,
+      #   startDate: "2020-01-01",
+      #   endDate: "2020-12-31"
+      # )
     }`
 	}
 }

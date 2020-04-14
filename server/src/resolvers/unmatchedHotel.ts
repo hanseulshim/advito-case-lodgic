@@ -37,6 +37,18 @@ export default {
 				.andWhere('dataEndDate', '<=', endDate)
 				.orderBy('templateCategory')
 			return result.map((r) => r.templateCategory)
+		},
+		sourceNameList: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<String[]> => {
+			const result = await UnmatchedHotelView.query()
+				.distinct('sourceName')
+				.where('clientId', clientId)
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.orderBy('sourceName')
+			return result.map((r) => r.sourceName)
 		}
 	}
 }
