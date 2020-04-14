@@ -19,22 +19,22 @@ export default {
           bestMatchScore
           roomSpend
           hotelName
-          chainName
+          hotelChainName
           templateCategory
           sourceName
           numberOfNights
           uploadTimestamp
-          addressLine1
-          addressLine2
+          address1
+          address2
           cityName
           stateCode
           countryName
           phoneNumber
-          brandName
-          sabreId
-          apolloId
-          amadeusId
-          worldspanId
+          hotelBrandName
+          sabrePropertyId
+          apolloPropertyId
+          amadeusPropertyId
+          worldspanPropertyId
         }
       }
       # unmatchedHotel(id: null) {
@@ -42,22 +42,22 @@ export default {
       #   bestMatchScore
       #   roomSpend
       #   hotelName
-      #   chainName
+      #   hotelChainName
       #   templateCategory
       #   sourceName
       #   numberOfNights
       #   uploadTimestamp
-      #   addressLine1
-      #   addressLine2
+      #   address1
+      #   address2
       #   cityName
       #   stateCode
       #   countryName
       #   phoneNumber
-      #   brandName
-      #   sabreId
-      #   apolloId
-      #   amadeusId
-      #   worldspanId
+      #   hotelBrandName
+      #   sabrePropertyId
+      #   apolloPropertyId
+      #   amadeusPropertyId
+      #   worldspanPropertyId
 			# }
     }`
 	}

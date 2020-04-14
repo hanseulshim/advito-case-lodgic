@@ -8,22 +8,22 @@ type UnmatchedHotelView {
 	bestMatchScore: Float
 	roomSpend: Float
 	hotelName: String
-	chainName: String
+	hotelChainName: String
 	templateCategory: String
 	sourceName: String
 	numberOfNights: Int
 	uploadTimestamp: String
-	addressLine1: String
-	addressLine2: String
+	address1: String
+	address2: String
 	cityName: String
 	stateCode: String
 	countryName: String
 	phoneNumber: String
-	brandName: String
-	sabreId: Int
-	apolloId: Int
-	amadeusId: Int
-	worldspanId: Int
+	hotelBrandName: String
+	sabrePropertyId: Int
+	apolloPropertyId: Int
+	amadeusPropertyId: Int
+	worldspanPropertyId: Int
 }
 
 extend type Query {

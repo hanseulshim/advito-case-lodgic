@@ -5,13 +5,13 @@ export class UnmatchedHotelView extends Model {
 	bestMatchScore: number
 	roomSpend: number
 	hotelName: string
-	chainName: string
+	hotelChainName: string
 	templateCategory: string
 	sourceName: string
 	numberOfNights: number
 	uploadTimestamp: string
-	addressLine1: string
-	addressLine2: string
+	address1: string
+	address2: string
 	cityName: string
 	stateCode: string
 	countryName: string
