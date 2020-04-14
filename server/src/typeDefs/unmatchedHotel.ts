@@ -34,7 +34,7 @@ extend type Query {
 		pageNumber: Int
 	): UnmatchedHotel @auth
 	unmatchedHotel(id: Int!): UnmatchedHotelView @auth
-	sourceTypeList(
+	templateCategoryList(
 		clientId: Int!
 		startDate: String!
 		endDate: String!

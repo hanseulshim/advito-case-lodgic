@@ -60,7 +60,7 @@ export default {
       #   worldspanPropertyId
       # }
       
-      # sourceTypeList(
+      # templateCategoryList(
       #   clientId: 348,
       #   startDate: "2020-01-01",
       #   endDate: "2020-12-31"

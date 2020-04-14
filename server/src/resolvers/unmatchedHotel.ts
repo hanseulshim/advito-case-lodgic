@@ -26,7 +26,9 @@ export default {
 					.orderBy('uploadTimestamp', 'desc')
 			}
 		},
-		sourceTypeList: async (
+		unmatchedHotel: async (_: null, { id }): Promise<UnmatchedHotelViewType> =>
+			UnmatchedHotelView.query().findById(id),
+		templateCategoryList: async (
 			_: null,
 			{ clientId, startDate, endDate }
 		): Promise<String[]> => {
