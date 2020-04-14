@@ -26,7 +26,17 @@ export default {
 					.orderBy('uploadTimestamp', 'desc')
 			}
 		},
-		unmatchedHotel: async (_: null, { id }): Promise<UnmatchedHotelViewType> =>
-			UnmatchedHotelView.query().findById(id)
+		sourceTypeList: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<String[]> => {
+			const result = await UnmatchedHotelView.query()
+				.distinct('templateCategory')
+				.where('clientId', clientId)
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.orderBy('templateCategory')
+			return result.map((r) => r.templateCategory)
+		}
 	}
 }

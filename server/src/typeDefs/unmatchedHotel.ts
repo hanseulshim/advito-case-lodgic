@@ -34,5 +34,10 @@ extend type Query {
 		pageNumber: Int
 	): UnmatchedHotel @auth
 	unmatchedHotel(id: Int!): UnmatchedHotelView @auth
+	sourceTypeList(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+	): [String] @auth
 }
 `
