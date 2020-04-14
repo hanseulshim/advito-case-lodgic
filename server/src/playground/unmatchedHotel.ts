@@ -8,10 +8,15 @@ export default {
 		query: `
     {
 			unmatchedHotelList(
-        clientId: 348,
-        startDate: "2020-01-01",
-        endDate: "2020-12-31",
+        clientId: 348
+        startDate: "2020-01-01"
+        endDate: "2020-12-31"
         pageNumber: null
+        # sortType: ""
+        # hotelName: ""
+        # templateCategory: ""
+        # sourceName: ""
+        # cityName: ""
       ) {
         pageCount
         data {
@@ -61,15 +66,15 @@ export default {
       # }
       
       # templateCategoryList(
-      #   clientId: 348,
-      #   startDate: "2020-01-01",
+      #   clientId: 348
+      #   startDate: "2020-01-01"
       #   endDate: "2020-12-31"
       # )
 
       # sourceNameList(
-      #   clientId: 348,
-      #   startDate: "2020-01-01",
-      #   endDate: "2020-12-31",
+      #   clientId: 348
+      #   startDate: "2020-01-01"
+      #   endDate: "2020-12-31"
       #   templateCategory: "Agency"
       # )
     }`

@@ -32,6 +32,11 @@ extend type Query {
 		startDate: String!
 		endDate: String!
 		pageNumber: Int
+		sortType: String
+		hotelName: String
+		templateCategory: String
+		sourceName: String
+		cityName: String
 	): UnmatchedHotel @auth
 	unmatchedHotel(id: Int!): UnmatchedHotelView @auth
 	templateCategoryList(

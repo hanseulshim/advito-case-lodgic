@@ -5,25 +5,48 @@ export default {
 	Query: {
 		unmatchedHotelList: async (
 			_: null,
-			{ clientId, startDate, endDate, pageNumber = 0 }
+			{
+				clientId,
+				startDate,
+				endDate,
+				pageNumber = 0,
+				sortType,
+				hotelName,
+				templateCategory,
+				sourceName,
+				cityName
+			}
 		): Promise<UnmatchedHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const [{ count }] = await UnmatchedHotelView.query()
+			const ORDER_BY = sortType ? sortType : 'roomSpend'
+			const [
+				{ count }
+			] = await UnmatchedHotelView.query()
+				.skipUndefined()
 				.count()
 				.where('clientId', clientId)
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
+				.andWhere('hotelName', 'ILIKE', hotelName)
+				.andWhere('templateCategory', templateCategory)
+				.andWhere('sourceName', sourceName)
+				.andWhere('cityName', 'ILIKE', cityName)
 
 			return {
 				pageCount: Math.ceil(+count / LIMIT),
 				data: await UnmatchedHotelView.query()
+					.skipUndefined()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('hotelName', 'ILIKE', hotelName)
+					.andWhere('templateCategory', templateCategory)
+					.andWhere('sourceName', sourceName)
+					.andWhere('cityName', 'ILIKE', cityName)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy('roomSpend', 'desc')
+					.orderBy(ORDER_BY, 'desc')
 			}
 		},
 		unmatchedHotel: async (_: null, { id }): Promise<UnmatchedHotelViewType> =>
