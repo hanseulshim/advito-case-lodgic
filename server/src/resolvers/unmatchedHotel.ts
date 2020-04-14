@@ -23,7 +23,7 @@ export default {
 					.andWhere('dataEndDate', '<=', endDate)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy('uploadTimestamp', 'desc')
+					.orderBy('roomSpend', 'desc')
 			}
 		},
 		unmatchedHotel: async (_: null, { id }): Promise<UnmatchedHotelViewType> =>
@@ -31,7 +31,7 @@ export default {
 		templateCategoryList: async (
 			_: null,
 			{ clientId, startDate, endDate }
-		): Promise<String[]> => {
+		): Promise<string[]> => {
 			const result = await UnmatchedHotelView.query()
 				.distinct('templateCategory')
 				.where('clientId', clientId)
@@ -42,13 +42,14 @@ export default {
 		},
 		sourceNameList: async (
 			_: null,
-			{ clientId, startDate, endDate }
-		): Promise<String[]> => {
+			{ clientId, startDate, endDate, templateCategory }
+		): Promise<string[]> => {
 			const result = await UnmatchedHotelView.query()
 				.distinct('sourceName')
 				.where('clientId', clientId)
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
+				.andWhere('templateCategory', templateCategory)
 				.orderBy('sourceName')
 			return result.map((r) => r.sourceName)
 		}

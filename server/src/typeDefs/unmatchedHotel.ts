@@ -44,6 +44,7 @@ extend type Query {
 		clientId: Int!
 		startDate: String!
 		endDate: String!
+		templateCategory: String!
 	): [String] @auth
 }
 `
