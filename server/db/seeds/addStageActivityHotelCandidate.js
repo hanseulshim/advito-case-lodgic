@@ -40,13 +40,6 @@ exports.seed = async (knex) => {
 
 	const bestMatchScoreList = await knex('stage_activity_hotel as ah')
 		.select('ah.id', 'sc.best_match_score')
-		.select(
-			knex.raw(`
-        (SELECT hotel_property_id FROM stage_activity_hotel_candidate c
-        WHERE c.stage_activity_hotel_id = ah.id AND c.match_score = sc.best_match_score
-        LIMIT 1)
-      `)
-		)
 		.leftJoin(
 			knex.raw(`
     (SELECT stage_activity_hotel_id, MAX(match_score) best_match_score
@@ -56,17 +49,11 @@ exports.seed = async (knex) => {
 		)
 
 	const updateRows = []
-	for (const {
-		id,
-		hotel_property_id,
-		best_match_score
-	} of bestMatchScoreList) {
+	for (const { id, best_match_score } of bestMatchScoreList) {
 		updateRows.push(
 			knex('stage_activity_hotel')
 				.update({
-					matched_hotel_property_id: hotel_property_id,
-					best_match_score,
-					is_matched: true
+					best_match_score
 				})
 				.where('id', id)
 		)
