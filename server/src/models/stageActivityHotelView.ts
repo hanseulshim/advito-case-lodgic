@@ -1,9 +1,6 @@
-export type UnmatchedHotelType = {
-	pageCount: number
-	data: UnmatchedHotelViewType[]
-}
+import { Model } from 'objection'
 
-export type UnmatchedHotelViewType = {
+export class StageActivityHotelView extends Model {
 	id: string
 	bestMatchScore: number
 	roomSpend: number
@@ -19,4 +16,7 @@ export type UnmatchedHotelViewType = {
 	stateCode: string
 	countryName: string
 	phoneNumber: string
+	count: string
+
+	static tableName = 'v_stage_activity_hotel'
 }

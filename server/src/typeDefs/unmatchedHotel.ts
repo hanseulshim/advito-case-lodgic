@@ -1,9 +1,9 @@
 export default `
 type UnmatchedHotel {
 	pageCount: Int
-	data: [UnmatchedHotelView]
+	data: [StageActivityHotelView]
 }
-type UnmatchedHotelView {
+type StageActivityHotelView {
 	id: Int
 	bestMatchScore: Float
 	roomSpend: Float
@@ -38,7 +38,7 @@ extend type Query {
 		sourceName: String
 		cityName: String
 	): UnmatchedHotel @auth
-	unmatchedHotel(id: Int!): UnmatchedHotelView @auth
+	unmatchedHotel(id: Int!): StageActivityHotelView @auth
 	templateCategoryList(
 		clientId: Int!
 		startDate: String!

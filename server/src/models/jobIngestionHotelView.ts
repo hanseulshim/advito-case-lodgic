@@ -1,7 +1,7 @@
 import { Model } from 'objection'
 import moment from 'moment'
 
-export class IngestionHotelView extends Model {
+export class JobIngestionHotelView extends Model {
 	id: string
 	jobIngestionId: string
 	templateNote: string
