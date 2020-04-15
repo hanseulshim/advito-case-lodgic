@@ -77,6 +77,27 @@ export default {
       #   endDate: "2020-12-31"
       #   templateCategory: "Agency"
       # )
+
+      # unmatchedHotelConfidenceList(stageActivityHotelId: null) {
+      #   id
+      #   stageActivityHotelId
+      #   hotelPropertyId
+      #   confidenceScore
+      #   hotelName
+      #   address1
+      #   address2
+      #   cityName
+      #   stateCode
+      #   countryName
+      #   phoneNumber
+      #   hotelChainName
+      #   hotelBrandName
+      #   lanyonId
+      #   sabrePropertyId
+      #   apolloPropertyId
+      #   amadeusPropertyId
+      #   worldspanPropertyId
+      # }
     }`
 	}
 }

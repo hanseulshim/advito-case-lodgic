@@ -26,6 +26,27 @@ type StageActivityHotelView {
 	worldspanPropertyId: Int
 }
 
+type StageActivityHotelCandidateView {
+	id: Int
+	stageActivityHotelId: Int
+	hotelPropertyId: Int
+	confidenceScore: Float
+	hotelName: String
+	address1: String
+	address2: String
+	cityName: String
+	stateCode: String
+	countryName: String
+	phoneNumber: String
+	hotelChainName: String
+	hotelBrandName: String
+	lanyonId: Int
+	sabrePropertyId: Int
+	apolloPropertyId: Int
+	amadeusPropertyId: Int
+	worldspanPropertyId: Int
+}
+
 extend type Query {
   unmatchedHotelList(
 		clientId: Int!
@@ -51,5 +72,7 @@ extend type Query {
 		endDate: String!
 		templateCategory: String!
 	): [String] @auth
+
+	unmatchedHotelConfidenceList(stageActivityHotelId: Int!): [StageActivityHotelCandidateView] @auth
 }
 `

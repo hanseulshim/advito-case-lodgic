@@ -1,5 +1,12 @@
-import { StageActivityHotelView } from '../models'
-import { StageActivityHotelViewType, StageActivityHotelType } from '../types'
+import {
+	StageActivityHotelView,
+	StageActivityHotelCandidateView
+} from '../models'
+import {
+	StageActivityHotelViewType,
+	StageActivityHotelType,
+	StageActivityHotelCandidateViewType
+} from '../types'
 
 export default {
 	Query: {
@@ -82,6 +89,13 @@ export default {
 				.andWhere('templateCategory', templateCategory)
 				.orderBy('sourceName')
 			return result.map((r) => r.sourceName)
-		}
+		},
+		unmatchedHotelConfidenceList: async (
+			_: null,
+			{ stageActivityHotelId }
+		): Promise<StageActivityHotelCandidateViewType[]> =>
+			StageActivityHotelCandidateView.query()
+				.where('stageActivityHotelId', stageActivityHotelId)
+				.orderBy('confidenceScore', 'DESC')
 	}
 }
