@@ -114,7 +114,7 @@ const createRow = (id) => {
 		file_info: `File Info - ${faker.random.number(10000)}`,
 		job_ingestion_id: id,
 		is_processed: true,
-		is_matched: null,
+		is_matched: false,
 		matched_hotel_property_id: null,
 		best_match_score: null
 	}

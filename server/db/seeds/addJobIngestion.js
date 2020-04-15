@@ -16,7 +16,7 @@ const createJobIngestionRow = ([clientList, applicationTemplateSourceList]) => {
 		processing_start_timestamp: dataStartDate,
 		processing_end_timestamp: new Date(dataStartDate.valueOf() + 6000),
 		processing_dur_sec: 60,
-		count_rows: faker.random.number({ min: 100, max: 200 }),
+		count_rows: faker.random.number({ min: 50, max: 100 }),
 		file_size: faker.random.number({ min: 5000, max: 10000 }),
 		file_extension: '.xlsx',
 		is_complete: true,
@@ -71,6 +71,7 @@ exports.seed = async (knex) => {
 	for (i = 0; i < 30; i++) {
 		jobIngestionRows.push(createJobIngestionRow(res))
 	}
+	await knex('stage_activity_hotel_candidate').del()
 	await knex('stage_activity_hotel').del()
 	await knex('job_ingestion_log').del()
 	await knex('job_ingestion_hotel').del()
