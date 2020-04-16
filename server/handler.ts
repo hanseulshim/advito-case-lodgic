@@ -22,6 +22,17 @@ Model.knex(
 	})
 )
 
+// const hotel = Knex({
+// 	client: 'pg',
+// 	connection: {
+// 		host: process.env.DB_HOST,
+// 		user: process.env.DB_USER,
+// 		password: process.env.DB_PASSWORD,
+// 		database: 'hotel'
+// 	},
+// 	...knexSnakeCaseMappers()
+// })
+
 const server = new ApolloServer({
 	typeDefs,
 	resolvers,
