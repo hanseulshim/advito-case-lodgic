@@ -1,8 +1,22 @@
 import history from './history'
 import moment from 'moment'
+import numeral from 'numeral'
 
-export const formatDate = date => {
-	return date ? moment(date).format('MMMM DD, YYYY') : ''
+export const formatDate = (date) => {
+	const parsed = +date
+	return parsed ? moment(parsed).format('MMMM DD, YYYY') : ''
+}
+
+export const formatNum = (num) => {
+	return num ? numeral(num).format('0,0') : 0
+}
+
+export const formatCurrency = (num) => {
+	return num ? numeral(num).format('$0,0.00') : 0
+}
+
+export const formatPercent = (num) => {
+	return num ? numeral(num).format('0.0%') : 0
 }
 
 export const getToken = () => {
@@ -21,7 +35,7 @@ export const getUser = () => {
 	}
 }
 
-export const updateUserName = displayName => {
+export const updateUserName = (displayName) => {
 	if (localStorage.getItem('advito-user')) {
 		const user = JSON.parse(localStorage.getItem('advito-user'))
 		user.displayName = displayName
@@ -29,7 +43,7 @@ export const updateUserName = displayName => {
 	}
 }
 
-export const setUser = user => {
+export const setUser = (user) => {
 	if (localStorage.getItem('advito-user')) {
 		localStorage.removeItem('advito-user')
 	}
