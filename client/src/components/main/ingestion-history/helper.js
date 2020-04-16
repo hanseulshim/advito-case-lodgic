@@ -1,5 +1,6 @@
 import React from 'react'
 import { formatDate } from 'helper'
+import { Checkbox, Button } from 'antd'
 
 const getColor = (status) => (status === 'Approved' ? 'green' : 'red')
 
@@ -25,26 +26,48 @@ export const getStatus = (record) => {
 		dateStatusSourcing,
 	} = record
 
-	if (isDpm && !isSourcing) {
-		return <Text type={'DPM'} status={statusDpm} date={dateStatusDpm} />
-	} else if (isSourcing && !isDpm) {
-		return (
+	const displayArr = []
+
+	if (isDpm) {
+		displayArr.push(
+			<Text type={'DPM'} status={statusDpm} date={dateStatusDpm} />
+		)
+	}
+	if (isSourcing) {
+		displayArr.push(
 			<Text
 				type={'Sourcing'}
 				status={statusSourcing}
 				date={dateStatusSourcing}
 			/>
 		)
-	} else if (isDpm && isSourcing) {
-		return (
-			<>
-				<Text type={'DPM'} status={statusDpm} date={dateStatusDpm} />
-				<Text
-					type={'Sourcing'}
-					status={statusSourcing}
-					date={dateStatusSourcing}
-				/>
-			</>
-		)
-	} else return 'Open'
+	}
+
+	return displayArr.length ? displayArr : 'Open'
+}
+
+export const getActions = (record) => {
+	const { isDpm, statusDpm, isSourcing, statusSourcing } = record
+
+	const displayArr = []
+	const loading = statusDpm === 'Loaded' || statusSourcing === 'Loaded'
+
+	if (!isDpm && !isSourcing) {
+		displayArr.push(<Checkbox>DPM</Checkbox>, <Checkbox>Sourcing</Checkbox>)
+	}
+	if (isDpm && !loading) {
+		displayArr.push(<Checkbox>Sourcing</Checkbox>)
+	}
+	if (isSourcing && !loading) {
+		displayArr.push(<Checkbox>DPM</Checkbox>)
+	}
+
+	return displayArr
+}
+
+export const getBackout = (record) => {
+	const { statusDpm, statusSourcing } = record
+	const showBackout = statusDpm !== 'Approved' || statusSourcing !== 'Approved'
+
+	return showBackout ? <Button>Backout</Button> : null
 }

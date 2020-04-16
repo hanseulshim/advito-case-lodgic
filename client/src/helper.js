@@ -21,8 +21,8 @@ export const formatPercent = (num) => {
 
 export const formatName = (displayName) => {
 	const initial = displayName.split(' ')[1].charAt(0)
-	const lastName = displayName.split(' ')[0]
-	console.log(displayName, initial, lastName)
+	const lastName = displayName.split(' ')[0].replace(',', '')
+
 	return displayName ? initial + lastName : ' '
 }
 
