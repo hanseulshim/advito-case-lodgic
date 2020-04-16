@@ -1,4 +1,10 @@
-import { formatDate, formatNum, formatCurrency, formatPercent } from 'helper'
+import {
+	formatDate,
+	formatNum,
+	formatCurrency,
+	formatPercent,
+	formatName,
+} from 'helper'
 //local helper
 import { getStatus } from './helper'
 
@@ -34,6 +40,7 @@ export const columns = [
 		title: 'Loaded By',
 		dataIndex: 'loadedBy',
 		width: 150,
+		render: (name) => formatName(name),
 	},
 	{
 		title: 'Period Start',
@@ -89,7 +96,7 @@ export const columns = [
 		render: (date) => formatDate(date),
 	},
 	{
-		title: 'Row Count',
+		title: 'Record Count',
 		dataIndex: 'countRows',
 		width: 150,
 	},

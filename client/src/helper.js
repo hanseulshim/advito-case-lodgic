@@ -19,6 +19,13 @@ export const formatPercent = (num) => {
 	return num ? numeral(num).format('0.0%') : 0
 }
 
+export const formatName = (displayName) => {
+	const initial = displayName.split(' ')[1].charAt(0)
+	const lastName = displayName.split(' ')[0]
+	console.log(displayName, initial, lastName)
+	return displayName ? initial + lastName : ' '
+}
+
 export const getToken = () => {
 	if (localStorage.getItem('advito-user')) {
 		const { sessionToken } = JSON.parse(localStorage.getItem('advito-user'))
