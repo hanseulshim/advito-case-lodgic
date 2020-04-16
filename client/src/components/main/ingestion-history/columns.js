@@ -120,7 +120,7 @@ export const columns = [
 	},
 	{
 		title: 'Load Actions',
-		width: 175,
+		width: 200,
 		fixed: 'right',
 		render: (_, record) => getActions(record),
 	},

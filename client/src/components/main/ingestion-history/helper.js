@@ -67,7 +67,8 @@ export const getActions = (record) => {
 
 export const getBackout = (record) => {
 	const { statusDpm, statusSourcing } = record
-	const showBackout = statusDpm !== 'Approved' || statusSourcing !== 'Approved'
+	const showBackout = statusDpm !== 'Approved' && statusSourcing !== 'Approved'
+	console.log(showBackout, statusDpm, statusSourcing)
 
 	return showBackout ? <Button>Backout</Button> : null
 }
