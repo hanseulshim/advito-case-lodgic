@@ -21,7 +21,7 @@ type JobIngestionHotelView {
 	conversionDate: String
 	countRows: Int
 	unmatchedCount: Int
-	unmatchedCountPercent: Float
+	unmatchedSpendPercent: Float
 	isDpm: Boolean
 	statusDpm: String
 	dateStatusDpm: String

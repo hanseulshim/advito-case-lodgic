@@ -21,7 +21,7 @@ type JobIngestionHotelView = {
 	conversionDate: () => string
 	countRows: string
 	unmatchedCount: string
-	unmatchedCountPercent: () => number
+	unmatchedSpendPercent: () => number
 	isDpm: boolean
 	statusDpm: string
 	dateStatusDpm: string

@@ -49,8 +49,11 @@ export class JobIngestionHotelView extends Model {
 		return inBetween.toString()
 	}
 
-	unmatchedCountPercent(): number {
-		return +this.countRows ? +this.unmatchedCount / +this.countRows : 0
+	unmatchedSpendPercent(): number {
+		return +this.unmatchedSpendUsd + +this.matchedSpendUsd
+			? +this.unmatchedSpendUsd /
+					(+this.unmatchedSpendUsd + +this.matchedSpendUsd)
+			: 0
 	}
 
 	convertedAbrUsd(): number {
