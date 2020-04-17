@@ -76,10 +76,10 @@ extend type Query {
 	unmatchedHotelConfidenceList(stageActivityHotelId: Int!): [StageActivityHotelCandidateView] @auth
 }
 
+extend type Mutation {
+	matchHotel(
+		stageActivityHotelId: Int!
+		hotelPropertyId: Int!
+	): Boolean @auth
+}
 `
-// extend type Mutation {
-// 	matchHotel(
-// 		stageActivityHotelId: Int!
-// 		hotelPropertyId: Int!
-// 	): Boolean @auth
-// }

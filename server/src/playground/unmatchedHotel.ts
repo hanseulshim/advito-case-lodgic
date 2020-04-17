@@ -99,5 +99,14 @@ export default {
       #   worldspanPropertyId
       # }
     }`
+	},
+	Mutation: {
+		name: 'Unmatched Hotel Mutation',
+		endpoint: getEndpoint(),
+		headers: { Authorization: 'MY^PR3TTYP0NY' },
+		query: `
+    mutation {
+      matchHotel(stageActivityHotelId: null, hotelPropertyId: null)
+    }`
 	}
 }

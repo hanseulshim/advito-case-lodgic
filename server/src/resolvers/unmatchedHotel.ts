@@ -98,10 +98,18 @@ export default {
 			StageActivityHotelCandidateView.query(hotel)
 				.where('stageActivityHotelId', stageActivityHotelId)
 				.orderBy('confidenceScore', 'DESC')
-		// matchHotel: async (
-		// 	_: null,
-		// 	{ stageActivityHotelId, hotelPropertyId }
-		// ): Promise<StageActivityHotelCandidateViewType[]> => {
-		// }
+	},
+	Mutation: {
+		matchHotel: async (
+			_: null,
+			{ stageActivityHotelId, hotelPropertyId },
+			{ advito }
+		): Promise<null> => {
+			const { rows } = await advito.raw(
+				`select manual_match(${stageActivityHotelId}, ${hotelPropertyId})`
+			)
+			const [{ manual_match: result }] = rows
+			return result
+		}
 	}
 }
