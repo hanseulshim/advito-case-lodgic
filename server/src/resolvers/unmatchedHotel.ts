@@ -27,19 +27,17 @@ export default {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
 			const ORDER_BY = sortType ? sortType : 'roomSpend'
-			const [
-				{ count }
-			] = await StageActivityHotelView.query()
+			const [{ count }] = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
-				.andWhere('hotelName', 'ILIKE', hotelName)
+				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
 				.andWhere('templateCategory', templateCategory)
 				.andWhere('sourceName', sourceName)
-				.andWhere('cityName', 'ILIKE', cityName)
+				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 
 			return {
 				pageCount: Math.ceil(+count / LIMIT),
@@ -49,10 +47,10 @@ export default {
 					.whereNull('matchedHotelPropertyId')
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
-					.andWhere('hotelName', 'ILIKE', hotelName)
+					.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
 					.andWhere('templateCategory', templateCategory)
 					.andWhere('sourceName', sourceName)
-					.andWhere('cityName', 'ILIKE', cityName)
+					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(ORDER_BY, 'desc')
