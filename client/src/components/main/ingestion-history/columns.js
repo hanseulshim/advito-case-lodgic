@@ -1,6 +1,13 @@
-import { formatDate, formatNum, formatCurrency, formatPercent } from 'helper'
+import React from 'react'
+import {
+	formatDate,
+	formatNum,
+	formatCurrency,
+	formatPercent,
+	formatName,
+} from 'helper'
 //local helper
-import { getStatus } from './helper'
+import { getStatus, getActions, getBackout } from './helper'
 
 // Cell width (in pixels)
 // const [small, med, large] = [75, 100, 150]
@@ -14,26 +21,27 @@ export const columns = [
 	},
 	{
 		title: 'Detail Level',
-		width: 150,
+		width: 130,
 		dataIndex: 'templateNote',
 		fixed: 'left',
 	},
 	{
 		title: 'Source Type',
 		dataIndex: 'templateCategory',
-		width: 150,
+		width: 100,
 		fixed: 'left',
 	},
 	{
 		title: 'Source Name',
 		dataIndex: 'sourceName',
-		width: 150,
+		width: 100,
 		fixed: 'left',
 	},
 	{
 		title: 'Loaded By',
 		dataIndex: 'loadedBy',
 		width: 150,
+		render: (name) => formatName(name),
 	},
 	{
 		title: 'Period Start',
@@ -89,7 +97,7 @@ export const columns = [
 		render: (date) => formatDate(date),
 	},
 	{
-		title: 'Row Count',
+		title: 'Record Count',
 		dataIndex: 'countRows',
 		width: 150,
 	},
@@ -99,20 +107,27 @@ export const columns = [
 		width: 150,
 	},
 	{
-		title: '% Unmatched',
-		dataIndex: 'unmatchedCountPercent',
+		title: 'Unmatched % Spend',
+		dataIndex: 'unmatchedSpendPercent',
 		width: 150,
 		render: (num) => formatPercent(num),
 	},
 	{
 		title: 'Status',
-		width: 200,
+		width: 150,
 		fixed: 'right',
 		render: (_, record) => getStatus(record),
 	},
 	{
-		title: 'Actions',
-		width: 150,
+		title: 'Load Actions',
+		width: 200,
 		fixed: 'right',
+		render: (_, record) => getActions(record),
+	},
+	{
+		title: '',
+		width: 100,
+		fixed: 'right',
+		render: (_, record) => getBackout(record),
 	},
 ]
