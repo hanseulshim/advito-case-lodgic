@@ -9,29 +9,28 @@ import { Model, knexSnakeCaseMappers } from 'objection'
 import { authenticateUser } from './src/utils'
 import RequireAuthDirective from './src/authDirective'
 
-Model.knex(
-	Knex({
-		client: 'pg',
-		connection: {
-			host: process.env.DB_HOST,
-			user: process.env.DB_USER,
-			password: process.env.DB_PASSWORD,
-			database: process.env.DB_NAME
-		},
-		...knexSnakeCaseMappers()
-	})
-)
+const advito = Knex({
+	client: 'pg',
+	connection: {
+		host: process.env.DB_HOST,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASSWORD,
+		database: process.env.DB_NAME
+	},
+	...knexSnakeCaseMappers()
+})
 
-// const hotel = Knex({
-// 	client: 'pg',
-// 	connection: {
-// 		host: process.env.DB_HOST,
-// 		user: process.env.DB_USER,
-// 		password: process.env.DB_PASSWORD,
-// 		database: 'hotel'
-// 	},
-// 	...knexSnakeCaseMappers()
-// })
+const hotel = Knex({
+	client: 'pg',
+	connection: {
+		host: process.env.DB_HOST,
+		user: process.env.DB_USER,
+		password: process.env.DB_PASSWORD,
+		database: 'hotel'
+	},
+	...knexSnakeCaseMappers()
+})
+Model.knex(advito)
 
 const server = new ApolloServer({
 	typeDefs,
@@ -40,7 +39,7 @@ const server = new ApolloServer({
 	context: async ({ event }): Promise<ContextType> => {
 		const sessionToken = event.headers.Authorization || ''
 		const user = await authenticateUser(sessionToken)
-		return { user }
+		return { user, advito, hotel }
 	},
 	schemaDirectives: {
 		auth: RequireAuthDirective

@@ -92,10 +92,16 @@ export default {
 		},
 		unmatchedHotelConfidenceList: async (
 			_: null,
-			{ stageActivityHotelId }
+			{ stageActivityHotelId },
+			{ hotel }
 		): Promise<StageActivityHotelCandidateViewType[]> =>
-			StageActivityHotelCandidateView.query()
+			StageActivityHotelCandidateView.query(hotel)
 				.where('stageActivityHotelId', stageActivityHotelId)
 				.orderBy('confidenceScore', 'DESC')
+		// matchHotel: async (
+		// 	_: null,
+		// 	{ stageActivityHotelId, hotelPropertyId }
+		// ): Promise<StageActivityHotelCandidateViewType[]> => {
+		// }
 	}
 }

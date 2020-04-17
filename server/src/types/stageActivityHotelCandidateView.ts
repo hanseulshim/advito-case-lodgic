@@ -12,9 +12,9 @@ export type StageActivityHotelCandidateViewType = {
 	phoneNumber: string
 	hotelChainName: string
 	hotelBrandName: string
-	lanyonId: number
-	sabrePropertyId: number
-	apolloPropertyId: number
-	amadeusPropertyId: number
-	worldspanPropertyId: number
+	lanyonId: string
+	sabrePropertyId: string
+	apolloPropertyId: string
+	amadeusPropertyId: string
+	worldspanPropertyId: string
 }

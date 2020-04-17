@@ -20,10 +20,10 @@ type StageActivityHotelView {
 	countryName: String
 	phoneNumber: String
 	hotelBrandName: String
-	sabrePropertyId: Int
-	apolloPropertyId: Int
-	amadeusPropertyId: Int
-	worldspanPropertyId: Int
+	sabrePropertyId: String
+	apolloPropertyId: String
+	amadeusPropertyId: String
+	worldspanPropertyId: String
 }
 
 type StageActivityHotelCandidateView {
@@ -40,11 +40,11 @@ type StageActivityHotelCandidateView {
 	phoneNumber: String
 	hotelChainName: String
 	hotelBrandName: String
-	lanyonId: Int
-	sabrePropertyId: Int
-	apolloPropertyId: Int
-	amadeusPropertyId: Int
-	worldspanPropertyId: Int
+	lanyonId: String
+	sabrePropertyId: String
+	apolloPropertyId: String
+	amadeusPropertyId: String
+	worldspanPropertyId: String
 }
 
 extend type Query {
@@ -75,4 +75,11 @@ extend type Query {
 
 	unmatchedHotelConfidenceList(stageActivityHotelId: Int!): [StageActivityHotelCandidateView] @auth
 }
+
 `
+// extend type Mutation {
+// 	matchHotel(
+// 		stageActivityHotelId: Int!
+// 		hotelPropertyId: Int!
+// 	): Boolean @auth
+// }
