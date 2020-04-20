@@ -43,7 +43,9 @@ export const getStatus = (record) => {
 		)
 	}
 
-	return displayArr.length ? displayArr : 'Open'
+	return displayArr.length
+		? displayArr.map((el, i) => ({ ...el, key: i }))
+		: 'Open'
 }
 
 export const getActions = (record) => {
@@ -51,6 +53,7 @@ export const getActions = (record) => {
 
 	const displayArr = []
 	const loading = statusDpm === 'Loaded' || statusSourcing === 'Loaded'
+	const finished = statusDpm === 'Approved' && statusSourcing === 'Approved'
 
 	if (!isDpm && !isSourcing) {
 		displayArr.push(<Checkbox>DPM</Checkbox>, <Checkbox>Sourcing</Checkbox>)
@@ -61,14 +64,16 @@ export const getActions = (record) => {
 	if (isSourcing && !loading) {
 		displayArr.push(<Checkbox>DPM</Checkbox>)
 	}
+	if (finished) {
+		return
+	}
 
-	return displayArr
+	return displayArr.length ? displayArr.map((el, i) => ({ ...el, key: i })) : []
 }
 
 export const getBackout = (record) => {
 	const { statusDpm, statusSourcing } = record
 	const showBackout = statusDpm !== 'Approved' && statusSourcing !== 'Approved'
-	console.log(showBackout, statusDpm, statusSourcing)
 
 	return showBackout ? <Button>Backout</Button> : null
 }
