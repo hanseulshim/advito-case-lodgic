@@ -9,6 +9,8 @@ import { Button } from 'antd'
 const Container = styled.div`
 	display: flex;
 	align-items: flex-end;
+	margin-top: 1em;
+	margin-bottom: 2em;
 	> div,
 	button {
 		margin-right: 15px;
