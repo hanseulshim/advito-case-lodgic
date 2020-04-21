@@ -39,9 +39,6 @@ export const authenticateUser = async (
 
 	const roleIds = user.advitoUserRoleLink.map((role) => +role.advitoRoleId)
 
-	if (!roleIds.includes(12) && !roleIds.includes(13))
-		throw new AuthenticationError('User has invalid roles')
-
 	return {
 		id: user.id,
 		displayName: user.fullName(),
