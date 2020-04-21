@@ -1,20 +1,20 @@
-export type UnmatchedHotelType = {
+export type StageActivityHotelType = {
 	pageCount: number
-	data: UnmatchedHotelView[]
+	data: StageActivityHotelViewType[]
 }
 
-type UnmatchedHotelView = {
+export type StageActivityHotelViewType = {
 	id: string
 	bestMatchScore: number
 	roomSpend: number
 	hotelName: string
-	chainName: string
+	hotelChainName: string
 	templateCategory: string
 	sourceName: string
 	numberOfNights: number
 	uploadTimestamp: string
-	addressLine1: string
-	addressLine2: string
+	address1: string
+	address2: string
 	cityName: string
 	stateCode: string
 	countryName: string

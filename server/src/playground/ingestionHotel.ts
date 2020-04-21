@@ -8,9 +8,9 @@ export default {
 		query: `
     {
 			ingestionHotelList(
-        clientId: 41,
-        startDate: "2020-01-01",
-        endDate: "2020-12-31",
+        clientId: 348
+        startDate: "2020-01-01"
+        endDate: "2020-12-31"
         pageNumber: null
       ) {
         pageCount
@@ -32,7 +32,7 @@ export default {
           conversionDate
           countRows
           unmatchedCount
-          unmatchedCountPercent
+          unmatchedSpendPercent
           isDpm
           statusDpm
           dateStatusDpm

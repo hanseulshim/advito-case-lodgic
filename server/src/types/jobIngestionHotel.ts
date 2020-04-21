@@ -1,9 +1,9 @@
-export type IngestionHotelType = {
+export type JobIngestionHotelType = {
 	pageCount: number
-	data: IngestionHotelView[]
+	data: JobIngestionHotelView[]
 }
 
-type IngestionHotelView = {
+type JobIngestionHotelView = {
 	id: string
 	jobIngestionId: string
 	templateNote: string
@@ -21,7 +21,7 @@ type IngestionHotelView = {
 	conversionDate: () => string
 	countRows: string
 	unmatchedCount: string
-	unmatchedCountPercent: () => number
+	unmatchedSpendPercent: () => number
 	isDpm: boolean
 	statusDpm: string
 	dateStatusDpm: string

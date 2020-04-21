@@ -1,9 +1,9 @@
 export default `
 type IngestionHotel {
 	pageCount: Int
-	data: [IngestionHotelView]
+	data: [JobIngestionHotelView]
 }
-type IngestionHotelView {
+type JobIngestionHotelView {
   id: Int
   jobIngestionId: Int
 	templateNote: String
@@ -21,7 +21,7 @@ type IngestionHotelView {
 	conversionDate: String
 	countRows: Int
 	unmatchedCount: Int
-	unmatchedCountPercent: Float
+	unmatchedSpendPercent: Float
 	isDpm: Boolean
 	statusDpm: String
 	dateStatusDpm: String

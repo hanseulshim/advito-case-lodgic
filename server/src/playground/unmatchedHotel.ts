@@ -8,10 +8,15 @@ export default {
 		query: `
     {
 			unmatchedHotelList(
-        clientId: 41,
-        startDate: "2020-01-01",
-        endDate: "2020-12-31",
+        clientId: 348
+        startDate: "2020-01-01"
+        endDate: "2020-12-31"
         pageNumber: null
+        # sortType: ""
+        # hotelName: ""
+        # templateCategory: ""
+        # sourceName: ""
+        # cityName: ""
       ) {
         pageCount
         data {
@@ -19,19 +24,89 @@ export default {
           bestMatchScore
           roomSpend
           hotelName
-          chainName
+          hotelChainName
           templateCategory
           sourceName
           numberOfNights
           uploadTimestamp
-          addressLine1
-          addressLine2
+          address1
+          address2
           cityName
           stateCode
           countryName
           phoneNumber
+          hotelBrandName
+          sabrePropertyId
+          apolloPropertyId
+          amadeusPropertyId
+          worldspanPropertyId
         }
-			}
+      }
+      # unmatchedHotel(id: null) {
+      #   id
+      #   bestMatchScore
+      #   roomSpend
+      #   hotelName
+      #   hotelChainName
+      #   templateCategory
+      #   sourceName
+      #   numberOfNights
+      #   uploadTimestamp
+      #   address1
+      #   address2
+      #   cityName
+      #   stateCode
+      #   countryName
+      #   phoneNumber
+      #   hotelBrandName
+      #   sabrePropertyId
+      #   apolloPropertyId
+      #   amadeusPropertyId
+      #   worldspanPropertyId
+      # }
+      
+      # templateCategoryList(
+      #   clientId: 348
+      #   startDate: "2020-01-01"
+      #   endDate: "2020-12-31"
+      # )
+
+      # sourceNameList(
+      #   clientId: 348
+      #   startDate: "2020-01-01"
+      #   endDate: "2020-12-31"
+      #   templateCategory: "Agency"
+      # )
+
+      # unmatchedHotelConfidenceList(stageActivityHotelId: null) {
+      #   id
+      #   stageActivityHotelId
+      #   hotelPropertyId
+      #   confidenceScore
+      #   hotelName
+      #   address1
+      #   address2
+      #   cityName
+      #   stateCode
+      #   countryName
+      #   phoneNumber
+      #   hotelChainName
+      #   hotelBrandName
+      #   lanyonId
+      #   sabrePropertyId
+      #   apolloPropertyId
+      #   amadeusPropertyId
+      #   worldspanPropertyId
+      # }
+    }`
+	},
+	Mutation: {
+		name: 'Unmatched Hotel Mutation',
+		endpoint: getEndpoint(),
+		headers: { Authorization: 'MY^PR3TTYP0NY' },
+		query: `
+    mutation {
+      matchHotel(stageActivityHotelId: null, hotelPropertyId: null)
     }`
 	}
 }

@@ -1,15 +1,15 @@
-import { IngestionHotelView } from '../models'
-import { IngestionHotelType } from '../types'
+import { JobIngestionHotelView } from '../models'
+import { JobIngestionHotelType } from '../types'
 
 export default {
 	Query: {
 		ingestionHotelList: async (
 			_: null,
 			{ clientId, startDate, endDate, pageNumber = 0 }
-		): Promise<IngestionHotelType> => {
+		): Promise<JobIngestionHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const [{ count }] = await IngestionHotelView.query()
+			const [{ count }] = await JobIngestionHotelView.query()
 				.count()
 				.where('clientId', clientId)
 				.andWhere('dataStartDate', '>=', startDate)
@@ -17,7 +17,7 @@ export default {
 
 			return {
 				pageCount: Math.ceil(+count / LIMIT),
-				data: await IngestionHotelView.query()
+				data: await JobIngestionHotelView.query()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
