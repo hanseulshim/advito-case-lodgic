@@ -6,12 +6,22 @@ export const UNMATCHED_HOTEL_LIST = gql`
 		$startDate: String!
 		$endDate: String!
 		$pageNumber: Int
+		$sortType: String
+		$hotelName: String
+		$templateCategory: String
+		$sourceName: String
+		$cityName: String
 	) {
 		unmatchedHotelList(
 			clientId: $clientId
 			startDate: $startDate
 			endDate: $endDate
 			pageNumber: $pageNumber
+			sortType: $sortType
+			hotelName: $hotelName
+			templateCategory: $templateCategory
+			sourceName: $sourceName
+			cityName: $cityName
 		) {
 			pageCount
 			data {

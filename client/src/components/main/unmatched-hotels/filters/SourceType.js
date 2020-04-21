@@ -42,7 +42,7 @@ const SourceType = ({ onChange, value }) => {
 				<Select
 					showSearch
 					placeholder="Select Source Type"
-					onChange={(e) => onChange(e, 'sourceType')}
+					onChange={(e) => onChange(e, 'templateCategory')}
 					filterOption={(input, option) =>
 						option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
 						0

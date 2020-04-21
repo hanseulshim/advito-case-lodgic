@@ -12,10 +12,12 @@ export const columns = [
 	},
 	{
 		title: 'Match %',
-		width: 100,
+		width: 130,
 		dataIndex: 'bestMatchScore',
 		fixed: 'left',
 		render: (num) => formatPercent(num),
+		// sorter: (a, b) => a.bestMatchScore - b.bestMatchScore,
+		// sortDirections: ['descend', 'ascend'],
 	},
 	{
 		title: 'Hotel Name',

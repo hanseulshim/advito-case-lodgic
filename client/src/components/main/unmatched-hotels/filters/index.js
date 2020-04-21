@@ -20,16 +20,16 @@ const Container = styled.div`
 const Filters = ({ onSubmit }) => {
 	const [filters, setFilters] = useState({
 		hotelName: '',
-		sourceType: '',
+		templateCategory: '',
 		sourceName: '',
 		cityName: '',
 	})
 
 	const onChange = (value, key) => {
-		if (key === 'sourceType') {
+		if (key === 'templateCategory') {
 			setFilters({
 				...filters,
-				sourceType: value,
+				templateCategory: value,
 				sourceName: '',
 			})
 		} else {
@@ -43,18 +43,25 @@ const Filters = ({ onSubmit }) => {
 	const clearFilters = () => {
 		setFilters({
 			hotelName: '',
-			sourceType: '',
+			templateCategory: '',
+			sourceName: '',
+			cityName: '',
+		})
+		onSubmit({
+			hotelName: '',
+			templateCategory: '',
 			sourceName: '',
 			cityName: '',
 		})
 	}
+
 	return (
 		<Container>
 			<HotelName onChange={onChange} value={filters.hotelName} />
-			<SourceType onChange={onChange} value={filters.sourceType} />
+			<SourceType onChange={onChange} value={filters.templateCategory} />
 			<SourceName
 				onChange={onChange}
-				templateCategory={filters.sourceType}
+				templateCategory={filters.templateCategory}
 				value={filters.sourceName}
 			/>
 			<CityName onChange={onChange} value={filters.cityName} />
