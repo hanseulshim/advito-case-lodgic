@@ -36,11 +36,17 @@ export const authenticateUser = async (
 		.findById(session.advitoUserId)
 		.withGraphFetched('advitoUserRoleLink(advitoRoleId)')
 	if (!user) throw new AuthenticationError('User not found')
+
+	const roleIds = user.advitoUserRoleLink.map((role) => +role.advitoRoleId)
+
+	if (!roleIds.includes(12) && !roleIds.includes(13))
+		throw new AuthenticationError('User has invalid roles')
+
 	return {
 		id: user.id,
 		displayName: user.fullName(),
 		clientId: user.clientId,
 		sessionToken,
-		roleIds: user.advitoUserRoleLink.map((role) => role.advitoRoleId)
+		roleIds
 	}
 }
