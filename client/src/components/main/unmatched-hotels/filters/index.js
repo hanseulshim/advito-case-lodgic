@@ -4,6 +4,7 @@ import CityName from './CityName'
 import HotelName from './HotelName'
 import SourceName from './SourceName'
 import SourceType from './SourceType'
+import SortType from './SortType'
 import { Button } from 'antd'
 
 const Container = styled.div`
@@ -23,6 +24,7 @@ const Filters = ({ onSubmit }) => {
 		templateCategory: '',
 		sourceName: '',
 		cityName: '',
+		sortType: '',
 	})
 
 	const onChange = (value, key) => {
@@ -46,12 +48,14 @@ const Filters = ({ onSubmit }) => {
 			templateCategory: '',
 			sourceName: '',
 			cityName: '',
+			sortType: '',
 		})
 		onSubmit({
 			hotelName: '',
 			templateCategory: '',
 			sourceName: '',
 			cityName: '',
+			sortType: '',
 		})
 	}
 
@@ -65,6 +69,7 @@ const Filters = ({ onSubmit }) => {
 				value={filters.sourceName}
 			/>
 			<CityName onChange={onChange} value={filters.cityName} />
+			<SortType onChange={onChange} value={filters.sortType} />
 			<Button onClick={() => onSubmit(filters)} type="primary" shape="round">
 				Submit
 			</Button>

@@ -15,7 +15,7 @@ const Container = styled.div`
 const SelectContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 300px;
+	width: 200px;
 
 	label {
 		margin-right: 10px;

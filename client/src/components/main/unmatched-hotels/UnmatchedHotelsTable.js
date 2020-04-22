@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { store } from 'context/store'
 import { UNMATCHED_HOTEL_LIST } from 'api/queries'
@@ -24,10 +24,15 @@ const UnmatchedHotelsTable = ({ filters }) => {
 		fetchPolicy: 'network-only',
 	})
 
-	if (loading) return <SpinLoader />
-	if (error) return <ErrorMessage error={error} />
+	useEffect(() => {
+		//Check if filters were changed. If so, return to page 1.
+		onPageChange(1)
+	}, [filters])
 
 	const onPageChange = (e) => setPageNumber(e)
+
+	if (loading) return <SpinLoader />
+	if (error) return <ErrorMessage error={error} />
 
 	return (
 		<Table
