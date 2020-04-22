@@ -55,6 +55,7 @@ extend type Query {
 		endDate: String!
 		pageNumber: Int
 		sortType: String
+		sortOrder: String
 		hotelName: String
 		templateCategory: String
 		sourceName: String

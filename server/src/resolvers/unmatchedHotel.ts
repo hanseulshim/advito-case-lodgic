@@ -18,6 +18,7 @@ export default {
 				endDate,
 				pageNumber = 0,
 				sortType,
+				sortOrder,
 				hotelName,
 				templateCategory,
 				sourceName,
@@ -27,6 +28,7 @@ export default {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
 			const ORDER_BY = sortType ? sortType : 'roomSpend'
+			const SORT_ORDER = sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC'
 			const [{ count }] = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
@@ -54,7 +56,7 @@ export default {
 					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy(ORDER_BY, 'desc')
+					.orderBy(ORDER_BY, SORT_ORDER)
 			}
 		},
 		unmatchedHotel: async (
