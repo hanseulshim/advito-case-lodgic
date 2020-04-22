@@ -1,5 +1,6 @@
 export * from './application'
 export * from './client'
+export * from './currency'
 export * from './hotelPropertyView'
 export * from './jobIngestionHotelView'
 export * from './stageActivityHotelView'

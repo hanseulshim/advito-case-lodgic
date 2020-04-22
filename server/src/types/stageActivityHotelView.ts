@@ -1,5 +1,6 @@
 export type StageActivityHotelType = {
 	pageCount: number
+	recordCount: number
 	data: StageActivityHotelViewType[]
 }
 

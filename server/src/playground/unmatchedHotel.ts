@@ -19,6 +19,7 @@ export default {
         # cityName: ""
       ) {
         pageCount
+        recordCount
         data {
           id
           bestMatchScore
