@@ -41,6 +41,7 @@ export default {
 
 			return {
 				pageCount: Math.ceil(+count / LIMIT),
+				recordCount: +count,
 				data: await StageActivityHotelView.query()
 					.skipUndefined()
 					.where('clientId', clientId)
