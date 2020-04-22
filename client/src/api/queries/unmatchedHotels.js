@@ -24,6 +24,7 @@ export const UNMATCHED_HOTEL_LIST = gql`
 			cityName: $cityName
 		) {
 			pageCount
+			recordCount
 			data {
 				id
 				bestMatchScore

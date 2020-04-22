@@ -39,7 +39,9 @@ const UnmatchedHotelsTable = ({ filters }) => {
 				defaultPageSize: 25,
 				showSizeChanger: false,
 				current: pageNumber,
-				total: data.unmatchedHotelList.pageCount * 25,
+				total: data.unmatchedHotelList.recordCount,
+				showTotal: (total, range) =>
+					`${range[0]}-${range[1]} of ${total} items`,
 				onChange: onPageChange,
 			}}
 			scroll={{ x: 1500, y: 700 }}
