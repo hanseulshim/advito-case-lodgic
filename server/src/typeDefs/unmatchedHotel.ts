@@ -25,6 +25,7 @@ type StageActivityHotelView {
 	apolloPropertyId: String
 	amadeusPropertyId: String
 	worldspanPropertyId: String
+	lanyonId: String
 }
 
 type StageActivityHotelCandidateView {

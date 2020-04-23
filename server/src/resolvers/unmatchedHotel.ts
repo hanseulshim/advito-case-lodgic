@@ -28,7 +28,8 @@ export default {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
 			const ORDER_BY = sortType ? sortType : 'roomSpend'
-			const SORT_ORDER = sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC'
+			const SORT_ORDER =
+				sortOrder && sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC'
 			const [{ count }] = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()

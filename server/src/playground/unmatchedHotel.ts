@@ -65,6 +65,7 @@ export default {
       #   apolloPropertyId
       #   amadeusPropertyId
       #   worldspanPropertyId
+      #   lanyonId
       # }
       
       # templateCategoryList(
