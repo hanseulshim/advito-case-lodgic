@@ -36,11 +36,14 @@ export const authenticateUser = async (
 		.findById(session.advitoUserId)
 		.withGraphFetched('advitoUserRoleLink(advitoRoleId)')
 	if (!user) throw new AuthenticationError('User not found')
+
+	const roleIds = user.advitoUserRoleLink.map((role) => +role.advitoRoleId)
+
 	return {
 		id: user.id,
 		displayName: user.fullName(),
 		clientId: user.clientId,
 		sessionToken,
-		roleIds: user.advitoUserRoleLink.map((role) => role.advitoRoleId)
+		roleIds
 	}
 }

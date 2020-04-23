@@ -1,7 +1,7 @@
 import { Model } from 'objection'
 import moment from 'moment'
 
-export class IngestionHotelView extends Model {
+export class JobIngestionHotelView extends Model {
 	id: string
 	jobIngestionId: string
 	templateNote: string
@@ -49,8 +49,11 @@ export class IngestionHotelView extends Model {
 		return inBetween.toString()
 	}
 
-	unmatchedCountPercent(): number {
-		return +this.countRows ? +this.unmatchedCount / +this.countRows : 0
+	unmatchedSpendPercent(): number {
+		return +this.unmatchedSpendUsd + +this.matchedSpendUsd
+			? +this.unmatchedSpendUsd /
+					(+this.unmatchedSpendUsd + +this.matchedSpendUsd)
+			: 0
 	}
 
 	convertedAbrUsd(): number {
