@@ -33,8 +33,11 @@ const SortType = ({ onChange, value }) => {
 					<Option key={'convertedRoomSpend'} value={''}>
 						{'Converted Room Spend'}
 					</Option>
-					<Option key={'bestMatchScore'} value={'bestMatchScore'}>
-						{'Best Match Score'}
+					<Option key={'bestMatchScore'} value={'asc'}>
+						{'Match % asc'}
+					</Option>
+					<Option key={'bestMatchScore'} value={'desc'}>
+						{'Match % desc'}
 					</Option>
 				</Select>
 			</SelectContainer>
