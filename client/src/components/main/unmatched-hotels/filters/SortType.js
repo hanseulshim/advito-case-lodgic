@@ -10,7 +10,7 @@ const Container = styled.div`
 const SelectContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 200px;
+	width: 250px;
 
 	label {
 		margin-right: 10px;
@@ -31,12 +31,12 @@ const SortType = ({ onChange, value }) => {
 					defaultValue={''}
 				>
 					<Option key={'convertedRoomSpend'} value={''}>
-						{'Converted Room Spend'}
+						{'Converted Room Spend (Desc)'}
 					</Option>
-					<Option key={'bestMatchScore'} value={'asc'}>
+					<Option key={'bestMatchScoreAsc'} value={'matchAsc'}>
 						{'Match % asc'}
 					</Option>
-					<Option key={'bestMatchScore'} value={'desc'}>
+					<Option key={'bestMatchScoreDesc'} value={'matchDesc'}>
 						{'Match % desc'}
 					</Option>
 				</Select>

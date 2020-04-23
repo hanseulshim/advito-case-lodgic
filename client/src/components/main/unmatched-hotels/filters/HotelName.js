@@ -5,7 +5,7 @@ import { Input } from 'antd'
 const SelectContainer = styled.div`
 	display: flex;
 	flex-direction: column;
-	width: 300px;
+	width: 250px;
 
 	label {
 		margin-right: 10px;

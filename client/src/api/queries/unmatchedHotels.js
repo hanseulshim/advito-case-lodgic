@@ -7,7 +7,6 @@ export const UNMATCHED_HOTEL_LIST = gql`
 		$endDate: String!
 		$pageNumber: Int
 		$sortType: String
-		$sortOrder: String
 		$hotelName: String
 		$templateCategory: String
 		$sourceName: String
@@ -19,7 +18,6 @@ export const UNMATCHED_HOTEL_LIST = gql`
 			endDate: $endDate
 			pageNumber: $pageNumber
 			sortType: $sortType
-			sortOrder: $sortOrder
 			hotelName: $hotelName
 			templateCategory: $templateCategory
 			sourceName: $sourceName
