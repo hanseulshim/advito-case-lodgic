@@ -9,6 +9,7 @@ export default {
     {
       hotelPropertyList
       # (
+        # id: ""
         # hotelName: ""
         # hotelChainName: ""
         # address1: ""

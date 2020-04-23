@@ -6,6 +6,7 @@ export default {
 		hotelPropertyList: async (
 			_: null,
 			{
+				id,
 				hotelName,
 				hotelChainName,
 				address1,
@@ -25,7 +26,8 @@ export default {
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
 			const [{ count }] = await HotelPropertyView.query(hotel)
 				.skipUndefined()
-				.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+				.where('id', id)
+				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
 				.andWhere('hotelChainName', 'ILIKE', `%${hotelChainName || ''}%`)
 				.andWhere('address1', 'ILIKE', `%${address1 || ''}%`)
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
@@ -46,7 +48,8 @@ export default {
 				pageCount: Math.ceil(+count / LIMIT),
 				data: await HotelPropertyView.query(hotel)
 					.skipUndefined()
-					.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+					.where('id', id)
+					.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
 					.andWhere('hotelChainName', 'ILIKE', `%${hotelChainName || ''}%`)
 					.andWhere('address1', 'ILIKE', `%${address1 || ''}%`)
 					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)

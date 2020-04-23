@@ -24,6 +24,7 @@ type HotelPropertyView {
 
 extend type Query {
   hotelPropertyList(
+		id: Int
 		hotelName: String
     hotelChainName: String
     address1: String
