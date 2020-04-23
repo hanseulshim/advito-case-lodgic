@@ -17,8 +17,7 @@ export default {
 				startDate,
 				endDate,
 				pageNumber = 0,
-				sortType,
-				sortOrder,
+				sortType = '',
 				hotelName,
 				templateCategory,
 				sourceName,
@@ -27,9 +26,10 @@ export default {
 		): Promise<StageActivityHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const ORDER_BY = sortType ? sortType : 'roomSpend'
-			const SORT_ORDER =
-				sortOrder && sortOrder.toLowerCase() === 'asc' ? 'ASC' : 'DESC'
+			const ORDER_BY = sortType.toLowerCase().includes('match')
+				? 'bestMatchScore'
+				: 'roomSpend'
+			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
 			const [{ count }] = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
