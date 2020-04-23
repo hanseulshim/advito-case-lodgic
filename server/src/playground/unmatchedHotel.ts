@@ -13,7 +13,6 @@ export default {
         endDate: "2020-12-31"
         pageNumber: null
         # sortType: ""
-        # sortOrder: ""
         # hotelName: ""
         # templateCategory: ""
         # sourceName: ""
