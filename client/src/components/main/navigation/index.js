@@ -9,7 +9,7 @@ const Navigation = () => {
 
 	const onEdit = (targetKey, action) => {
 		if (targetKey === 'work-record' && action === 'remove') {
-			history.push('unmatched-hotels')
+			history.push('/unmatched-hotels')
 		}
 	}
 
