@@ -1,4 +1,3 @@
-import React from 'react'
 import {
 	formatDate,
 	formatNum,
@@ -8,9 +7,6 @@ import {
 } from 'helper'
 //local helper
 import { getStatus, getActions, getBackout } from './helper'
-
-// Cell width (in pixels)
-// const [small, med, large] = [75, 100, 150]
 
 export const columns = [
 	{
