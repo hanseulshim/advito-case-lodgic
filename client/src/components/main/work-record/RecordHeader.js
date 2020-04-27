@@ -1,11 +1,15 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
-import { PageHeader, Row, Statistic } from 'antd'
+import { useHistory } from 'react-router-dom'
+import { useQuery, readQuery, ApolloClient } from '@apollo/client'
+import { PageHeader, Row, Statistic, Pagination } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
-import { UNMATCHED_HOTEL } from 'api/queries'
+import { UNMATCHED_HOTEL, UNMATCHED_HOTEL_LIST } from 'api/queries'
+import { getFieldOrder, formatTitle, formatPhoneNumber } from './helper'
+import './styles.scss'
 
 const RecordHeader = ({ recordId }) => {
+	let history = useHistory()
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL, {
 		variables: {
 			id: recordId,
@@ -16,45 +20,25 @@ const RecordHeader = ({ recordId }) => {
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
 
-	const formatTitle = (s) => {
-		const split = s.replace(/([a-z](?=[A-Z]))/g, '$1 ')
-		return split.charAt(0).toUpperCase() + split.slice(1)
-	}
-
-	const getFieldOrder = () => {
-		return [
-			'roomSpend',
-			'numberOfNights',
-			'hotelName',
-			'address1',
-			'address2',
-			'cityName',
-			'stateCode',
-			'countryName',
-			'phoneNumber',
-			'hotelBrandName',
-			'hotelChainName',
-			'sabrePropertyId',
-			'apolloPropertyId',
-			'amadeusPropertyId',
-			'worldspanPropertyId',
-			'lanyonId',
-		]
-	}
-
-	const formatPhoneNumber = (phone) => {
-		const match = phone
-			.replace(/\D+/g, '')
-			.replace(/^1/, '')
-			.match(/([^\d]*\d[^\d]*){1,10}$/)[0]
-		const part1 = match.length > 2 ? `(${match.substring(0, 3)})` : match
-		const part2 = match.length > 3 ? ` ${match.substring(3, 6)}` : ''
-		const part3 = match.length > 6 ? `-${match.substring(6, 10)}` : ''
-		return `${part1}${part2}${part3}`
-	}
+	// const onPageChange = () => {}
 
 	return (
-		<PageHeader title="Work Record">
+		<PageHeader
+			title="Work Record"
+			onBack={() => history.push('/unmatched-hotels')}
+			extra={
+				[
+					// <Pagination
+					// 	key="pagination"
+					// 	simple
+					// 	size="small"
+					// 	total={50}
+					// 	showTotal={(total) => `Record ${1} of ${total} items`}
+					// 	onChange={onPageChange}
+					// />,
+				]
+			}
+		>
 			<Row>
 				{getFieldOrder().map((field, i) => {
 					return (
