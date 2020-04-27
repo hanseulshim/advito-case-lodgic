@@ -1,8 +1,3 @@
-export const formatTitle = (s) => {
-	const split = s.replace(/([a-z](?=[A-Z]))/g, '$1 ')
-	return split.charAt(0).toUpperCase() + split.slice(1)
-}
-
 export const getFieldOrder = () => {
 	return [
 		'roomSpend',
@@ -22,6 +17,21 @@ export const getFieldOrder = () => {
 		'worldspanPropertyId',
 		'lanyonId',
 	]
+}
+
+export const formatTitle = (field) => {
+	const split = field.replace(/([a-z](?=[A-Z]))/g, '$1 ')
+	const formatted = split.charAt(0).toUpperCase() + split.slice(1)
+
+	if (formatted === 'Room Spend') {
+		return 'Spend'
+	} else if (formatted === 'Hotel Chain Name') {
+		return 'Chain Name'
+	} else if (formatted === 'Hotel Brand Name') {
+		return 'Brand Name'
+	} else if (formatted.includes('Property')) {
+		return formatted.replace('Property', '')
+	} else return formatted
 }
 
 export const formatPhoneNumber = (phone) => {

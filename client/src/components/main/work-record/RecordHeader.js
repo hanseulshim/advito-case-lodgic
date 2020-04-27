@@ -1,11 +1,12 @@
 import React from 'react'
 import { useHistory } from 'react-router-dom'
-import { useQuery, readQuery, ApolloClient } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { PageHeader, Row, Statistic, Pagination } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
-import { UNMATCHED_HOTEL, UNMATCHED_HOTEL_LIST } from 'api/queries'
+import { UNMATCHED_HOTEL } from 'api/queries'
 import { getFieldOrder, formatTitle, formatPhoneNumber } from './helper'
+import { formatNum } from 'helper'
 import './styles.scss'
 
 const RecordHeader = ({ recordId }) => {
@@ -26,18 +27,16 @@ const RecordHeader = ({ recordId }) => {
 		<PageHeader
 			title="Work Record"
 			onBack={() => history.push('/unmatched-hotels')}
-			extra={
-				[
-					// <Pagination
-					// 	key="pagination"
-					// 	simple
-					// 	size="small"
-					// 	total={50}
-					// 	showTotal={(total) => `Record ${1} of ${total} items`}
-					// 	onChange={onPageChange}
-					// />,
-				]
-			}
+			// extra={[
+			// 	<Pagination
+			// 		key="pagination"
+			// 		simple
+			// 		size="small"
+			// 		total={50}
+			// 		showTotal={(total) => `Record ${1} of ${total} items`}
+			// 		onChange={onPageChange}
+			// 	/>,
+			// ]}
 		>
 			<Row>
 				{getFieldOrder().map((field, i) => {
@@ -49,10 +48,13 @@ const RecordHeader = ({ recordId }) => {
 							style={{ marginRight: '2em', marginBottom: '1em' }}
 							valueStyle={{ fontSize: '1.25em' }}
 							formatter={(value) =>
-								field === 'phoneNumber' ? formatPhoneNumber(value) : value
+								field === 'phoneNumber'
+									? formatPhoneNumber(value)
+									: field === 'roomSpend'
+									? formatNum(value)
+									: value
 							}
 							prefix={field === 'roomSpend' ? '$' : null}
-							groupSeparator={field === 'roomSpend' ? ',' : ''}
 						/>
 					)
 				})}
