@@ -22,6 +22,7 @@ const Navigation = () => {
 				}}
 				activeKey={location.pathname.split('/')[1]}
 				onEdit={onEdit}
+				hideAdd
 				animated
 			>
 				<TabPane

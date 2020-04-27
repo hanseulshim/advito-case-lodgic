@@ -1,7 +1,14 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
+import RecordHeader from './RecordHeader'
 
 const WorkRecord = () => {
-	return <p>In this tab we work records!</p>
+	const { recordId } = useParams()
+	return (
+		<>
+			<RecordHeader recordId={+recordId} />
+		</>
+	)
 }
 
 export default WorkRecord

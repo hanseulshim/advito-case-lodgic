@@ -74,6 +74,7 @@ export const UNMATCHED_HOTEL = gql`
 			apolloPropertyId
 			amadeusPropertyId
 			worldspanPropertyId
+			lanyonId
 		}
 	}
 `
