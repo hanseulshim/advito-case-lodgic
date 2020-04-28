@@ -96,12 +96,13 @@ export default {
 
 			const index = list.findIndex((hotel) => +hotel.id === +id)
 			const data = index === -1 ? list[0] : list[index]
+			const currPosition = index === -1 ? null : index + 1
 			const prevId = index < 1 ? null : +list[index - 1].id
 			const nextId = index === list.length - 1 ? null : +list[index + 1].id
 			return {
 				recordCount: list.length,
 				prevId,
-				currIndex: Math.max(0, index),
+				currPosition,
 				nextId,
 				data
 			}

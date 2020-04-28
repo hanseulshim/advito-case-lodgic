@@ -7,7 +7,7 @@ type UnmatchedHotelList {
 type UnmatchedHotel {
 	recordCount: Int
 	prevId: Int
-	currIndex: Int 
+	currPosition: Int 
 	nextId: Int
 	data: StageActivityHotelView
 }

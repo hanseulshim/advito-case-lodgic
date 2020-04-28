@@ -6,7 +6,7 @@ export type StageActivityHotelType = {
 export type StageActivityHotelSingleType = {
 	recordCount: number
 	prevId: number
-	currIndex: number
+	currPosition: number
 	nextId: number
 	data: StageActivityHotelViewType
 }
