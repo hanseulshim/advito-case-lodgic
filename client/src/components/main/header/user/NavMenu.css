@@ -1,7 +1,14 @@
 .ant-popover-inner-content {
-  display: flex;
-  padding: 1em 2em;
-  flex-direction: column;
-  background-color: #ff9e16;
-  border-radius: 5px;
+	display: flex;
+	padding: 1em 2em;
+	flex-direction: column;
+	background-color: #ff9e16;
+	border-radius: 5px;
+}
+
+.ant-popover-placement-bottom > .ant-popover-content > .ant-popover-arrow,
+.ant-popover-placement-bottomLeft > .ant-popover-content > .ant-popover-arrow,
+.ant-popover-placement-bottomRight > .ant-popover-content > .ant-popover-arrow {
+	border-top-color: #ff9e16;
+	border-left-color: #ff9e16;
 }

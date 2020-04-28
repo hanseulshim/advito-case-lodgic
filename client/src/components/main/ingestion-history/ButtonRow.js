@@ -7,7 +7,7 @@ const Container = styled.div`
 	display: flex;
 	justify-content: flex-end;
 	margin-left: auto;
-	margin-bottom: 16px;
+	margin-bottom: 15px;
 
 	> Button {
 		margin-left: 10px;
