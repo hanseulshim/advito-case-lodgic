@@ -29,6 +29,10 @@ export const formatTitle = (field) => {
 		return 'Chain Name'
 	} else if (formatted === 'Hotel Brand Name') {
 		return 'Brand Name'
+	} else if (formatted === 'Country Name') {
+		return 'Country'
+	} else if (formatted === 'State Code') {
+		return 'State'
 	} else if (formatted.includes('Property')) {
 		return formatted.replace('Property', '')
 	} else return formatted

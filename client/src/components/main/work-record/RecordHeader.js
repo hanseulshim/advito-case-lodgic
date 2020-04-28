@@ -21,22 +21,24 @@ const RecordHeader = ({ recordId }) => {
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
 
-	// const onPageChange = () => {}
+	const onPageChange = (e) => {
+		console.log(e)
+	}
 
 	return (
 		<PageHeader
 			title="Work Record"
 			onBack={() => history.push('/unmatched-hotels')}
-			// extra={[
-			// 	<Pagination
-			// 		key="pagination"
-			// 		simple
-			// 		size="small"
-			// 		total={50}
-			// 		showTotal={(total) => `Record ${1} of ${total} items`}
-			// 		onChange={onPageChange}
-			// 	/>,
-			// ]}
+			extra={[
+				<Pagination
+					key="pagination"
+					simple
+					size="small"
+					total={50}
+					showTotal={(total) => `Record ${1} of ${total} items`}
+					onChange={onPageChange}
+				/>,
+			]}
 		>
 			<Row>
 				{getFieldOrder().map((field, i) => {
