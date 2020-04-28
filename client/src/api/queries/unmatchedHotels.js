@@ -52,29 +52,55 @@ export const UNMATCHED_HOTEL_LIST = gql`
 `
 
 export const UNMATCHED_HOTEL = gql`
-	query unmatchedHotel($id: Int!) {
-		unmatchedHotel(id: $id) {
-			id
-			bestMatchScore
-			roomSpend
-			hotelName
-			hotelChainName
-			templateCategory
-			sourceName
-			numberOfNights
-			uploadTimestamp
-			address1
-			address2
-			cityName
-			stateCode
-			countryName
-			phoneNumber
-			hotelBrandName
-			sabrePropertyId
-			apolloPropertyId
-			amadeusPropertyId
-			worldspanPropertyId
-			lanyonId
+	query unmatchedHotel(
+		$id: Int!
+		$clientId: Int!
+		$startDate: String!
+		$endDate: String!
+		$sortType: String
+		$hotelName: String
+		$templateCategory: String
+		$sourceName: String
+		$cityName: String
+	) {
+		unmatchedHotel(
+			id: $id
+			clientId: $clientId
+			startDate: $startDate
+			endDate: $endDate
+			sortType: $sortType
+			hotelName: $hotelName
+			templateCategory: $templateCategory
+			sourceName: $sourceName
+			cityName: $cityName
+		) {
+			recordCount
+			prevId
+			currPosition
+			nextId
+			data {
+				id
+				bestMatchScore
+				roomSpend
+				hotelName
+				hotelChainName
+				templateCategory
+				sourceName
+				numberOfNights
+				uploadTimestamp
+				address1
+				address2
+				cityName
+				stateCode
+				countryName
+				phoneNumber
+				hotelBrandName
+				sabrePropertyId
+				apolloPropertyId
+				amadeusPropertyId
+				worldspanPropertyId
+				lanyonId
+			}
 		}
 	}
 `

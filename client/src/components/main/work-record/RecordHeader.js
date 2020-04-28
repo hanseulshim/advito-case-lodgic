@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import { store } from 'context/store'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
 import { PageHeader, Row, Statistic, Pagination } from 'antd'
@@ -11,9 +12,22 @@ import './styles.scss'
 
 const RecordHeader = ({ recordId }) => {
 	let history = useHistory()
+	const globalState = useContext(store)
+	const { state } = globalState
+	const { clientId, dateRange, filters } = state
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL, {
 		variables: {
 			id: recordId,
+			clientId,
+			startDate: dateRange[0],
+			endDate: dateRange[1],
+			...(filters.hotelName && { hotelName: filters.hotelName }),
+			...(filters.templateCategory && {
+				templateCategory: filters.templateCategory,
+			}),
+			...(filters.sourceName && { sourceName: filters.sourceName }),
+			...(filters.cityName && { cityName: filters.cityName }),
+			...(filters.sortType && { sortType: filters.sortType }),
 		},
 		fetchPolicy: 'network-only',
 	})
@@ -22,7 +36,11 @@ const RecordHeader = ({ recordId }) => {
 	if (error) return <ErrorMessage error={error} />
 
 	const onPageChange = (e) => {
-		console.log(e)
+		if (e > data.unmatchedHotel.currPosition) {
+			history.push(`/work-record/${data.unmatchedHotel.nextId}`)
+		} else if (e < data.unmatchedHotel.currPosition) {
+			history.push(`/work-record/${data.unmatchedHotel.prevId}`)
+		}
 	}
 
 	return (
@@ -34,7 +52,8 @@ const RecordHeader = ({ recordId }) => {
 					key="pagination"
 					simple
 					size="small"
-					total={50}
+					current={data.unmatchedHotel.currPosition}
+					total={data.unmatchedHotel.recordCount}
 					showTotal={(total) => `Record ${1} of ${total} items`}
 					onChange={onPageChange}
 				/>,
@@ -46,7 +65,7 @@ const RecordHeader = ({ recordId }) => {
 						<Statistic
 							title={formatTitle(field)}
 							key={'field' + i}
-							value={data.unmatchedHotel[field]}
+							value={data.unmatchedHotel.data[field]}
 							style={{ marginRight: '2em', marginBottom: '1em' }}
 							valueStyle={{ fontSize: '1.25em' }}
 							formatter={(value) =>
