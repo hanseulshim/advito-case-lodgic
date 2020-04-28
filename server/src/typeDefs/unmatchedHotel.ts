@@ -1,8 +1,15 @@
 export default `
-type UnmatchedHotel {
+type UnmatchedHotelList {
 	pageCount: Int
 	recordCount: Int
 	data: [StageActivityHotelView]
+}
+type UnmatchedHotel {
+	recordCount: Int
+	prevId: Int
+	currIndex: Int 
+	nextId: Int
+	data: StageActivityHotelView
 }
 type StageActivityHotelView {
 	id: Int
@@ -60,8 +67,18 @@ extend type Query {
 		templateCategory: String
 		sourceName: String
 		cityName: String
+	): UnmatchedHotelList @auth
+	unmatchedHotel(
+		id: Int
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+		sortType: String
+		hotelName: String
+		templateCategory: String
+		sourceName: String
+		cityName: String
 	): UnmatchedHotel @auth
-	unmatchedHotel(id: Int!): StageActivityHotelView @auth
 	templateCategoryList(
 		clientId: Int!
 		startDate: String!

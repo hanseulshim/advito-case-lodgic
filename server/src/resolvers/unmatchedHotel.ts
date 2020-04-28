@@ -3,7 +3,7 @@ import {
 	StageActivityHotelCandidateView
 } from '../models'
 import {
-	StageActivityHotelViewType,
+	StageActivityHotelSingleType,
 	StageActivityHotelType,
 	StageActivityHotelCandidateViewType
 } from '../types'
@@ -30,9 +30,10 @@ export default {
 				? 'bestMatchScore'
 				: 'roomSpend'
 			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
-			const [{ count }] = await StageActivityHotelView.query()
+			const { count } = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
+				.first()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
@@ -58,13 +59,53 @@ export default {
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(ORDER_BY, SORT_ORDER)
+					.orderBy('id')
 			}
 		},
 		unmatchedHotel: async (
 			_: null,
-			{ id }
-		): Promise<StageActivityHotelViewType> =>
-			StageActivityHotelView.query().findById(id),
+			{
+				id = null,
+				clientId,
+				startDate,
+				endDate,
+				sortType = '',
+				hotelName,
+				templateCategory,
+				sourceName,
+				cityName
+			}
+		): Promise<StageActivityHotelSingleType> => {
+			const ORDER_BY = sortType.toLowerCase().includes('match')
+				? 'bestMatchScore'
+				: 'roomSpend'
+			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
+
+			const list = await StageActivityHotelView.query()
+				.skipUndefined()
+				.where('clientId', clientId)
+				.whereNull('matchedHotelPropertyId')
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+				.andWhere('templateCategory', templateCategory)
+				.andWhere('sourceName', sourceName)
+				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+				.orderBy(ORDER_BY, SORT_ORDER)
+				.orderBy('id')
+
+			const index = list.findIndex((hotel) => +hotel.id === +id)
+			const data = index === -1 ? list[0] : list[index]
+			const prevId = index < 1 ? null : +list[index - 1].id
+			const nextId = index === list.length - 1 ? null : +list[index + 1].id
+			return {
+				recordCount: list.length,
+				prevId,
+				currIndex: Math.max(0, index),
+				nextId,
+				data
+			}
+		},
 		templateCategoryList: async (
 			_: null,
 			{ clientId, startDate, endDate }
