@@ -8,6 +8,16 @@ import {
 	StageActivityHotelCandidateViewType
 } from '../types'
 
+const getOrderBy = (sortType: string): string => {
+	const orderBy = sortType.toLowerCase().includes('match')
+		? 'best_match_score'
+		: 'room_spend'
+	const sortOrder = sortType.toLowerCase().includes('asc')
+		? 'ASC'
+		: 'DESC NULLS LAST'
+	return `${orderBy} ${sortOrder}`
+}
+
 export default {
 	Query: {
 		unmatchedHotelList: async (
@@ -26,10 +36,6 @@ export default {
 		): Promise<StageActivityHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const ORDER_BY = sortType.toLowerCase().includes('match')
-				? 'bestMatchScore'
-				: 'roomSpend'
-			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
 			const { count } = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
@@ -58,7 +64,7 @@ export default {
 					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy(ORDER_BY, SORT_ORDER)
+					.orderByRaw(getOrderBy(sortType))
 					.orderBy('id')
 			}
 		},
@@ -76,11 +82,6 @@ export default {
 				cityName
 			}
 		): Promise<StageActivityHotelSingleType> => {
-			const ORDER_BY = sortType.toLowerCase().includes('match')
-				? 'bestMatchScore'
-				: 'roomSpend'
-			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
-
 			const list = await StageActivityHotelView.query()
 				.skipUndefined()
 				.where('clientId', clientId)
@@ -91,7 +92,7 @@ export default {
 				.andWhere('templateCategory', templateCategory)
 				.andWhere('sourceName', sourceName)
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-				.orderBy(ORDER_BY, SORT_ORDER)
+				.orderByRaw(getOrderBy(sortType))
 				.orderBy('id')
 
 			const index = list.findIndex((hotel) => +hotel.id === +id)
