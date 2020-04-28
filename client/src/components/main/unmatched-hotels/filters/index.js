@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { store } from 'context/store'
 import styled from 'styled-components'
 import CityName from './CityName'
 import HotelName from './HotelName'
@@ -18,7 +19,10 @@ const Container = styled.div`
 	}
 `
 
-const Filters = ({ onSubmit }) => {
+const Filters = () => {
+	const globalState = useContext(store)
+	const { dispatch } = globalState
+
 	const [filters, setFilters] = useState({
 		hotelName: '',
 		templateCategory: '',
@@ -50,13 +54,20 @@ const Filters = ({ onSubmit }) => {
 			cityName: '',
 			sortType: '',
 		})
-		onSubmit({
-			hotelName: '',
-			templateCategory: '',
-			sourceName: '',
-			cityName: '',
-			sortType: '',
+		dispatch({
+			type: 'setFilters',
+			value: {
+				hotelName: '',
+				templateCategory: '',
+				sourceName: '',
+				cityName: '',
+				sortType: '',
+			},
 		})
+	}
+
+	const submitTableFilters = () => {
+		dispatch({ type: 'setFilters', value: { ...filters } })
 	}
 
 	return (
@@ -70,7 +81,7 @@ const Filters = ({ onSubmit }) => {
 			/>
 			<CityName onChange={onChange} value={filters.cityName} />
 			<SortType onChange={onChange} value={filters.sortType} />
-			<Button onClick={() => onSubmit(filters)} type="primary" shape="round">
+			<Button onClick={() => submitTableFilters()} type="primary" shape="round">
 				Submit
 			</Button>
 			<Button onClick={clearFilters} danger shape="round">

@@ -7,10 +7,10 @@ import { Table } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 
-const UnmatchedHotelsTable = ({ filters }) => {
+const UnmatchedHotelsTable = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientId, dateRange } = state
+	const { clientId, dateRange, filters } = state
 	const [pageNumber, setPageNumber] = useState(1)
 
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL_LIST, {
@@ -19,7 +19,13 @@ const UnmatchedHotelsTable = ({ filters }) => {
 			startDate: dateRange[0],
 			endDate: dateRange[1],
 			pageNumber,
-			...(filters && { ...filters }),
+			...(filters.hotelName && { hotelName: filters.hotelName }),
+			...(filters.templateCategory && {
+				templateCategory: filters.templateCategory,
+			}),
+			...(filters.sourceName && { sourceName: filters.sourceName }),
+			...(filters.cityName && { cityName: filters.cityName }),
+			...(filters.sortType && { sortType: filters.sortType }),
 		},
 		fetchPolicy: 'network-only',
 	})

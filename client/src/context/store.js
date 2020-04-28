@@ -14,6 +14,13 @@ const StateProvider = ({ children }) => {
 					clientId: action.value.inputs.clientId,
 					dateRange: action.value.inputs.dateRange,
 				}
+			case 'setFilters':
+				return {
+					...state,
+					filters: {
+						...action.value,
+					},
+				}
 			default:
 				throw new Error()
 		}
