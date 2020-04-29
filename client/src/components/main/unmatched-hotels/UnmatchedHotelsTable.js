@@ -81,7 +81,11 @@ const UnmatchedHotelsTable = () => {
 				scroll={{ x: 1500, y: 700 }}
 				rowKey="id"
 			/>
-			<Button type="primary" onClick={() => loadFirstRecord()}>
+			<Button
+				type="primary"
+				onClick={() => loadFirstRecord()}
+				style={{ marginLeft: '87.25%', position: 'relative', bottom: '3.5em' }}
+			>
 				Work Records
 			</Button>
 		</>
