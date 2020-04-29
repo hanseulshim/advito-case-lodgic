@@ -6,8 +6,8 @@ import { PageHeader, Row, Statistic, Pagination } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 import { UNMATCHED_HOTEL } from 'api/queries'
-import { getFieldOrder, formatTitle, formatPhoneNumber } from './helper'
-import { formatNum } from 'helper'
+import { getFieldOrder, formatTitle } from './helper'
+import { formatNum, formatPhoneNumber } from 'helper'
 import './styles.scss'
 
 const RecordHeader = ({ recordId }) => {
@@ -52,6 +52,7 @@ const RecordHeader = ({ recordId }) => {
 					key="pagination"
 					simple
 					showSizeChanger={false}
+					showQuickJumper={false}
 					current={data.unmatchedHotel.currPosition}
 					total={data.unmatchedHotel.recordCount}
 					pageSize={1}

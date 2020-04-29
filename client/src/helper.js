@@ -26,6 +26,17 @@ export const formatName = (displayName) => {
 	return displayName ? initial + lastName : ' '
 }
 
+export const formatPhoneNumber = (phone) => {
+	const match = phone
+		.replace(/\D+/g, '')
+		.replace(/^1/, '')
+		.match(/([^\d]*\d[^\d]*){1,10}$/)[0]
+	const part1 = match.length > 2 ? `(${match.substring(0, 3)})` : match
+	const part2 = match.length > 3 ? ` ${match.substring(3, 6)}` : ''
+	const part3 = match.length > 6 ? `-${match.substring(6, 10)}` : ''
+	return `${part1}${part2}${part3}`
+}
+
 export const getToken = () => {
 	if (localStorage.getItem('advito-user')) {
 		const { sessionToken } = JSON.parse(localStorage.getItem('advito-user'))

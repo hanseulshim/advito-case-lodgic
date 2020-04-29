@@ -53,7 +53,7 @@ export const UNMATCHED_HOTEL_LIST = gql`
 
 export const UNMATCHED_HOTEL = gql`
 	query unmatchedHotel(
-		$id: Int!
+		$id: Int
 		$clientId: Int!
 		$startDate: String!
 		$endDate: String!
