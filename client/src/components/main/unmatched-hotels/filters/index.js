@@ -21,26 +21,27 @@ const Container = styled.div`
 
 const Filters = () => {
 	const globalState = useContext(store)
-	const { dispatch } = globalState
+	const { dispatch, state } = globalState
+	const { filters } = state
 
-	const [filters, setFilters] = useState({
-		hotelName: '',
-		templateCategory: '',
-		sourceName: '',
-		cityName: '',
-		sortType: '',
+	const [localFilters, setFilters] = useState({
+		hotelName: filters.hotelName,
+		templateCategory: filters.templateCategory,
+		sourceName: filters.sourceName,
+		cityName: filters.cityName,
+		sortType: filters.sortType,
 	})
 
 	const onChange = (value, key) => {
 		if (key === 'templateCategory') {
 			setFilters({
-				...filters,
+				...localFilters,
 				templateCategory: value,
 				sourceName: '',
 			})
 		} else {
 			setFilters({
-				...filters,
+				...localFilters,
 				[key]: value,
 			})
 		}
@@ -67,20 +68,20 @@ const Filters = () => {
 	}
 
 	const submitTableFilters = () => {
-		dispatch({ type: 'setFilters', value: { ...filters } })
+		dispatch({ type: 'setFilters', value: { ...localFilters } })
 	}
 
 	return (
 		<Container>
-			<HotelName onChange={onChange} value={filters.hotelName} />
-			<SourceType onChange={onChange} value={filters.templateCategory} />
+			<HotelName onChange={onChange} value={localFilters.hotelName} />
+			<SourceType onChange={onChange} value={localFilters.templateCategory} />
 			<SourceName
 				onChange={onChange}
-				templateCategory={filters.templateCategory}
-				value={filters.sourceName}
+				templateCategory={localFilters.templateCategory}
+				value={localFilters.sourceName}
 			/>
-			<CityName onChange={onChange} value={filters.cityName} />
-			<SortType onChange={onChange} value={filters.sortType} />
+			<CityName onChange={onChange} value={localFilters.cityName} />
+			<SortType onChange={onChange} value={localFilters.sortType} />
 			<Button onClick={() => submitTableFilters()} type="primary" shape="round">
 				Submit
 			</Button>
