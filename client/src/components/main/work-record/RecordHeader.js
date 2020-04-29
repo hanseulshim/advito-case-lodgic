@@ -51,7 +51,6 @@ const RecordHeader = ({ recordId }) => {
 				<Pagination
 					key="pagination"
 					simple
-					size="small"
 					showSizeChanger={false}
 					current={data.unmatchedHotel.currPosition}
 					total={data.unmatchedHotel.recordCount}
