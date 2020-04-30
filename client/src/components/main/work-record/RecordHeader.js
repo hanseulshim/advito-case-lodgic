@@ -67,8 +67,11 @@ const RecordHeader = ({ recordId }) => {
 							title={formatTitle(field)}
 							key={'field' + i}
 							value={data.unmatchedHotel.data[field]}
-							style={{ marginRight: '2em', marginBottom: '1em' }}
-							valueStyle={{ fontSize: '1.25em' }}
+							style={{
+								marginRight: '2em',
+								marginBottom: '1em',
+							}}
+							valueStyle={{ fontSize: '1em' }}
 							formatter={(value) =>
 								field === 'phoneNumber'
 									? formatPhoneNumber(value)

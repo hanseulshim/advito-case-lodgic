@@ -1,3 +1,31 @@
 .ant-page-header-heading-extra {
 	float: none !important;
 }
+
+.ant-page-header-content {
+	padding-top: 12px;
+	background-color: #ecf7fb;
+	padding: 15px;
+	margin-top: 10px;
+}
+
+.ant-statistic-title {
+	margin-bottom: 4px;
+	color: rgba(0, 0, 0, 0.85) !important;
+	font-weight: 500 !important;
+	font-size: 14px;
+}
+
+.ant-statistic-content-value {
+	color: rgba(0, 0, 0, 0.65);
+	font-size: 14px;
+	font-variant: tabular-nums;
+	line-height: 1.5715;
+}
+
+.ant-statistic-content-prefix {
+	color: rgba(0, 0, 0, 0.65);
+	font-size: 14px;
+	font-variant: tabular-nums;
+	line-height: 1.5715;
+}

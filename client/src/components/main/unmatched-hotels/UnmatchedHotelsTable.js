@@ -47,6 +47,7 @@ const UnmatchedHotelsTable = () => {
 			...(filters.cityName && { cityName: filters.cityName }),
 			...(filters.sortType && { sortType: filters.sortType }),
 		},
+		fetchPolicy: 'network-only',
 		onCompleted: (data) =>
 			history.push(`work-record/${data.unmatchedHotel.data.id}`),
 		onError: (error) => console.log(`Error grabbing ID!:${error}`),
