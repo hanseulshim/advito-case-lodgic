@@ -21,7 +21,7 @@ const MatchesTable = ({ recordId }) => {
 		<>
 			<Table
 				columns={columns}
-				dataSource={data.unmatchedHotelConfidenceList.data}
+				dataSource={data.unmatchedHotelConfidenceList}
 				scroll={{ x: 1500, y: 700 }}
 				rowKey="id"
 			/>
