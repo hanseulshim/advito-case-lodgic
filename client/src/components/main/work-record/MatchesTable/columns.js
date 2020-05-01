@@ -1,4 +1,3 @@
-import { formatPhoneNumber } from 'helper'
 import { getConfidence } from './helper'
 
 export const columns = [
@@ -50,7 +49,6 @@ export const columns = [
 		title: 'Phone',
 		dataIndex: 'phoneNumber',
 		width: 150,
-		render: (num) => formatPhoneNumber(num),
 	},
 	{
 		title: 'Chain Name',

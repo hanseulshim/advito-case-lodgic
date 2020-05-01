@@ -7,7 +7,7 @@ import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 import { UNMATCHED_HOTEL } from 'api/queries'
 import { getFieldOrder, formatTitle } from './helper'
-import { formatNum, formatPhoneNumber } from 'helper'
+import { formatNum } from 'helper'
 import './styles.scss'
 
 const RecordHeader = ({ recordId }) => {
@@ -73,11 +73,7 @@ const RecordHeader = ({ recordId }) => {
 							}}
 							valueStyle={{ fontSize: '1em' }}
 							formatter={(value) =>
-								field === 'phoneNumber'
-									? formatPhoneNumber(value)
-									: field === 'roomSpend'
-									? formatNum(value)
-									: value
+								field === 'roomSpend' ? formatNum(value) : value
 							}
 							prefix={field === 'roomSpend' ? '$' : null}
 						/>
