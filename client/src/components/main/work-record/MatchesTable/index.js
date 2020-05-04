@@ -1,3 +1,4 @@
+/* eslint-disable react/display-name */
 import React, { useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { UNMATCHED_HOTEL_CONFIDENCE_LIST } from 'api/queries'
@@ -36,7 +37,7 @@ const MatchesTable = ({ recordId }) => {
 						render: (record) => {
 							return (
 								<Checkbox
-									onChange={(e) => onMatchHotel(record.id)}
+									onChange={() => onMatchHotel(record.id)}
 									checked={matchHotelId === record.id}
 								>
 									Match to this
