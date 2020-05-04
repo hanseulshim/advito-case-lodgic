@@ -85,9 +85,4 @@ export const columns = [
 		dataIndex: 'worldspanPropertyId',
 		width: 130,
 	},
-	{
-		title: 'Actions',
-		width: 100,
-		fixed: 'right',
-	},
 ]

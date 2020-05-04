@@ -5,6 +5,7 @@ import MatchesTable from './MatchesTable'
 
 const WorkRecord = () => {
 	const { recordId } = useParams()
+
 	return (
 		<>
 			<RecordHeader recordId={+recordId} />
