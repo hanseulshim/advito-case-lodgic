@@ -6,6 +6,7 @@ import Header from './header'
 import Navigation from './navigation'
 import IngestionHistory from './ingestion-history'
 import UnmatchedHotels from './unmatched-hotels'
+import WorkRecord from './work-record'
 import { Switch, Route } from 'react-router-dom'
 import Controls from './controls'
 
@@ -38,6 +39,7 @@ const Main = () => {
 					<Switch>
 						<Route path={`/ingestion-history`} component={IngestionHistory} />
 						<Route path={`/unmatched-hotels`} component={UnmatchedHotels} />
+						<Route path={`/work-record/:recordId`} component={WorkRecord} />
 					</Switch>
 				</>
 			) : null}

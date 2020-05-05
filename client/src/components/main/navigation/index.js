@@ -7,18 +7,37 @@ const Navigation = () => {
 	let history = useHistory()
 	let location = useLocation()
 
+	const onEdit = (targetKey, action) => {
+		if (targetKey === 'work-record' && action === 'remove') {
+			history.push('/unmatched-hotels')
+		}
+	}
+
 	return (
 		<>
 			<Tabs
-				type="card"
+				type="editable-card"
 				onChange={(key) => {
 					history.push(`/${key}`)
 				}}
-				activeKey={location.pathname.replace('/', '')}
+				activeKey={location.pathname.split('/')[1]}
+				onEdit={onEdit}
+				hideAdd
 				animated
 			>
-				<TabPane tab="Ingestion History" key="ingestion-history" />
-				<TabPane tab="Unmatched Hotels" key="unmatched-hotels" />
+				<TabPane
+					tab="Ingestion History"
+					key="ingestion-history"
+					closable={false}
+				/>
+				<TabPane
+					tab="Unmatched Hotels"
+					key="unmatched-hotels"
+					closable={false}
+				/>
+				{location.pathname.includes('work-record') && (
+					<TabPane tab="Work Record" key="work-record" />
+				)}
 			</Tabs>
 		</>
 	)
