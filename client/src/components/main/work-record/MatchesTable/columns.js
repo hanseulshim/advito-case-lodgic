@@ -31,14 +31,14 @@ export const columns = [
 		width: 150,
 	},
 	{
-		title: 'State',
-		dataIndex: 'stateCode',
-		width: 100,
-	},
-	{
 		title: 'City',
 		dataIndex: 'cityName',
 		width: 150,
+	},
+	{
+		title: 'State',
+		dataIndex: 'stateCode',
+		width: 100,
 	},
 	{
 		title: 'Country',
@@ -51,19 +51,14 @@ export const columns = [
 		width: 150,
 	},
 	{
-		title: 'Chain Name',
-		dataIndex: 'hotelChainName',
-		width: 150,
-	},
-	{
 		title: 'Brand Name',
 		dataIndex: 'hotelBrandName',
 		width: 150,
 	},
 	{
-		title: 'Lanyon ID',
-		dataIndex: 'lanyonId',
-		width: 100,
+		title: 'Chain Name',
+		dataIndex: 'hotelChainName',
+		width: 150,
 	},
 	{
 		title: 'Sabre ID',
@@ -84,5 +79,10 @@ export const columns = [
 		title: 'Worldspan ID',
 		dataIndex: 'worldspanPropertyId',
 		width: 130,
+	},
+	{
+		title: 'Lanyon ID',
+		dataIndex: 'lanyonId',
+		width: 100,
 	},
 ]
