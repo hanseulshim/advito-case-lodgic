@@ -3,10 +3,20 @@ import {
 	StageActivityHotelCandidateView
 } from '../models'
 import {
-	StageActivityHotelViewType,
+	StageActivityHotelSingleType,
 	StageActivityHotelType,
 	StageActivityHotelCandidateViewType
 } from '../types'
+
+const getOrderBy = (sortType: string): string => {
+	const orderBy = sortType.toLowerCase().includes('match')
+		? 'best_match_score'
+		: 'room_spend'
+	const sortOrder = sortType.toLowerCase().includes('asc')
+		? 'ASC'
+		: 'DESC NULLS LAST'
+	return `${orderBy} ${sortOrder}`
+}
 
 export default {
 	Query: {
@@ -26,13 +36,10 @@ export default {
 		): Promise<StageActivityHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const ORDER_BY = sortType.toLowerCase().includes('match')
-				? 'bestMatchScore'
-				: 'roomSpend'
-			const SORT_ORDER = sortType.toLowerCase().includes('asc') ? 'ASC' : 'DESC'
-			const [{ count }] = await StageActivityHotelView.query()
+			const { count } = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
+				.first()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
@@ -57,14 +64,50 @@ export default {
 					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 					.offset(OFFSET)
 					.limit(LIMIT)
-					.orderBy(ORDER_BY, SORT_ORDER)
+					.orderByRaw(getOrderBy(sortType))
+					.orderBy('id')
 			}
 		},
 		unmatchedHotel: async (
 			_: null,
-			{ id }
-		): Promise<StageActivityHotelViewType> =>
-			StageActivityHotelView.query().findById(id),
+			{
+				id = null,
+				clientId,
+				startDate,
+				endDate,
+				sortType = '',
+				hotelName,
+				templateCategory,
+				sourceName,
+				cityName
+			}
+		): Promise<StageActivityHotelSingleType> => {
+			const list = await StageActivityHotelView.query()
+				.skipUndefined()
+				.where('clientId', clientId)
+				.whereNull('matchedHotelPropertyId')
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+				.andWhere('templateCategory', templateCategory)
+				.andWhere('sourceName', sourceName)
+				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+				.orderByRaw(getOrderBy(sortType))
+				.orderBy('id')
+
+			const index = list.findIndex((hotel) => +hotel.id === +id)
+			const data = index === -1 ? list[0] : list[index]
+			const currPosition = index === -1 ? null : index + 1
+			const prevId = index < 1 ? null : +list[index - 1].id
+			const nextId = index === list.length - 1 ? null : +list[index + 1].id
+			return {
+				recordCount: list.length,
+				prevId,
+				currPosition,
+				nextId,
+				data
+			}
+		},
 		templateCategoryList: async (
 			_: null,
 			{ clientId, startDate, endDate }

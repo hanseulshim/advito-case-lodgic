@@ -3,6 +3,13 @@ export type StageActivityHotelType = {
 	recordCount: number
 	data: StageActivityHotelViewType[]
 }
+export type StageActivityHotelSingleType = {
+	recordCount: number
+	prevId: number
+	currPosition: number
+	nextId: number
+	data: StageActivityHotelViewType
+}
 
 export type StageActivityHotelViewType = {
 	id: string

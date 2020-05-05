@@ -4,13 +4,13 @@ const createJobIngestionRow = ([clientList, applicationTemplateSourceList]) => {
 	const { id, application_name, template_name } = faker.random.arrayElement(
 		applicationTemplateSourceList
 	)
-	const dataStartDate = faker.date.recent(30)
+	const dataStartDate = faker.date.recent(0)
 	return {
 		advito_user_id: 882, // Pony User Id
 		client_id: faker.random.arrayElement(clientList).client_id,
 		advito_application_template_source_id: id,
 		data_start_date: dataStartDate,
-		data_end_date: faker.date.recent(-30),
+		data_end_date: faker.date.recent(-60),
 		upload_timestamp: dataStartDate,
 		original_file_name: `${application_name}-${template_name}.xlsx`,
 		processing_start_timestamp: dataStartDate,

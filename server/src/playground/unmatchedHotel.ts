@@ -43,28 +43,44 @@ export default {
           worldspanPropertyId
         }
       }
-      # unmatchedHotel(id: null) {
-      #   id
-      #   bestMatchScore
-      #   roomSpend
-      #   hotelName
-      #   hotelChainName
-      #   templateCategory
-      #   sourceName
-      #   numberOfNights
-      #   uploadTimestamp
-      #   address1
-      #   address2
-      #   cityName
-      #   stateCode
-      #   countryName
-      #   phoneNumber
-      #   hotelBrandName
-      #   sabrePropertyId
-      #   apolloPropertyId
-      #   amadeusPropertyId
-      #   worldspanPropertyId
-      #   lanyonId
+      # unmatchedHotel(
+      #   id: null
+      #   clientId: 348
+      #   startDate: "2020-01-01"
+      #   endDate: "2020-12-31"
+      #   sortType: ""
+      #   hotelName: ""
+      #   templateCategory: ""
+      #   sourceName: ""
+      #   cityName: ""
+      # ) {
+      #   recordCount
+      #   prevId
+      #   currPosition
+      #   nextId
+      #   data {
+        #   id
+        #   bestMatchScore
+        #   roomSpend
+        #   hotelName
+        #   hotelChainName
+        #   templateCategory
+        #   sourceName
+        #   numberOfNights
+        #   uploadTimestamp
+        #   address1
+        #   address2
+        #   cityName
+        #   stateCode
+        #   countryName
+        #   phoneNumber
+        #   hotelBrandName
+        #   sabrePropertyId
+        #   apolloPropertyId
+        #   amadeusPropertyId
+        #   worldspanPropertyId
+        #   lanyonId
+      #   }
       # }
       
       # templateCategoryList(
