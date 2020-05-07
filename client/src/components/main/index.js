@@ -39,7 +39,7 @@ const Main = () => {
 					<Switch>
 						<Route path={`/ingestion-history`} component={IngestionHistory} />
 						<Route path={`/unmatched-hotels`} component={UnmatchedHotels} />
-						<Route path={`/work-record/:recordId`} component={WorkRecord} />
+						<Route path={`/work-record/:record`} component={WorkRecord} />
 					</Switch>
 				</>
 			) : null}

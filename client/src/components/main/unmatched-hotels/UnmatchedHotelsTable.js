@@ -4,6 +4,7 @@ import { useHistory } from 'react-router-dom'
 import { store } from 'context/store'
 import { UNMATCHED_HOTEL_LIST, UNMATCHED_HOTEL } from 'api/queries'
 import { columns } from './columns'
+import { getActions } from './helper'
 import { Table, Button } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
@@ -34,7 +35,7 @@ const UnmatchedHotelsTable = () => {
 
 	const [loadFirstRecord] = useLazyQuery(UNMATCHED_HOTEL, {
 		variables: {
-			id: null,
+			currPosition: 1,
 			clientId,
 			startDate: dateRange[0],
 			endDate: dateRange[1],
@@ -49,7 +50,7 @@ const UnmatchedHotelsTable = () => {
 		},
 		fetchPolicy: 'network-only',
 		onCompleted: (data) =>
-			history.push(`work-record/${data.unmatchedHotel.data.id}`),
+			history.push(`work-record/${data.unmatchedHotel.data.id}-1`),
 		onError: (error) => console.log(`Error grabbing ID!:${error}`),
 	})
 
@@ -66,7 +67,15 @@ const UnmatchedHotelsTable = () => {
 	return (
 		<>
 			<Table
-				columns={columns}
+				columns={[
+					...columns,
+					{
+						title: 'Actions',
+						width: 200,
+						fixed: 'right',
+						render: (_, record, index) => getActions(record, pageNumber, index),
+					},
+				]}
 				dataSource={data.unmatchedHotelList.data}
 				pagination={{
 					position: ['bottomLeft'],

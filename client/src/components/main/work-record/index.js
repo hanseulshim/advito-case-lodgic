@@ -5,7 +5,9 @@ import MatchesTable from './MatchesTable'
 import MoreMatches from './MoreMatches'
 
 const WorkRecord = () => {
-	const { recordId } = useParams()
+	const { record } = useParams()
+	const recordId = record.split('-')[0]
+	const recordIndex = record.split('-')[1]
 	const [matchedHotel, setMatchedHotel] = useState(null)
 
 	const onMatchHotel = (record) => {
@@ -16,7 +18,7 @@ const WorkRecord = () => {
 
 	return (
 		<>
-			<RecordHeader recordId={+recordId} />
+			<RecordHeader recordId={+recordId} recordIndex={+recordIndex} />
 			<MatchesTable
 				recordId={+recordId}
 				onMatchHotel={onMatchHotel}
