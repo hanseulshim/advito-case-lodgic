@@ -71,7 +71,7 @@ export default {
 		unmatchedHotel: async (
 			_: null,
 			{
-				id = null,
+				currPosition = 1,
 				clientId,
 				startDate,
 				endDate,
@@ -82,8 +82,38 @@ export default {
 				cityName
 			}
 		): Promise<StageActivityHotelSingleType> => {
-			const list = await StageActivityHotelView.query()
+			const list =
+				currPosition > 1
+					? await StageActivityHotelView.query()
+							.skipUndefined()
+							.where('clientId', clientId)
+							.whereNull('matchedHotelPropertyId')
+							.andWhere('dataStartDate', '>=', startDate)
+							.andWhere('dataEndDate', '<=', endDate)
+							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+							.andWhere('templateCategory', templateCategory)
+							.andWhere('sourceName', sourceName)
+							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+							.orderByRaw(getOrderBy(sortType))
+							.offset(currPosition - 1)
+							.limit(3)
+					: await StageActivityHotelView.query()
+							.skipUndefined()
+							.where('clientId', clientId)
+							.whereNull('matchedHotelPropertyId')
+							.andWhere('dataStartDate', '>=', startDate)
+							.andWhere('dataEndDate', '<=', endDate)
+							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+							.andWhere('templateCategory', templateCategory)
+							.andWhere('sourceName', sourceName)
+							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+							.orderByRaw(getOrderBy(sortType))
+							.limit(2)
+
+			const { count } = await StageActivityHotelView.query()
 				.skipUndefined()
+				.count()
+				.first()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
@@ -92,18 +122,15 @@ export default {
 				.andWhere('templateCategory', templateCategory)
 				.andWhere('sourceName', sourceName)
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-				.orderByRaw(getOrderBy(sortType))
-				.orderBy('id')
 
-			const index = list.findIndex((hotel) => +hotel.id === +id)
-			const data = index === -1 ? list[0] : list[index]
-			const currPosition = index === -1 ? null : index + 1
-			const prevId = index < 1 ? null : +list[index - 1].id
-			const nextId = index === list.length - 1 ? null : +list[index + 1].id
+			const index = list.length === 0 ? null : list.length === 2 ? 0 : 1
+			const data = index === null ? null : list[index]
+			const prevId = index ? +list[index - 1].id : null
+			const nextId = index === null ? null : +list[index + 1].id
 			return {
-				recordCount: list.length,
+				recordCount: +count,
 				prevId,
-				currPosition,
+				currPosition: currPosition ? currPosition : 1,
 				nextId,
 				data
 			}

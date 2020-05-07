@@ -69,7 +69,7 @@ extend type Query {
 		cityName: String
 	): UnmatchedHotelList @auth
 	unmatchedHotel(
-		id: Int
+		currPosition: Int
 		clientId: Int!
 		startDate: String!
 		endDate: String!
