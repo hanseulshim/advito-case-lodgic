@@ -37,3 +37,61 @@ export const formatTitle = (field) => {
 		return formatted.replace('Property', '')
 	} else return formatted
 }
+
+export const moreMatchesFilters = [
+	{
+		label: 'Hotel Name',
+		placeholder: 'Enter Hotel Name',
+		value: 'hotelName',
+	},
+	{
+		label: 'Address 1',
+		placeholder: 'Enter Address',
+		value: 'address1',
+	},
+	{
+		label: 'City',
+		placeholder: 'Enter City Name',
+		value: 'cityName',
+	},
+	{
+		label: 'State',
+		placeholder: 'Enter State Code',
+		value: 'stateCode',
+	},
+	{
+		label: 'Country',
+		placeholder: 'Enter Country Name',
+		value: 'countryName',
+	},
+	{
+		label: 'Chain Name',
+		placeholder: 'Enter Hotel Chain Name',
+		value: 'hotelChainName',
+	},
+	{
+		label: 'Lanyon ID',
+		placeholder: 'Enter Lanyon ID',
+		value: 'lanyonId',
+	},
+	{
+		label: 'Sabre ID',
+		placeholder: 'Enter Sabre ID',
+		value: 'sabrePropertyId',
+	},
+	{
+		label: 'Apollo ID',
+		placeholder: 'Enter Apollo ID',
+		value: 'apolloPropertyId',
+	},
+	{
+		label: 'Amadeus ID',
+		placeholder: 'Enter Amadeus ID',
+		value: 'amadeusPropertyId',
+	},
+	{
+		label: 'Worldspan ID',
+		placeholder: 'Enter Worldspan ID',
+		value: 'worldspanPropertyId',
+	},
+]

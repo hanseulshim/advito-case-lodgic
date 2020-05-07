@@ -1,5 +1,5 @@
 /* eslint-disable react/display-name */
-import React, { useState } from 'react'
+import React from 'react'
 import { useQuery } from '@apollo/client'
 import { UNMATCHED_HOTEL_CONFIDENCE_LIST } from 'api/queries'
 import { columns } from './columns'
@@ -7,20 +7,13 @@ import { Table, Checkbox, Button } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 
-const MatchesTable = ({ recordId }) => {
+const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL_CONFIDENCE_LIST, {
 		variables: {
 			stageActivityHotelId: recordId,
 		},
 		fetchPolicy: 'network-only',
 	})
-	const [matchHotelId, setMatchHotelId] = useState(null)
-
-	const onMatchHotel = (id) => {
-		if (id == matchHotelId) {
-			setMatchHotelId(null)
-		} else setMatchHotelId(id)
-	}
 
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
@@ -37,8 +30,8 @@ const MatchesTable = ({ recordId }) => {
 						render: (record) => {
 							return (
 								<Checkbox
-									onChange={() => onMatchHotel(record.id)}
-									checked={matchHotelId === record.id}
+									onChange={() => onMatchHotel(record)}
+									checked={matchedHotel === record}
 								>
 									Match to this
 								</Checkbox>
@@ -60,8 +53,12 @@ const MatchesTable = ({ recordId }) => {
 			>
 				<Button
 					type="primary"
-					onClick={() => alert(`Matched with Hotel: ${matchHotelId}!`)}
-					disabled={!matchHotelId}
+					onClick={() =>
+						alert(
+							`Matched with Hotel ${matchedHotel.hotelName} HMF ID: ${matchedHotel.hotelPropertyId}!`
+						)
+					}
+					disabled={!matchedHotel}
 				>
 					Match Hotel
 				</Button>
