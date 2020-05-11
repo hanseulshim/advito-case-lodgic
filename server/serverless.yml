@@ -43,6 +43,7 @@ provider:
 
 functions:
   graphql:
+    timeout: 60
     handler: handler.graphqlHandler
     events:
       - http:
