@@ -1,6 +1,5 @@
 import { formatDate, formatNum, formatCurrency, formatPercent } from 'helper'
 //local helper
-import { getActions } from './helper'
 
 export const columns = [
 	{
@@ -16,8 +15,6 @@ export const columns = [
 		dataIndex: 'bestMatchScore',
 		fixed: 'left',
 		render: (num) => formatPercent(num),
-		// sorter: (a, b) => a.bestMatchScore - b.bestMatchScore,
-		// sortDirections: ['descend', 'ascend'],
 	},
 	{
 		title: 'Hotel Name',
@@ -81,11 +78,5 @@ export const columns = [
 		title: 'Phone Number',
 		dataIndex: 'phoneNumber',
 		width: 150,
-	},
-	{
-		title: 'Actions',
-		width: 200,
-		fixed: 'right',
-		render: (_, record) => getActions(record),
 	},
 ]

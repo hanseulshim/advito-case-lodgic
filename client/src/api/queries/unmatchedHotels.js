@@ -23,7 +23,6 @@ export const UNMATCHED_HOTEL_LIST = gql`
 			sourceName: $sourceName
 			cityName: $cityName
 		) {
-			pageCount
 			recordCount
 			data {
 				id
@@ -53,7 +52,7 @@ export const UNMATCHED_HOTEL_LIST = gql`
 
 export const UNMATCHED_HOTEL = gql`
 	query unmatchedHotel(
-		$id: Int
+		$currPosition: Int
 		$clientId: Int!
 		$startDate: String!
 		$endDate: String!
@@ -64,7 +63,7 @@ export const UNMATCHED_HOTEL = gql`
 		$cityName: String
 	) {
 		unmatchedHotel(
-			id: $id
+			currPosition: $currPosition
 			clientId: $clientId
 			startDate: $startDate
 			endDate: $endDate

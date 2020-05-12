@@ -40,7 +40,7 @@ const IngestionHistory = () => {
 					defaultPageSize: 25,
 					showSizeChanger: false,
 					current: pageNumber,
-					total: data.ingestionHotelList.pageCount * 25,
+					total: data.ingestionHotelList.recordCount,
 					onChange: onPageChange,
 				}}
 				scroll={{ x: 1500, y: 700 }}

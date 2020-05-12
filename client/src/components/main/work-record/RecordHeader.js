@@ -10,14 +10,14 @@ import { getFieldOrder, formatTitle } from './helper'
 import { formatNum } from 'helper'
 import './styles.scss'
 
-const RecordHeader = ({ recordId }) => {
+const RecordHeader = ({ recordIndex }) => {
 	let history = useHistory()
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange, filters } = state
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL, {
 		variables: {
-			id: recordId,
+			currPosition: recordIndex,
 			clientId,
 			startDate: dateRange[0],
 			endDate: dateRange[1],
@@ -37,9 +37,13 @@ const RecordHeader = ({ recordId }) => {
 
 	const onPageChange = (e) => {
 		if (e > data.unmatchedHotel.currPosition) {
-			history.push(`/work-record/${data.unmatchedHotel.nextId}`)
+			history.push(
+				`/work-record/${data.unmatchedHotel.nextId}-${recordIndex + 1}`
+			)
 		} else if (e < data.unmatchedHotel.currPosition) {
-			history.push(`/work-record/${data.unmatchedHotel.prevId}`)
+			history.push(
+				`/work-record/${data.unmatchedHotel.prevId}-${recordIndex - 1}`
+			)
 		}
 	}
 

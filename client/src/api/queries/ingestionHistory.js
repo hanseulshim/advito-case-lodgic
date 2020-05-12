@@ -13,7 +13,7 @@ export const INGESTION_HOTEL_LIST = gql`
 			endDate: $endDate
 			pageNumber: $pageNumber
 		) {
-			pageCount
+			recordCount
 			data {
 				id
 				jobIngestionId
