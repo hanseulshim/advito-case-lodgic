@@ -1,18 +1,15 @@
 import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Button, Input } from 'antd'
+import { Button, Input, Modal } from 'antd'
 import { moreMatchesFilters } from '../../helper'
+import { ExclamationCircleOutlined } from '@ant-design/icons'
+
+const { error } = Modal
 
 const Container = styled.div`
 	display: flex;
 	flex-wrap: wrap;
 	align-items: flex-end;
-	margin-top: 1em;
-	margin-bottom: 2em;
-	> div,
-	button {
-		margin-right: 15px;
-	}
 `
 
 const InputContainer = styled.div`
@@ -20,6 +17,7 @@ const InputContainer = styled.div`
 	flex-direction: column;
 	width: 250px;
 	margin-top: 10px;
+	margin-right: 10px;
 	label {
 		margin-right: 10px;
 		text-transform: uppercase;
@@ -27,7 +25,7 @@ const InputContainer = styled.div`
 	}
 `
 
-const MatchFilters = () => {
+const MatchFilters = ({ onSubmitFilters }) => {
 	const [filters, setFilters] = useState({
 		hotelName: '',
 		hotelChainName: '',
@@ -41,13 +39,6 @@ const MatchFilters = () => {
 		amadeusPropertyId: '',
 		worldspanPropertyId: '',
 	})
-
-	const onChange = (value, key) => {
-		setFilters({
-			...filters,
-			[key]: value,
-		})
-	}
 
 	const clearFilters = () => {
 		setFilters({
@@ -63,15 +54,59 @@ const MatchFilters = () => {
 			amadeusPropertyId: '',
 			worldspanPropertyId: '',
 		})
+		onSubmitFilters({
+			hotelName: '',
+			hotelChainName: '',
+			address1: '',
+			cityName: '',
+			stateCode: '',
+			countryName: '',
+			lanyonId: '',
+			sabrePropertyId: '',
+			apolloPropertyId: '',
+			amadeusPropertyId: '',
+			worldspanPropertyId: '',
+		})
 	}
 
-	const submitTableFilters = () => {}
+	const onChange = (value, key) => {
+		setFilters({
+			...filters,
+			[key]: value,
+		})
+	}
+
+	const showError = () => {
+		error({
+			title: 'Error in filters',
+			icon: <ExclamationCircleOutlined />,
+			content: 'Please only use alphanumeric characters in filters',
+		})
+	}
+
+	const submitTableFilters = () => {
+		const validFilters = {}
+		Object.keys(filters).map((filter) => {
+			if (filters[filter]) {
+				validFilters[filter] = filters[filter]
+			}
+		})
+		if (
+			Object.values(validFilters).some(
+				(filter) => !filter.match(/^([a-zA-Z0-9 _-]+)$/)
+			)
+		) {
+			showError()
+		} else {
+			onSubmitFilters({ ...validFilters })
+		}
+	}
 
 	return (
-		<Container>
-			{moreMatchesFilters.map((filter, i) => {
+		<Container id="filtersContainer">
+			{moreMatchesFilters.map((filter) => {
 				return (
-					<InputContainer key={filter + i}>
+					<InputContainer key={filter.label}>
 						<label>{filter.label}</label>
 						<Input
 							placeholder={filter.placeholder}
@@ -81,8 +116,12 @@ const MatchFilters = () => {
 					</InputContainer>
 				)
 			})}
-
-			<Button onClick={() => submitTableFilters()} type="primary" shape="round">
+			<Button
+				type="primary"
+				shape="round"
+				onClick={submitTableFilters}
+				disabled={!Object.values(filters).length > 0}
+			>
 				Submit
 			</Button>
 			<Button onClick={clearFilters} danger shape="round">
