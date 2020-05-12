@@ -23,8 +23,9 @@ const WorkRecord = () => {
 				recordId={+recordId}
 				onMatchHotel={onMatchHotel}
 				matchedHotel={matchedHotel}
+				style={{ marginBottom: '1em' }}
 			/>
-			<MoreMatches />
+			<MoreMatches onMatchHotel={onMatchHotel} matchedHotel={matchedHotel} />
 		</>
 	)
 }

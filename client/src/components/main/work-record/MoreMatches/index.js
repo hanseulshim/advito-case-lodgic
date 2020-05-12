@@ -1,19 +1,30 @@
+/* eslint-disable react/display-name */
 import React, { useState } from 'react'
+import styled from 'styled-components'
 import MatchFilters from './filters'
+import MoreMatchesTable from './MoreMatchesTable'
 
-const MoreMatches = () => {
-	const [filters, setFilters] = useState({})
+const Container = styled.div`
+	padding-bottom: 2em;
+`
 
-	const onSubmitFilters = (filterObj) => {
-		console.log(filterObj)
-		setFilters(filterObj)
+const MoreMatches = ({ onMatchHotel, matchedHotel }) => {
+	const [filters, updateFilters] = useState({})
+
+	const setFilters = (filterObj) => {
+		updateFilters(filterObj)
 	}
 
 	return (
-		<>
+		<Container>
 			<h4>FIND MORE MATCHES: </h4>
-			<MatchFilters onSubmitFilters={onSubmitFilters} />
-		</>
+			<MatchFilters setFilters={setFilters} />
+			<MoreMatchesTable
+				filters={filters}
+				onMatchHotel={onMatchHotel}
+				matchedHotel={matchedHotel}
+			/>
+		</Container>
 	)
 }
 

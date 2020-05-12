@@ -23,7 +23,6 @@ export const UNMATCHED_HOTEL_LIST = gql`
 			sourceName: $sourceName
 			cityName: $cityName
 		) {
-			pageCount
 			recordCount
 			data {
 				id

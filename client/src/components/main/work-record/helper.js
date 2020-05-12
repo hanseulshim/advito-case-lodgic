@@ -94,4 +94,9 @@ export const moreMatchesFilters = [
 		placeholder: 'Enter Worldspan ID',
 		value: 'worldspanPropertyId',
 	},
+	{
+		label: 'HMF ID',
+		placeholder: 'Enter HMF ID',
+		value: 'id',
+	},
 ]

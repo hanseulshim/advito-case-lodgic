@@ -30,8 +30,8 @@ const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
 						render: (record) => {
 							return (
 								<Checkbox
-									onChange={() => onMatchHotel(record)}
-									checked={matchedHotel === record}
+									onChange={() => onMatchHotel(record.hotelPropertyId)}
+									checked={matchedHotel === record.hotelPropertyId}
 								>
 									Match to this
 								</Checkbox>
@@ -54,9 +54,7 @@ const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
 				<Button
 					type="primary"
 					onClick={() =>
-						alert(
-							`Matched with Hotel ${matchedHotel.hotelName} HMF ID: ${matchedHotel.hotelPropertyId}!`
-						)
+						alert(`Matched this record with HMFID: ${matchedHotel}`)
 					}
 					disabled={!matchedHotel}
 				>

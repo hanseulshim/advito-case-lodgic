@@ -25,8 +25,8 @@ const InputContainer = styled.div`
 	}
 `
 
-const MatchFilters = ({ onSubmitFilters }) => {
-	const [filters, setFilters] = useState({
+const MatchFilters = ({ setFilters }) => {
+	const [filters, updateFilters] = useState({
 		hotelName: '',
 		hotelChainName: '',
 		address1: '',
@@ -38,10 +38,11 @@ const MatchFilters = ({ onSubmitFilters }) => {
 		apolloPropertyId: '',
 		amadeusPropertyId: '',
 		worldspanPropertyId: '',
+		id: '',
 	})
 
 	const clearFilters = () => {
-		setFilters({
+		updateFilters({
 			hotelName: '',
 			hotelChainName: '',
 			address1: '',
@@ -53,24 +54,13 @@ const MatchFilters = ({ onSubmitFilters }) => {
 			apolloPropertyId: '',
 			amadeusPropertyId: '',
 			worldspanPropertyId: '',
+			id: '',
 		})
-		onSubmitFilters({
-			hotelName: '',
-			hotelChainName: '',
-			address1: '',
-			cityName: '',
-			stateCode: '',
-			countryName: '',
-			lanyonId: '',
-			sabrePropertyId: '',
-			apolloPropertyId: '',
-			amadeusPropertyId: '',
-			worldspanPropertyId: '',
-		})
+		setFilters({})
 	}
 
 	const onChange = (value, key) => {
-		setFilters({
+		updateFilters({
 			...filters,
 			[key]: value,
 		})
@@ -86,25 +76,25 @@ const MatchFilters = ({ onSubmitFilters }) => {
 
 	const getValidFilters = () => {
 		const validFilters = {}
-		Object.keys(filters).map((filter) => {
-			if (filters[filter]) {
-				validFilters[filter] = filters[filter]
+		Object.keys(filters).map((key) => {
+			if (filters[key]) {
+				validFilters[key] = filters[key]
 			}
 		})
-		console.log(validFilters)
 		return validFilters
 	}
 
-	const submitTableFilters = () => {
-		const filters = getValidFilters()
+	const handleSubmit = () => {
+		const valid = getValidFilters()
+
 		if (
-			Object.values(filters).some(
+			Object.values(valid).some(
 				(filter) => !filter.match(/^([a-zA-Z0-9 _-]+)$/)
 			)
 		) {
 			showError()
 		} else {
-			onSubmitFilters({ ...filters })
+			setFilters({ ...valid })
 		}
 	}
 
@@ -125,8 +115,9 @@ const MatchFilters = ({ onSubmitFilters }) => {
 			<Button
 				type="primary"
 				shape="round"
-				onClick={submitTableFilters}
+				onClick={handleSubmit}
 				disabled={!Object.keys(getValidFilters()).length}
+				style={{ marginRight: '10px' }}
 			>
 				Submit
 			</Button>
