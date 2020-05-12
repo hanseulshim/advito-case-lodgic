@@ -1,5 +1,5 @@
 export type HotelPropertyType = {
-	pageCount: number
+	recordCount: number
 	data: HotelPropertyViewType[]
 }
 

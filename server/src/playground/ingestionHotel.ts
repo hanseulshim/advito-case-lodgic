@@ -13,7 +13,7 @@ export default {
         endDate: "2020-12-31"
         pageNumber: null
       ) {
-        pageCount
+        recordCount
         data {
           id
           jobIngestionId

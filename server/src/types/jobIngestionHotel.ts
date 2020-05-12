@@ -1,5 +1,5 @@
 export type JobIngestionHotelType = {
-	pageCount: number
+	recordCount: number
 	data: JobIngestionHotelView[]
 }
 

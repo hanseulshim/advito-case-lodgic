@@ -1,6 +1,6 @@
 export default `
 type IngestionHotel {
-	pageCount: Int
+	recordCount: Int
 	data: [JobIngestionHotelView]
 }
 type JobIngestionHotelView {

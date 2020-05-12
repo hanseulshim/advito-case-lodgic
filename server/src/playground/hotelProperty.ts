@@ -24,7 +24,7 @@ export default {
         # pageNumber: 0
       # ) 
       {
-        pageCount
+        recordCount
         data {
           id
           hotelName
