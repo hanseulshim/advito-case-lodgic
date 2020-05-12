@@ -84,21 +84,27 @@ const MatchFilters = ({ onSubmitFilters }) => {
 		})
 	}
 
-	const submitTableFilters = () => {
+	const getValidFilters = () => {
 		const validFilters = {}
 		Object.keys(filters).map((filter) => {
 			if (filters[filter]) {
 				validFilters[filter] = filters[filter]
 			}
 		})
+		console.log(validFilters)
+		return validFilters
+	}
+
+	const submitTableFilters = () => {
+		const filters = getValidFilters()
 		if (
-			Object.values(validFilters).some(
+			Object.values(filters).some(
 				(filter) => !filter.match(/^([a-zA-Z0-9 _-]+)$/)
 			)
 		) {
 			showError()
 		} else {
-			onSubmitFilters({ ...validFilters })
+			onSubmitFilters({ ...filters })
 		}
 	}
 
@@ -120,7 +126,7 @@ const MatchFilters = ({ onSubmitFilters }) => {
 				type="primary"
 				shape="round"
 				onClick={submitTableFilters}
-				disabled={!Object.values(filters).length > 0}
+				disabled={!Object.keys(getValidFilters()).length}
 			>
 				Submit
 			</Button>
