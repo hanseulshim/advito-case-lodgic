@@ -89,7 +89,7 @@ const MatchFilters = ({ setFilters }) => {
 
 		if (
 			Object.values(valid).some(
-				(filter) => !filter.match(/^([a-zA-Z0-9 _-]+)$/)
+				(filter) => !filter.match(/^([a-zA-Z0-9&,:. _-]+)$/)
 			)
 		) {
 			showError()

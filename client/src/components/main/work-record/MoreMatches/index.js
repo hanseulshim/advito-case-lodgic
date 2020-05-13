@@ -19,11 +19,13 @@ const MoreMatches = ({ onMatchHotel, matchedHotel }) => {
 		<Container>
 			<h4>FIND MORE MATCHES: </h4>
 			<MatchFilters setFilters={setFilters} />
-			<MoreMatchesTable
-				filters={filters}
-				onMatchHotel={onMatchHotel}
-				matchedHotel={matchedHotel}
-			/>
+			{Object.keys(filters).length > 0 && (
+				<MoreMatchesTable
+					filters={filters}
+					onMatchHotel={onMatchHotel}
+					matchedHotel={matchedHotel}
+				/>
+			)}
 		</Container>
 	)
 }
