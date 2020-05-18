@@ -38,4 +38,8 @@ extend type Query {
 		pageNumber: Int
 	): IngestionHotel @auth
 }
+
+extend type Mutation {
+	backout(jobIngestionId: Int!): Boolean @auth
+}
 `

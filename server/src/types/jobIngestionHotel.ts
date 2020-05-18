@@ -28,4 +28,6 @@ type JobIngestionHotelView = {
 	isSourcing: boolean
 	statusSourcing: string
 	dateStatusSourcing: string
+	isComplete: boolean
+	jobStatus: string
 }
