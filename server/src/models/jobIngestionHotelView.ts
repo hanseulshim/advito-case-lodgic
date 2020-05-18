@@ -1,5 +1,5 @@
-import { Model } from 'objection'
 import moment from 'moment'
+import { Model } from 'objection'
 
 export class JobIngestionHotelView extends Model {
 	id: string
@@ -27,6 +27,8 @@ export class JobIngestionHotelView extends Model {
 	statusSourcing: string
 	dateStatusSourcing: string
 	count: string
+	isComplete: boolean
+	jobStatus: string
 
 	static tableName = 'v_job_ingestion_hotel'
 

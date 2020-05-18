@@ -1,6 +1,5 @@
 export default `
 type UnmatchedHotelList {
-	pageCount: Int
 	recordCount: Int
 	data: [StageActivityHotelView]
 }

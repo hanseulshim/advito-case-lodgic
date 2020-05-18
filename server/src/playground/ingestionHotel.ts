@@ -13,7 +13,7 @@ export default {
         endDate: "2020-12-31"
         pageNumber: null
       ) {
-        pageCount
+        recordCount
         data {
           id
           jobIngestionId
@@ -42,5 +42,14 @@ export default {
         }
 			}
     }`
+	},
+	Mutation: {
+		name: 'Ingestion Hotel Mutation',
+		endpoint: getEndpoint(),
+		headers: { Authorization: 'MY^PR3TTYP0NY' },
+		query: `
+      mutation {
+        backout(jobIngestionId: null)
+      }`
 	}
 }

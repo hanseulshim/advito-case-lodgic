@@ -1,5 +1,5 @@
 export type JobIngestionHotelType = {
-	pageCount: number
+	recordCount: number
 	data: JobIngestionHotelView[]
 }
 
@@ -28,4 +28,6 @@ type JobIngestionHotelView = {
 	isSourcing: boolean
 	statusSourcing: string
 	dateStatusSourcing: string
+	isComplete: boolean
+	jobStatus: string
 }

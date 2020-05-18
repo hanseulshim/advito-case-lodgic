@@ -1,11 +1,11 @@
 import {
-	StageActivityHotelView,
-	StageActivityHotelCandidateView
+	StageActivityHotelCandidateView,
+	StageActivityHotelView
 } from '../models'
 import {
+	StageActivityHotelCandidateViewType,
 	StageActivityHotelSingleType,
-	StageActivityHotelType,
-	StageActivityHotelCandidateViewType
+	StageActivityHotelType
 } from '../types'
 
 const getOrderBy = (sortType: string): string => {
@@ -50,7 +50,6 @@ export default {
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 
 			return {
-				pageCount: Math.ceil(+count / LIMIT),
 				recordCount: +count,
 				data: await StageActivityHotelView.query()
 					.skipUndefined()

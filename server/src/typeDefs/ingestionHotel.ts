@@ -1,6 +1,6 @@
 export default `
 type IngestionHotel {
-	pageCount: Int
+	recordCount: Int
 	data: [JobIngestionHotelView]
 }
 type JobIngestionHotelView {
@@ -37,5 +37,9 @@ extend type Query {
 		endDate: String!
 		pageNumber: Int
 	): IngestionHotel @auth
+}
+
+extend type Mutation {
+	backout(jobIngestionId: Int!): Boolean @auth
 }
 `

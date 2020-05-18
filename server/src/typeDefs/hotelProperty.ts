@@ -1,6 +1,6 @@
 export default `
 type HotelProperty {
-	pageCount: Int
+	recordCount: Int
 	data: [HotelPropertyView]
 }
 

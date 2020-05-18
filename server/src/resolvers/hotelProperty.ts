@@ -45,7 +45,7 @@ export default {
 				.count()
 
 			return {
-				pageCount: Math.ceil(+count / LIMIT),
+				recordCount: +count,
 				data: await HotelPropertyView.query(hotel)
 					.skipUndefined()
 					.where('id', id)
