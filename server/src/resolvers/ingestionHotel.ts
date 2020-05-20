@@ -40,14 +40,15 @@ export default {
 	},
 	Mutation: {
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			const statuses = ['processed, loaded, approved']
+			const statuses = ['processed', 'loaded', 'approved']
 			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
 			if (
 				!jobIngestion ||
 				!jobIngestion.isComplete ||
 				!statuses.includes(jobIngestion.jobStatus)
-			)
+			) {
 				return false
+			}
 
 			const hotelProjectPropertyList = await HotelProjectProperty.query()
 				.distinct('hotelProjectId')

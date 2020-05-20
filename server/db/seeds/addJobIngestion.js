@@ -20,7 +20,7 @@ const createJobIngestionRow = ([clientList, applicationTemplateSourceList]) => {
 		file_size: faker.random.number({ min: 5000, max: 10000 }),
 		file_extension: '.xlsx',
 		is_complete: true,
-		job_status: 'done',
+		job_status: 'processed',
 		job_note: null
 	}
 }
