@@ -31,7 +31,7 @@ export default {
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.whereIn('jobStatus', ['ingested', 'processed', 'loaded', 'approved'])
+					.whereIn('jobStatus', ['processed', 'loaded', 'approved'])
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(['dataStartDate', 'templateCategory', 'sourceName'])
