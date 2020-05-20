@@ -31,7 +31,12 @@ export default {
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.whereIn('jobStatus', ['processed', 'loaded', 'approved'])
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(['dataStartDate', 'templateCategory', 'sourceName'])
