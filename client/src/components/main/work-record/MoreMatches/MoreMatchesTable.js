@@ -8,8 +8,8 @@ import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 
 const MoreMatchesTable = ({
-	setMatchedHotel,
 	matchedHotel,
+	setMatchedHotel,
 	onMatchHotel,
 	filters,
 }) => {

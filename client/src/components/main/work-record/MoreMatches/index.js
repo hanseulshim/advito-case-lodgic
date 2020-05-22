@@ -8,7 +8,7 @@ const Container = styled.div`
 	padding-bottom: 2em;
 `
 
-const MoreMatches = ({ onMatchHotel, matchedHotel }) => {
+const MoreMatches = ({ onMatchHotel, matchedHotel, setMatchedHotel }) => {
 	const [filters, updateFilters] = useState({})
 
 	const setFilters = (filterObj) => {
@@ -24,6 +24,7 @@ const MoreMatches = ({ onMatchHotel, matchedHotel }) => {
 					filters={filters}
 					onMatchHotel={onMatchHotel}
 					matchedHotel={matchedHotel}
+					setMatchedHotel={setMatchedHotel}
 				/>
 			)}
 		</Container>
