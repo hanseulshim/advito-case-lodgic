@@ -95,6 +95,7 @@ const UnmatchedHotelsTable = () => {
 				type="primary"
 				onClick={() => loadFirstRecord()}
 				style={{ marginLeft: '87.25%', position: 'relative', bottom: '3.5em' }}
+				disabled={!data.unmatchedHotelList.recordCount}
 			>
 				Work Records
 			</Button>
