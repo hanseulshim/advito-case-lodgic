@@ -1,5 +1,4 @@
 import {
-	ActivityHotel,
 	HotelProject,
 	HotelProjectProperty,
 	JobIngestion,
@@ -65,12 +64,6 @@ export default {
 				.select('id')
 
 			await Promise.all([
-				ActivityHotel.query()
-					.delete()
-					.whereIn(
-						'stageId',
-						stageActivityHotelList.map((v) => v.id)
-					),
 				HotelProjectProperty.query()
 					.delete()
 					.where('agencyJobIngestionId', jobIngestion.id)
