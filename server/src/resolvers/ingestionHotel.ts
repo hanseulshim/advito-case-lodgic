@@ -1,5 +1,4 @@
 import {
-	ActivityHotel,
 	HotelProject,
 	HotelProjectProperty,
 	JobIngestion,
@@ -31,7 +30,12 @@ export default {
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.whereIn('jobStatus', ['processed', 'loaded', 'approved'])
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(['dataStartDate', 'templateCategory', 'sourceName'])
@@ -60,12 +64,6 @@ export default {
 				.select('id')
 
 			await Promise.all([
-				ActivityHotel.query()
-					.delete()
-					.whereIn(
-						'stageId',
-						stageActivityHotelList.map((v) => v.id)
-					),
 				HotelProjectProperty.query()
 					.delete()
 					.where('agencyJobIngestionId', jobIngestion.id)

@@ -125,7 +125,7 @@ exports.seed = async (knex) => {
 	const idList = await knex('job_ingestion')
 		.select('id', 'count_rows')
 		.where('is_complete', true)
-		.andWhere('job_status', 'done')
+		.andWhere('job_status', 'processed')
 	for (const { id, count_rows } of idList) {
 		let file = []
 		for (let i = 0; i < count_rows; i++) {

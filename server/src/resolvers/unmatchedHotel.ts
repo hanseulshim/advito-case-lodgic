@@ -11,7 +11,7 @@ import {
 const getOrderBy = (sortType: string): string => {
 	const orderBy = sortType.toLowerCase().includes('match')
 		? 'best_match_score'
-		: 'room_spend'
+		: 'room_spend::float'
 	const sortOrder = sortType.toLowerCase().includes('asc')
 		? 'ASC'
 		: 'DESC NULLS LAST'
