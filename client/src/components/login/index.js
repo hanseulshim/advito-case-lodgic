@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import styled from 'styled-components'
+import { store } from 'context/store'
 import { Form, Input, Button } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { Redirect } from 'react-router-dom'
@@ -18,7 +19,7 @@ const Container = styled.div`
 	width: 100%;
 	height: 100%;
 	min-height: 1000px;
-	background: ${props => props.theme.jungleMist};
+	background: ${(props) => props.theme.jungleMist};
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -37,7 +38,7 @@ const Logo = styled.div`
 const Title = styled.div`
 	font-size: 4em;
 	text-align: center;
-	color: ${props => props.theme.white};
+	color: ${(props) => props.theme.white};
 	line-height: 1.25;
 	margin-top: 2em;
 `
@@ -56,7 +57,7 @@ const ButtonRow = styled.div`
 `
 
 const Link = styled.div`
-	color: ${props => props.theme.white};
+	color: ${(props) => props.theme.white};
 	cursor: pointer;
 	:hover {
 		opacity: 0.7;
@@ -64,10 +65,17 @@ const Link = styled.div`
 `
 
 const Login = () => {
+	const globalState = useContext(store)
+	const { dispatch } = globalState
 	const [visible, setVisible] = useState(false)
 	const [login, { loading, error, data }] = useMutation(LOGIN, {
 		client: authClient
 	})
+
+	// Clear context when login is rendered
+	useEffect(() => {
+		dispatch({ type: 'clearContext' })
+	}, [])
 
 	const handleSubmit = async ({ username, password }) => {
 		try {

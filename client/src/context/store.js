@@ -12,14 +12,18 @@ const StateProvider = ({ children }) => {
 				return {
 					...state,
 					clientId: action.value.inputs.clientId,
-					dateRange: action.value.inputs.dateRange,
+					dateRange: action.value.inputs.dateRange
 				}
 			case 'setFilters':
 				return {
 					...state,
 					filters: {
-						...action.value,
-					},
+						...action.value
+					}
+				}
+			case 'clearContext':
+				return {
+					...initialState
 				}
 			default:
 				throw new Error()
