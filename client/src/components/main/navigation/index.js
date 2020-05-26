@@ -13,6 +13,10 @@ const Navigation = () => {
 		}
 	}
 
+	const user = JSON.parse(localStorage.getItem('advito-user'))
+	const isSpecialistOrConsultant =
+		user.roleIds.includes(16) || user.roleIds.includes(17)
+
 	return (
 		<>
 			<Tabs
@@ -25,11 +29,13 @@ const Navigation = () => {
 				hideAdd
 				animated
 			>
-				<TabPane
-					tab="Ingestion History"
-					key="ingestion-history"
-					closable={false}
-				/>
+				{!isSpecialistOrConsultant && (
+					<TabPane
+						tab="Ingestion History"
+						key="ingestion-history"
+						closable={false}
+					/>
+				)}
 				<TabPane
 					tab="Unmatched Hotels"
 					key="unmatched-hotels"

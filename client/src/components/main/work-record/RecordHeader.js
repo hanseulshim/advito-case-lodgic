@@ -10,7 +10,7 @@ import { getFieldOrder, formatTitle } from './helper'
 import { formatNum } from 'helper'
 import './styles.scss'
 
-const RecordHeader = ({ recordIndex }) => {
+const RecordHeader = ({ recordIndex, setNext }) => {
 	let history = useHistory()
 	const globalState = useContext(store)
 	const { state } = globalState
@@ -30,6 +30,9 @@ const RecordHeader = ({ recordIndex }) => {
 			...(filters.sortType && { sortType: filters.sortType }),
 		},
 		fetchPolicy: 'network-only',
+		onCompleted: () => {
+			setNext(data.unmatchedHotel.nextId)
+		},
 	})
 
 	if (loading) return <SpinLoader />

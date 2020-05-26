@@ -7,7 +7,12 @@ import { Table, Checkbox, Button } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 
-const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
+const MatchesTable = ({
+	recordId,
+	setMatchedHotel,
+	matchedHotel,
+	onMatchHotel,
+}) => {
 	const { loading, error, data } = useQuery(UNMATCHED_HOTEL_CONFIDENCE_LIST, {
 		variables: {
 			stageActivityHotelId: recordId,
@@ -30,7 +35,7 @@ const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
 						render: (record) => {
 							return (
 								<Checkbox
-									onChange={() => onMatchHotel(record.hotelPropertyId)}
+									onChange={() => setMatchedHotel(record.hotelPropertyId)}
 									checked={matchedHotel === record.hotelPropertyId}
 								>
 									Match to this
@@ -51,13 +56,7 @@ const MatchesTable = ({ recordId, onMatchHotel, matchedHotel }) => {
 					justifyContent: 'flex-end',
 				}}
 			>
-				<Button
-					type="primary"
-					onClick={() =>
-						alert(`Matched this record with HMFID: ${matchedHotel}`)
-					}
-					disabled={!matchedHotel}
-				>
+				<Button type="primary" onClick={onMatchHotel} disabled={!matchedHotel}>
 					Match Hotel
 				</Button>
 			</div>

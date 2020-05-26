@@ -7,7 +7,12 @@ import { columns } from './columns'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 
-const MoreMatchesTable = ({ onMatchHotel, matchedHotel, filters }) => {
+const MoreMatchesTable = ({
+	matchedHotel,
+	setMatchedHotel,
+	onMatchHotel,
+	filters,
+}) => {
 	const [pageNumber, setPageNumber] = useState(1)
 	const { loading, error, data } = useQuery(HOTEL_PROPERTY_LIST, {
 		variables: {
@@ -36,7 +41,7 @@ const MoreMatchesTable = ({ onMatchHotel, matchedHotel, filters }) => {
 						render: (record) => {
 							return (
 								<Checkbox
-									onChange={() => onMatchHotel(record.id)}
+									onChange={() => setMatchedHotel(record.id)}
 									checked={matchedHotel === record.id}
 								>
 									Match to this
@@ -67,13 +72,7 @@ const MoreMatchesTable = ({ onMatchHotel, matchedHotel, filters }) => {
 					justifyContent: 'flex-end',
 				}}
 			>
-				<Button
-					type="primary"
-					onClick={() =>
-						alert(`Matched this record with HMFID: ${matchedHotel}!`)
-					}
-					disabled={!matchedHotel}
-				>
+				<Button type="primary" onClick={onMatchHotel} disabled={!matchedHotel}>
 					Match Hotel
 				</Button>
 			</div>
