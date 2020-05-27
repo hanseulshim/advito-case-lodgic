@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { Button } from 'antd'
 import { DownloadOutlined } from '@ant-design/icons'
+import EnhancedQc from './buttons/EnhancedQc'
 
 const Container = styled.div`
 	display: flex;
@@ -18,7 +19,7 @@ const ButtonRow = () => {
 	return (
 		<Container>
 			<Button icon={<DownloadOutlined />}>Export Activity Data QC</Button>
-			<Button icon={<DownloadOutlined />}>Export Enhanced QC Report</Button>
+			<EnhancedQc />
 			<Button danger>Approve Files for DPM</Button>
 			<Button danger>Approve Files for Sourcing</Button>
 		</Container>
