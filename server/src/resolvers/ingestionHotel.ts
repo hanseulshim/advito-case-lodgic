@@ -1,3 +1,4 @@
+import { parse } from 'json2csv'
 import {
 	HotelProject,
 	HotelProjectProperty,
@@ -96,6 +97,22 @@ export default {
 				jobStatus: 'backout'
 			})
 			return true
+		},
+		exportActivityDataQc: async (
+			_: null,
+			{ jobIngestionId, currencyType },
+			{ advito }
+		): Promise<string> => {
+			console.log(currencyType)
+			const res = await advito.raw(
+				`select * from export_stage_activity_hotel_qc(${jobIngestionId})`
+			)
+			try {
+				return parse(res.rows)
+			} catch (err) {
+				console.error(err)
+				return 'error'
+			}
 		}
 	}
 }
