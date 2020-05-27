@@ -23,16 +23,16 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 			endDate: dateRange[1],
 			...(filters.hotelName && { hotelName: filters.hotelName }),
 			...(filters.templateCategory && {
-				templateCategory: filters.templateCategory,
+				templateCategory: filters.templateCategory
 			}),
 			...(filters.sourceName && { sourceName: filters.sourceName }),
 			...(filters.cityName && { cityName: filters.cityName }),
-			...(filters.sortType && { sortType: filters.sortType }),
+			...(filters.sortType && { sortType: filters.sortType })
 		},
 		fetchPolicy: 'network-only',
 		onCompleted: () => {
 			setNext(data.unmatchedHotel.nextId)
-		},
+		}
 	})
 
 	if (loading) return <SpinLoader />
@@ -43,7 +43,7 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 			history.push(
 				`/work-record/${data.unmatchedHotel.nextId}-${recordIndex + 1}`
 			)
-		} else if (e < data.unmatchedHotel.currPosition) {
+		} else if (e < data.unmatchedHotel.currPosition + 1) {
 			history.push(
 				`/work-record/${data.unmatchedHotel.prevId}-${recordIndex - 1}`
 			)
@@ -60,11 +60,11 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 					simple
 					showSizeChanger={false}
 					showQuickJumper={false}
-					current={data.unmatchedHotel.currPosition}
+					current={data.unmatchedHotel.currPosition + 1}
 					total={data.unmatchedHotel.recordCount}
 					pageSize={1}
 					onChange={onPageChange}
-				/>,
+				/>
 			]}
 		>
 			<Row>
@@ -76,7 +76,7 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 							value={data.unmatchedHotel.data[field]}
 							style={{
 								marginRight: '2em',
-								marginBottom: '1em',
+								marginBottom: '1em'
 							}}
 							valueStyle={{ fontSize: '1em' }}
 							formatter={(value) =>

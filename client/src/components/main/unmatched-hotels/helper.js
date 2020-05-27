@@ -3,7 +3,7 @@ import history from '../../../history'
 import { Button } from 'antd'
 
 export const getActions = (record, pageNumber, index) => {
-	const recordNumber = (pageNumber - 1) * 25 + index + 1
+	const recordNumber = (pageNumber - 1) * 25 + index
 	return (
 		<Button
 			onClick={() => history.push(`/work-record/${record.id}-${recordNumber}`)}
