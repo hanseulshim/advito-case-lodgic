@@ -103,9 +103,8 @@ export default {
 			{ jobIngestionId, currencyType },
 			{ advito }
 		): Promise<string> => {
-			console.log(currencyType)
 			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc(${jobIngestionId})`
+				`select * from export_stage_activity_hotel_qc(${jobIngestionId}, '${currencyType}')`
 			)
 			try {
 				return parse(res.rows)
