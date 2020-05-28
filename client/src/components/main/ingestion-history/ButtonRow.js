@@ -1,8 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Button } from 'antd'
-import { DownloadOutlined } from '@ant-design/icons'
 import EnhancedQc from './buttons/EnhancedQc'
+import ActivityDataQc from './buttons/ActivityDataQc'
 
 const Container = styled.div`
 	display: flex;
@@ -18,7 +18,7 @@ const Container = styled.div`
 const ButtonRow = () => {
 	return (
 		<Container>
-			<Button icon={<DownloadOutlined />}>Export Activity Data QC</Button>
+			<ActivityDataQc />
 			<EnhancedQc />
 			<Button danger>Approve Files for DPM</Button>
 			<Button danger>Approve Files for Sourcing</Button>
