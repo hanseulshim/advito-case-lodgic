@@ -24,13 +24,13 @@ const UnmatchedHotelsTable = () => {
 			pageNumber,
 			...(filters.hotelName && { hotelName: filters.hotelName }),
 			...(filters.templateCategory && {
-				templateCategory: filters.templateCategory,
+				templateCategory: filters.templateCategory
 			}),
 			...(filters.sourceName && { sourceName: filters.sourceName }),
 			...(filters.cityName && { cityName: filters.cityName }),
-			...(filters.sortType && { sortType: filters.sortType }),
+			...(filters.sortType && { sortType: filters.sortType })
 		},
-		fetchPolicy: 'network-only',
+		fetchPolicy: 'network-only'
 	})
 
 	const [loadFirstRecord] = useLazyQuery(UNMATCHED_HOTEL, {
@@ -42,16 +42,16 @@ const UnmatchedHotelsTable = () => {
 			pageNumber,
 			...(filters.hotelName && { hotelName: filters.hotelName }),
 			...(filters.templateCategory && {
-				templateCategory: filters.templateCategory,
+				templateCategory: filters.templateCategory
 			}),
 			...(filters.sourceName && { sourceName: filters.sourceName }),
 			...(filters.cityName && { cityName: filters.cityName }),
-			...(filters.sortType && { sortType: filters.sortType }),
+			...(filters.sortType && { sortType: filters.sortType })
 		},
 		fetchPolicy: 'network-only',
 		onCompleted: (data) =>
-			history.push(`work-record/${data.unmatchedHotel.data.id}-1`),
-		onError: (error) => console.log(`Error grabbing ID!:${error}`),
+			history.push(`work-record/${data.unmatchedHotel.data.id}-0`),
+		onError: (error) => console.log(`Error grabbing ID!:${error}`)
 	})
 
 	useEffect(() => {
@@ -73,8 +73,8 @@ const UnmatchedHotelsTable = () => {
 						title: 'Actions',
 						width: 200,
 						fixed: 'right',
-						render: (_, record, index) => getActions(record, pageNumber, index),
-					},
+						render: (_, record, index) => getActions(record, pageNumber, index)
+					}
 				]}
 				dataSource={data.unmatchedHotelList.data}
 				pagination={{
@@ -86,7 +86,7 @@ const UnmatchedHotelsTable = () => {
 					total: data.unmatchedHotelList.recordCount,
 					showTotal: (total, range) =>
 						`${range[0]}-${range[1]} of ${total} items`,
-					onChange: onPageChange,
+					onChange: onPageChange
 				}}
 				scroll={{ x: 1500, y: 700 }}
 				rowKey="id"
