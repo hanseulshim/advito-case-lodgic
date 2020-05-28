@@ -34,7 +34,7 @@ const ActivityDataQc = () => {
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
-				Export Activity Data QC
+				Activity Data QC Export
 			</Button>
 			<Modal
 				visible={visible}
