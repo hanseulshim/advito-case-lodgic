@@ -16,11 +16,11 @@ const WorkRecord = () => {
 	const [matchedHotel, setHotel] = useState(null)
 	const [nextRecord, setNextRecord] = useState(null)
 
-	const [matchHotel, { loading }] = useMutation(MATCH_HOTEL, {
+	const [matchHotel] = useMutation(MATCH_HOTEL, {
 		onCompleted: () => {
 			showSuccess()
 		},
-		onError: (error) => showError(error),
+		onError: (error) => showError(error)
 	})
 
 	useEffect(() => {
@@ -39,8 +39,8 @@ const WorkRecord = () => {
 		matchHotel({
 			variables: {
 				stageActivityHotelId: +recordId,
-				hotelPropertyId: +matchedHotel,
-			},
+				hotelPropertyId: +matchedHotel
+			}
 		})
 	}
 
