@@ -100,11 +100,11 @@ export default {
 		},
 		exportActivityDataQc: async (
 			_: null,
-			{ jobIngestionId, currencyType },
+			{ jobIngestionIds, currencyType },
 			{ advito }
 		): Promise<string> => {
 			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc(${jobIngestionId}, '${currencyType}')`
+				`select * from export_stage_activity_hotel_qc(ARRAY [${jobIngestionIds}], '${currencyType}')`
 			)
 			try {
 				return parse(res.rows)
