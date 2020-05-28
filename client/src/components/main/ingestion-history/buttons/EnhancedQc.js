@@ -28,7 +28,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 
 const EnhancedQc = () => {
 	const [visible, setVisible] = useState(false)
-	const [currencyType, setCurrencyType] = useState('')
+	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
 
 	const { loading, error, data } = useQuery(CURRENCY_LIST)
