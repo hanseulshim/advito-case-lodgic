@@ -50,6 +50,7 @@ export default {
 		query: `
       mutation {
         backout(jobIngestionId: null)
+        exportActivityDataQc(jobIngestionId: null, currencyType: null)
       }`
 	}
 }

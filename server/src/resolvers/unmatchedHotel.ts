@@ -70,7 +70,7 @@ export default {
 		unmatchedHotel: async (
 			_: null,
 			{
-				currPosition = 1,
+				currPosition = 0,
 				clientId,
 				startDate,
 				endDate,
@@ -82,8 +82,20 @@ export default {
 			}
 		): Promise<StageActivityHotelSingleType> => {
 			const list =
-				currPosition > 1
+				currPosition === 0
 					? await StageActivityHotelView.query()
+							.skipUndefined()
+							.where('clientId', clientId)
+							.whereNull('matchedHotelPropertyId')
+							.andWhere('dataStartDate', '>=', startDate)
+							.andWhere('dataEndDate', '<=', endDate)
+							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+							.andWhere('templateCategory', templateCategory)
+							.andWhere('sourceName', sourceName)
+							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+							.orderByRaw(getOrderBy(sortType))
+							.limit(2)
+					: await StageActivityHotelView.query()
 							.skipUndefined()
 							.where('clientId', clientId)
 							.whereNull('matchedHotelPropertyId')
@@ -96,19 +108,6 @@ export default {
 							.orderByRaw(getOrderBy(sortType))
 							.offset(currPosition - 1)
 							.limit(3)
-					: await StageActivityHotelView.query()
-							.skipUndefined()
-							.where('clientId', clientId)
-							.whereNull('matchedHotelPropertyId')
-							.andWhere('dataStartDate', '>=', startDate)
-							.andWhere('dataEndDate', '<=', endDate)
-							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-							.andWhere('templateCategory', templateCategory)
-							.andWhere('sourceName', sourceName)
-							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-							.orderByRaw(getOrderBy(sortType))
-							.limit(2)
-
 			const { count } = await StageActivityHotelView.query()
 				.skipUndefined()
 				.count()
@@ -129,7 +128,7 @@ export default {
 			return {
 				recordCount: +count,
 				prevId,
-				currPosition: currPosition ? currPosition : 1,
+				currPosition,
 				nextId,
 				data
 			}
