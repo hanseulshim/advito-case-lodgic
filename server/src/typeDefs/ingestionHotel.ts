@@ -67,6 +67,6 @@ extend type Query {
 
 extend type Mutation {
 	backout(jobIngestionId: Int!): Boolean @auth
-	exportActivityDataQc(jobIngestionIds: [Int]!, currencyType: String!): String @auth
+	exportActivityDataQc(currencyType: String!): String @auth
 }
 `

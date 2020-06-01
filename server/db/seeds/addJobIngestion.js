@@ -72,10 +72,10 @@ exports.seed = async (knex) => {
 		jobIngestionRows.push(createJobIngestionRow(res))
 	}
 	await knex('stage_activity_hotel_candidate').del()
-	await knex('stage_activity_hotel').del()
+	// await knex('stage_activity_hotel').del()
 	await knex('job_ingestion_log').del()
 	await knex('job_ingestion_hotel').del()
-	await knex('job_ingestion').del()
+	// await knex('job_ingestion').del()
 	const idList = await knex('job_ingestion')
 		.insert(jobIngestionRows)
 		.returning('id')
