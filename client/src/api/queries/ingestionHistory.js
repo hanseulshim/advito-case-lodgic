@@ -39,6 +39,7 @@ export const INGESTION_HOTEL_LIST = gql`
 				isSourcing
 				statusSourcing
 				dateStatusSourcing
+				jobName
 			}
 		}
 	}

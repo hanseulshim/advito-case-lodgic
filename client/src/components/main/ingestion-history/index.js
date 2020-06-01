@@ -6,6 +6,7 @@ import { INGESTION_HOTEL_LIST } from 'api/queries'
 import { columns } from './columns'
 import { Table, Button } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
+import { Backout } from './buttons/Backout'
 import ErrorMessage from 'components/common/ErrorMessage'
 import EnhancedQc from './buttons/EnhancedQc'
 import ActivityDataQc from './buttons/ActivityDataQc'
@@ -28,7 +29,7 @@ const IngestionHistory = () => {
 	const { state } = globalState
 	const { clientId, dateRange } = state
 	const [pageNumber, setPageNumber] = useState(1)
-	const { loading, error, data } = useQuery(INGESTION_HOTEL_LIST, {
+	const { loading, error, data, refetch } = useQuery(INGESTION_HOTEL_LIST, {
 		variables: {
 			clientId,
 			startDate: dateRange[0],
@@ -64,7 +65,16 @@ const IngestionHistory = () => {
 				<ApproveSourcing onClick={handleApprove} />
 			</ButtonRow>
 			<Table
-				columns={columns}
+				columns={[
+					...columns,
+					{
+						title: '',
+						width: 100,
+						fixed: 'right',
+						// eslint-disable-next-line react/display-name
+						render: (_, record) => <Backout record={record} refetch={refetch} />
+					}
+				]}
 				dataSource={data.ingestionHotelList.data}
 				pagination={{
 					position: ['bottomLeft'],
