@@ -1,5 +1,7 @@
 export type JobIngestionHotelType = {
-	recordCount: number
+	recordCount: string
+	dpmCount: string
+	sourcingCount: string
 	data: JobIngestionHotelView[]
 }
 

@@ -14,11 +14,14 @@ export default {
         pageNumber: null
       ) {
         recordCount
+        dpmCount
+        sourcingCount
         data {
           id
           jobIngestionId
           templateNote
           templateCategory
+          jobName
           sourceName
           loadedBy
           dataStartDate

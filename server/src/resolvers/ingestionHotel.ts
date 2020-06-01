@@ -18,15 +18,56 @@ export default {
 		): Promise<JobIngestionHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const [{ count }] = await JobIngestionHotelView.query()
-				.count()
-				.where('clientId', clientId)
-				.andWhere('dataStartDate', '>=', startDate)
-				.andWhere('dataEndDate', '<=', endDate)
-
-			return {
-				recordCount: +count,
-				data: await JobIngestionHotelView.query()
+			const [
+				{ count: recordCount },
+				{ count: dpmCount },
+				{ count: sourcingCount },
+				data
+			] = await Promise.all([
+				JobIngestionHotelView.query()
+					.count()
+					.first()
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					),
+				JobIngestionHotelView.query()
+					.count()
+					.first()
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isDpm', true)
+					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					),
+				JobIngestionHotelView.query()
+					.count()
+					.first()
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isSourcing', true)
+					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					),
+				JobIngestionHotelView.query()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
@@ -40,6 +81,13 @@ export default {
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(['dataStartDate', 'templateCategory', 'sourceName'])
+			])
+
+			return {
+				recordCount,
+				dpmCount,
+				sourcingCount,
+				data
 			}
 		}
 	},

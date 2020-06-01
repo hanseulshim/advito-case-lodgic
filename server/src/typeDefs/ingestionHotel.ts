@@ -1,6 +1,8 @@
 export default `
 type IngestionHotel {
 	recordCount: Int
+	dpmCount: Int
+	sourcingCount: Int
 	data: [JobIngestionHotelView]
 }
 type JobIngestionHotelView {
@@ -8,6 +10,7 @@ type JobIngestionHotelView {
   jobIngestionId: Int
 	templateNote: String
 	templateCategory: String
+	jobName: String
 	sourceName: String
 	loadedBy: String
 	dataStartDate: String
@@ -28,32 +31,6 @@ type JobIngestionHotelView {
 	isSourcing: Boolean
 	statusSourcing: String
 	dateStatusSourcing: String
-}
-type ActivityDataQc {
-	jobIngestionId: Int
-	matchedHotelPropertyId: Int
-	matchedHotelPropertyAliasId: Int
-	lanyonId: Int
-	propertyName: String
-	address1: String
-	address2: String
-	city: String
-	state: String
-	countryCode: String
-	countryName: String
-	chainCode: String
-	chainName: String
-	brandName: String
-	marketTierCode: String
-	marketTierLabel: String
-	serviceLevel: String
-	agencyNights: String
-	agencySpend: String
-	supplierNights: String
-	supperSpend: String
-	cardSpendTotal: String
-	cardSpend80: String
-	sourceName: String
 }
 
 extend type Query {
