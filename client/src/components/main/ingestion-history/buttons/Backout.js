@@ -39,8 +39,16 @@ export const Backout = ({ record, refetch }) => {
 				variables: { jobIngestionId }
 			})
 		} catch (e) {
+			error(e.message)
 			console.error('Error in backout ', e)
 		}
+	}
+
+	const error = (error) => {
+		Modal.error({
+			title: 'Error in Backout',
+			content: error
+		})
 	}
 
 	return (
