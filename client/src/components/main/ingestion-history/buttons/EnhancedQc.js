@@ -26,7 +26,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const EnhancedQc = () => {
+const EnhancedQc = ({ onClick }) => {
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
@@ -46,6 +46,11 @@ const EnhancedQc = () => {
 		setCurrencySelection(e)
 	}
 
+	const onOk = () => {
+		onClick(currencyType, currencySelection)
+		toggleModal()
+	}
+
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
@@ -54,7 +59,7 @@ const EnhancedQc = () => {
 			<Modal
 				visible={visible}
 				title={'Enhanced QC Export'}
-				onOk={toggleModal}
+				onOk={onOk}
 				onCancel={toggleModal}
 			>
 				<Header>

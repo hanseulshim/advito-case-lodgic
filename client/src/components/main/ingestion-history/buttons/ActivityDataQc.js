@@ -20,7 +20,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ActivityDataQc = () => {
+const ActivityDataQc = ({ onClick }) => {
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
 
@@ -31,6 +31,11 @@ const ActivityDataQc = () => {
 		setCurrencyType(e.target.value)
 	}
 
+	const onOk = () => {
+		onClick(currencyType)
+		toggleModal()
+	}
+
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
@@ -39,7 +44,7 @@ const ActivityDataQc = () => {
 			<Modal
 				visible={visible}
 				title={'Activity Data QC Export'}
-				onOk={toggleModal}
+				onOk={onOk}
 				onCancel={toggleModal}
 			>
 				<Header>
