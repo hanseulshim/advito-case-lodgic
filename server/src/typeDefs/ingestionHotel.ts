@@ -45,7 +45,7 @@ extend type Query {
 		startDate: String!
 		endDate: String!
 	): [String] @auth
-	dpmFileList(
+	sourcingFileList(
 		clientId: Int!
 		startDate: String!
 		endDate: String!

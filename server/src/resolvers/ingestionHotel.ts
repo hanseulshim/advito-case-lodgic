@@ -90,6 +90,58 @@ export default {
 				sourcingCount,
 				data
 			}
+		},
+		dpmFileList: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<string[]> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotelView.query()
+					.select('jobIngestionId')
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isDpm', true)
+					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
+				if (!jobIngestionHotel)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				return jobIngestionHotel.map((job) => job.jobName)
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
+		},
+		sourcingFileList: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<string[]> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotelView.query()
+					.select('jobIngestionId')
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isSourcing', true)
+					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
+				if (!jobIngestionHotel)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				return jobIngestionHotel.map((job) => job.jobName)
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
 		}
 	},
 	Mutation: {

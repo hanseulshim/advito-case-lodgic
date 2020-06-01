@@ -7,6 +7,7 @@ export class JobIngestionHotelView extends Model {
 	templateNote: string
 	templateCategory: string
 	sourceName: string
+	jobName: string
 	dataStartDate: string
 	dataEndDate: string
 	uploadTimestamp: string
