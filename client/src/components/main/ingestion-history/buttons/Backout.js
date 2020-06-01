@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { store } from 'context/store'
 import { Button, Modal } from 'antd'
 import { useMutation } from '@apollo/client'
 import { BACKOUT } from 'api'
@@ -12,6 +13,9 @@ const Icon = styled(ExclamationCircleOutlined)`
 `
 
 export const Backout = ({ record, refetch }) => {
+	const globalState = useContext(store)
+	const { state } = globalState
+	const { clientName } = state
 	const [backout, { loading }] = useMutation(BACKOUT, {
 		onCompleted: () => refetch()
 	})
@@ -71,27 +75,37 @@ export const Backout = ({ record, refetch }) => {
 				<div>
 					{loaded && (
 						<>
+							<h3>WARNING</h3>
 							<p>
-								You are about to backout of file {jobName}, this is a
-								nonreversible action. The following will occur:
+								You are about to backout a file for {clientName}, which has
+								already been loaded. Continuing this action will:
 							</p>
-							<p>
-								{' '}
-								- All Records for this file will be deleted and removed from
-								ingestion history and unmatched screens
-							</p>
-							<p>
-								- Loaded records for all other files that were included in the
-								same data load will be deleted (but not the ingested data for
-								all other associated files)
-							</p>
+							<ul>
+								<li> Delete all ingested records for this file.</li>
+								<li> Delete all unmatched properties for this file.</li>
+								<li>
+									Delete all processed records for ALL other files associated
+									with this file. The ingested records for all other files will
+									remain.
+								</li>
+							</ul>
+							<h3>NOT REVERSIBLE</h3>
+							<p>The following file will be backed out:</p>
+							<p>{jobName}</p>
 						</>
 					)}
 					{open && (
-						<p>
-							Messaging: you are about to backout of file {jobName}, this is a
-							nonreversible action. The following will occur...
-						</p>
+						<>
+							<h3>WARNING</h3>
+							<p>
+								You are about to backout of the file below for {clientName},
+								which will delete all ingested data from this file and delete
+								any associated unmatched property records.
+							</p>
+							<h3>NOT REVERSIBLE</h3>
+							<p>The following file will be backed out:</p>
+							<p>{jobName}</p>
+						</>
 					)}
 				</div>
 			</Modal>

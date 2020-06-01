@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { store } from 'context/store'
 import styled from 'styled-components'
 import { Button, Modal } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -16,6 +17,9 @@ const Icon = styled(ExclamationCircleOutlined)`
 `
 
 const ApproveSourcing = ({ onClick }) => {
+	const globalState = useContext(store)
+	const { state } = globalState
+	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 
 	const toggleModal = () => {
@@ -45,7 +49,7 @@ const ApproveSourcing = ({ onClick }) => {
 			>
 				<Header>
 					<p>
-						You are about to approve sourcing data for 'client name', confirming
+						You are about to approve sourcing data for {clientName}, confirming
 						that enhanced QC report has been approved by consultant. This action
 						is not reversible.
 					</p>
