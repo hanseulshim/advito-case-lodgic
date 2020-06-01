@@ -153,6 +153,78 @@ export default {
 				throw new ApolloError(e.message)
 			}
 		},
+		approveDpm: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<boolean> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotelView.query()
+					.select('jobIngestionId')
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isDpm', true)
+					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
+				if (!jobIngestionHotel || jobIngestionHotel.length === 0)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				await JobIngestionHotel.query()
+					.patch({
+						isDpm: true,
+						statusDpm: 'Approved',
+						dateStatusDpm: new Date()
+					})
+					.whereIn(
+						'jobIngestionId',
+						jobIngestionHotel.map((job) => job.jobIngestionId)
+					)
+				return true
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
+		},
+		approveSourcing: async (
+			_: null,
+			{ clientId, startDate, endDate }
+		): Promise<boolean> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotelView.query()
+					.select('jobIngestionId')
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere('isSourcing', true)
+					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
+					.whereIn(
+						'jobStatus',
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? ['done', 'ingested', 'processed', 'loaded', 'approved']
+							: ['processed', 'loaded', 'approved']
+					)
+				if (!jobIngestionHotel || jobIngestionHotel.length === 0)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				await JobIngestionHotel.query()
+					.patch({
+						isSourcing: true,
+						statusSourcing: 'Approved',
+						dateStatusSourcing: new Date()
+					})
+					.whereIn(
+						'jobIngestionId',
+						jobIngestionHotel.map((job) => job.jobIngestionId)
+					)
+				return true
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
+		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
 			const statuses = ['processed', 'loaded', 'approved']
 			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)

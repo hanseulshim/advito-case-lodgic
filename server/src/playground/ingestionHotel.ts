@@ -52,10 +52,16 @@ export default {
 		headers: { Authorization: 'MY^PR3TTYP0NY' },
 		query: `
       mutation {
-        loadDpm(jobIngestionId: null)
-        loadSourcing(jobIngestionId: null)
-        backout(jobIngestionId: null)
-        exportActivityDataQc(currencyType: "usd")
+        # loadDpm(jobIngestionId: null)
+        # loadSourcing(jobIngestionId: null)
+        # approveDpm(clientId: 348
+        #   startDate: "2020-01-01"
+        #   endDate: "2020-12-31")
+        # approveSourcing(clientId: 348
+        #   startDate: "2020-01-01"
+        #   endDate: "2020-12-31")
+        # backout(jobIngestionId: null)
+        # exportActivityDataQc(currencyType: "usd")
       }`
 	}
 }

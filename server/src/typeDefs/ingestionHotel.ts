@@ -40,12 +40,28 @@ extend type Query {
 		endDate: String!
 		pageNumber: Int
 	): IngestionHotel @auth
+	dpmFileList(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+	): [String] @auth
+	dpmFileList(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+	): [String] @auth
 }
 
 extend type Mutation {
 	backout(jobIngestionId: Int!): Boolean @auth
 	loadDpm(jobIngestionId: Int!): Boolean @auth
 	loadSourcing(jobIngestionId: Int!): Boolean @auth
+	approveDpm(clientId: Int!
+		startDate: String!
+		endDate: String!): Boolean @auth
+	approveSourcing(clientId: Int!
+		startDate: String!
+		endDate: String!): Boolean @auth
 	exportActivityDataQc(currencyType: String!): String @auth
 }
 `
