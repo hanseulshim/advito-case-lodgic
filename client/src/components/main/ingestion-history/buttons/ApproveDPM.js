@@ -49,9 +49,9 @@ const ApproveDPM = ({ onClick }) => {
 			>
 				<Header>
 					<p>
-						You are about to approve sourcing data for {clientName}, confirming
-						that enhanced QC report has been approved by consultant. This action
-						is not reversible.
+						You are about to approve DPM data for {clientName}, confirming that
+						enhanced QC report has been approved by consultant. This action is
+						not reversible.
 					</p>
 				</Header>
 			</Modal>
