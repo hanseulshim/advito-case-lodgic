@@ -1,9 +1,5 @@
 import React from 'react'
-import { useQuery } from '@apollo/client'
 import styled from 'styled-components'
-import { SpinLoader } from 'components/common/Loader'
-import ErrorMessage from 'components/common/ErrorMessage'
-import { CLIENT_LIST } from 'api/queries'
 import { Select } from 'antd'
 const { Option } = Select
 
@@ -23,11 +19,7 @@ const SelectContainer = styled.div`
 	}
 `
 
-const SelectClient = ({ onChange }) => {
-	const { loading, error, data } = useQuery(CLIENT_LIST)
-	if (loading) return <SpinLoader />
-	if (error) return <ErrorMessage error={error} />
-
+const SelectClient = ({ onChange, clients }) => {
 	return (
 		<Container>
 			<SelectContainer>
@@ -42,7 +34,7 @@ const SelectClient = ({ onChange }) => {
 					}
 					optionFilterProp="children"
 				>
-					{data.clientList.map((client, i) => {
+					{clients.map((client, i) => {
 						return (
 							<Option key={'client' + i} value={client.id}>
 								{client.clientName}

@@ -59,7 +59,12 @@ const WorkRecord = () => {
 	const closeSuccess = () => {
 		if (nextRecord) {
 			history.push(`/work-record/${nextRecord}-${+recordIndex + 1}`)
-		} else alert('No next record! All done')
+		} else
+			message.success(
+				'No more records to work. Redirecting you ingestion history...',
+				5,
+				history.push(`/ingestion-history`)
+			)
 	}
 
 	return (
