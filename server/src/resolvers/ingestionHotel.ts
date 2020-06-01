@@ -1,3 +1,4 @@
+import { ApolloError } from 'apollo-server-lambda'
 import { parse } from 'json2csv'
 import {
 	HotelProject,
@@ -92,6 +93,66 @@ export default {
 		}
 	},
 	Mutation: {
+		loadDpm: async (_: null, { jobIngestionId }): Promise<boolean> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotel.query().findById(
+					jobIngestionId
+				)
+				if (!jobIngestionHotel)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				if (
+					jobIngestionHotel.isSourcing &&
+					jobIngestionHotel.statusSourcing.toLowerCase() === 'loaded'
+				)
+					throw new ApolloError(
+						'Job Ingestion has a sourcing status of loaded.',
+						'500'
+					)
+				if (jobIngestionHotel.isDpm)
+					throw new ApolloError(
+						'Job Ingestion has already been loaded or approved.',
+						'500'
+					)
+				await JobIngestionHotel.query().findById(jobIngestionId).patch({
+					isDpm: true,
+					statusDpm: 'Loaded',
+					dateStatusDpm: new Date()
+				})
+				return true
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
+		},
+		loadSourcing: async (_: null, { jobIngestionId }): Promise<boolean> => {
+			try {
+				const jobIngestionHotel = await JobIngestionHotel.query().findById(
+					jobIngestionId
+				)
+				if (!jobIngestionHotel)
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				if (
+					jobIngestionHotel.isDpm &&
+					jobIngestionHotel.statusDpm.toLowerCase() === 'loaded'
+				)
+					throw new ApolloError(
+						'Job Ingestion has a DPM status of loaded.',
+						'500'
+					)
+				if (jobIngestionHotel.isSourcing)
+					throw new ApolloError(
+						'Job Ingestion has already been loaded or approved.',
+						'500'
+					)
+				await JobIngestionHotel.query().findById(jobIngestionId).patch({
+					isSourcing: true,
+					statusSourcing: 'Loaded',
+					dateStatusSourcing: new Date()
+				})
+				return true
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
+		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
 			const statuses = ['processed', 'loaded', 'approved']
 			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)

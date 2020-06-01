@@ -52,6 +52,8 @@ export default {
 		headers: { Authorization: 'MY^PR3TTYP0NY' },
 		query: `
       mutation {
+        loadDpm(jobIngestionId: null)
+        loadSourcing(jobIngestionId: null)
         backout(jobIngestionId: null)
         exportActivityDataQc(currencyType: "usd")
       }`

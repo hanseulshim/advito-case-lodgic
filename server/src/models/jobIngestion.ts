@@ -9,9 +9,16 @@ export class JobIngestion extends Model {
 }
 
 export class JobIngestionHotel extends Model {
-	id: number
+	jobIngestionId: number
+	isDpm: boolean
+	statusDpm: string
+	dateStatusDpm: Date
+	isSourcing: boolean
+	statusSourcing: string
+	dateStatusSourcing: Date
 
 	static tableName = 'job_ingestion_hotel'
+	static idColumn = 'jobIngestionId'
 }
 
 export class StageActivityHotel extends Model {
