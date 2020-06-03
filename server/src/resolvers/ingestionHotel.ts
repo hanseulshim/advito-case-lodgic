@@ -263,7 +263,17 @@ export default {
 				!jobIngestion.isComplete ||
 				!statuses.includes(jobIngestion.jobStatus)
 			) {
-				return false
+				throw new ApolloError('Job Ingestion Hotel not found', '500')
+			} else if (!statuses.includes(jobIngestion.jobStatus)) {
+				throw new ApolloError(
+					'Job Ingestion does not have status of complete',
+					'500'
+				)
+			} else if (!statuses.includes(jobIngestion.jobStatus)) {
+				throw new ApolloError(
+					'Job Ingestion does not have one of the following status: processed, loaded, approved.',
+					'500'
+				)
 			}
 
 			const hotelProjectPropertyList = await HotelProjectProperty.query()
@@ -320,7 +330,7 @@ export default {
 			try {
 				return parse(res.rows)
 			} catch (err) {
-				throw new ApolloError(e.message)
+				throw new ApolloError(err.message)
 			}
 		}
 	}
