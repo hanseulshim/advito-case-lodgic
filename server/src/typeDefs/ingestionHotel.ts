@@ -40,15 +40,11 @@ extend type Query {
 		endDate: String!
 		pageNumber: Int
 	): IngestionHotel @auth
-	dpmFileList(
+	approveFileList(
 		clientId: Int!
 		startDate: String!
 		endDate: String!
-	): [String] @auth
-	sourcingFileList(
-		clientId: Int!
-		startDate: String!
-		endDate: String!
+		type: String!
 	): [String] @auth
 }
 

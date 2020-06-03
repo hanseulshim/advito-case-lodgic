@@ -91,45 +91,26 @@ export default {
 				data
 			}
 		},
-		dpmFileList: async (
+		approveFileList: async (
 			_: null,
-			{ clientId, startDate, endDate }
+			{ clientId, startDate, endDate, type }
 		): Promise<string[]> => {
 			try {
+				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
+					throw new ApolloError('Type must be either dpm or sourcing')
+				}
+				const property = type.toLowerCase() !== 'dpm' ? 'isDpm' : 'isSourcing'
+				const status =
+					type.toLowerCase() !== 'dpm' ? 'status_dpm' : 'status_sourcing'
+				type.toLowerCase() !== 'dpm' ? 'status_sourcing' : 'status_dpm'
 				const jobIngestionHotel = await JobIngestionHotelView.query()
-					.select('jobIngestionId')
+					.select('jobName')
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.andWhere('isDpm', true)
-					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					)
-				if (!jobIngestionHotel)
-					throw new ApolloError('Job Ingestion Hotel not found', '500')
-				return jobIngestionHotel.map((job) => job.jobName)
-			} catch (e) {
-				throw new ApolloError(e.message)
-			}
-		},
-		sourcingFileList: async (
-			_: null,
-			{ clientId, startDate, endDate }
-		): Promise<string[]> => {
-			try {
-				const jobIngestionHotel = await JobIngestionHotelView.query()
-					.select('jobIngestionId')
-					.where('clientId', clientId)
-					.andWhere('dataStartDate', '>=', startDate)
-					.andWhere('dataEndDate', '<=', endDate)
-					.andWhere('isComplete', true)
-					.andWhere('isSourcing', true)
-					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
+					.andWhere(property, true)
+					.whereRaw(`LOWER("${status}") = ?`, 'loaded')
 					.whereIn(
 						'jobStatus',
 						process.env.ENVIRONMENT === 'PRODUCTION'
