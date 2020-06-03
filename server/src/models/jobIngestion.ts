@@ -45,5 +45,10 @@ export class HotelProjectProperty extends Model {
 }
 
 export class HotelProject extends Model {
+	clientId: number
+	projectType: string
+	projectStatus: string
+	projectYear: number
+	projectMonth: number
 	static tableName = 'hotel_project'
 }

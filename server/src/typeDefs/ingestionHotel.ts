@@ -50,8 +50,12 @@ extend type Query {
 
 extend type Mutation {
 	backout(jobIngestionId: Int!): Boolean @auth
-	loadDpm(jobIngestionId: Int!): Boolean @auth
-	loadSourcing(jobIngestionId: Int!): Boolean @auth
+	loadEnhancedQcReport(
+		jobIngestionIds: [Int]!
+		type: String!
+		year: Int!
+		month: Int
+	): Boolean @auth
 	approveDpm(clientId: Int!
 		startDate: String!
 		endDate: String!): Boolean @auth

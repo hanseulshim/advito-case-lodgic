@@ -97,12 +97,11 @@ export default {
 		): Promise<string[]> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
-					throw new ApolloError('Type must be either dpm or sourcing')
+					throw new ApolloError('Type must be either dpm or sourcing', '500')
 				}
-				const property = type.toLowerCase() !== 'dpm' ? 'isDpm' : 'isSourcing'
+				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
 				const status =
-					type.toLowerCase() !== 'dpm' ? 'status_dpm' : 'status_sourcing'
-				type.toLowerCase() !== 'dpm' ? 'status_sourcing' : 'status_dpm'
+					type.toLowerCase() === 'dpm' ? 'status_dpm' : 'status_sourcing'
 				const jobIngestionHotel = await JobIngestionHotelView.query()
 					.select('jobName')
 					.where('clientId', clientId)
@@ -126,61 +125,59 @@ export default {
 		}
 	},
 	Mutation: {
-		loadDpm: async (_: null, { jobIngestionId }): Promise<boolean> => {
+		loadEnhancedQcReport: async (
+			_: null,
+			{ jobIngestionIds, type, year, month }
+		): Promise<boolean> => {
 			try {
-				const jobIngestionHotel = await JobIngestionHotel.query().findById(
-					jobIngestionId
-				)
-				if (!jobIngestionHotel)
-					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
+					throw new ApolloError('Type must be either dpm or sourcing', '500')
+				}
 				if (
-					jobIngestionHotel.isSourcing &&
-					jobIngestionHotel.statusSourcing.toLowerCase() === 'loaded'
+					(type.toLowerCase() === 'dpm' && month < 1) ||
+					(type.toLowerCase() === 'dpm' && month > 12)
+				) {
+					throw new ApolloError('DPM types must have a valid month', '500')
+				}
+				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
+				const status =
+					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
+				const dateStatus =
+					type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
+				const otherProperty =
+					type.toLowerCase() === 'dpm' ? 'isSourcing' : 'isDpm'
+				const otherStatus =
+					type.toLowerCase() === 'dpm' ? 'statusSourcing' : 'statusDpm'
+				const jobIngestionHotels = await JobIngestionHotel.query().whereIn(
+					'jobIngestionId',
+					jobIngestionIds
 				)
-					throw new ApolloError(
-						'Job Ingestion has a sourcing status of loaded.',
-						'500'
-					)
-				if (jobIngestionHotel.isDpm)
-					throw new ApolloError(
-						'Job Ingestion has already been loaded or approved.',
-						'500'
-					)
-				await JobIngestionHotel.query().findById(jobIngestionId).patch({
-					isDpm: true,
-					statusDpm: 'Loaded',
-					dateStatusDpm: new Date()
-				})
-				return true
-			} catch (e) {
-				throw new ApolloError(e.message)
-			}
-		},
-		loadSourcing: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			try {
-				const jobIngestionHotel = await JobIngestionHotel.query().findById(
-					jobIngestionId
-				)
-				if (!jobIngestionHotel)
+				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
-				if (
-					jobIngestionHotel.isDpm &&
-					jobIngestionHotel.statusDpm.toLowerCase() === 'loaded'
-				)
+				} else if (
+					jobIngestionHotels.some(
+						(hotel) =>
+							hotel[otherProperty] &&
+							hotel[otherStatus].toLowerCase() === 'loaded'
+					)
+				) {
 					throw new ApolloError(
-						'Job Ingestion has a DPM status of loaded.',
+						'A job ingestion hotel has a sourcing status of loaded.',
 						'500'
 					)
-				if (jobIngestionHotel.isSourcing)
+				} else if (jobIngestionHotels.some((hotel) => hotel[property])) {
 					throw new ApolloError(
-						'Job Ingestion has already been loaded or approved.',
+						'A job ingestion hotel has already been loaded or approved.',
 						'500'
 					)
-				await JobIngestionHotel.query().findById(jobIngestionId).patch({
-					isSourcing: true,
-					statusSourcing: 'Loaded',
-					dateStatusSourcing: new Date()
-				})
+				}
+				await JobIngestionHotel.query()
+					.patch({
+						[property]: true,
+						[status]: 'Loaded',
+						[dateStatus]: new Date()
+					})
+					.whereIn('jobIngestionId', jobIngestionIds)
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message)
@@ -323,8 +320,7 @@ export default {
 			try {
 				return parse(res.rows)
 			} catch (err) {
-				console.error(err)
-				return 'error'
+				throw new ApolloError(e.message)
 			}
 		}
 	}

@@ -59,8 +59,7 @@ export default {
 		headers: { Authorization: 'MY^PR3TTYP0NY' },
 		query: `
       mutation {
-        # loadDpm(jobIngestionId: null)
-        # loadSourcing(jobIngestionId: null)
+        # loadEnhancedQcReport(jobIngestionIds: [], type: "", year: 2020, month: null)
         # approveDpm(clientId: 348
         #   startDate: "2020-01-01"
         #   endDate: "2020-12-31")
