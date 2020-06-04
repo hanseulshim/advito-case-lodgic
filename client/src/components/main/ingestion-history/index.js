@@ -6,12 +6,13 @@ import { INGESTION_HOTEL_LIST } from 'api/queries'
 import { columns } from './columns'
 import { Table, Button } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
-import { Backout } from './buttons/Backout'
+import LoadActions from './actions/LoadActions'
+import Backout from './actions/Backout'
 import ErrorMessage from 'components/common/ErrorMessage'
-import EnhancedQc from './buttons/EnhancedQc'
-import ActivityDataQc from './buttons/ActivityDataQc'
-import ApproveSourcing from './buttons/ApproveSourcing'
-import ApproveDPM from './buttons/ApproveDPM'
+import EnhancedQc from './actions/EnhancedQc'
+import ActivityDataQc from './actions/ActivityDataQc'
+import ApproveSourcing from './actions/ApproveSourcing'
+import ApproveDPM from './actions/ApproveDPM'
 
 const ButtonRow = styled.div`
 	display: flex;
@@ -44,25 +45,24 @@ const IngestionHistory = () => {
 
 	const onPageChange = (e) => setPageNumber(e)
 
-	const handleEnhancedQc = (currencyType, currencySelection) => {
-		console.log(currencyType, currencySelection)
-	}
-
-	const handleApprove = () => {
-		console.log('Approved')
-	}
-
 	return (
 		<>
 			<ButtonRow>
 				<ActivityDataQc />
-				<EnhancedQc onClick={handleEnhancedQc} />
-				<ApproveDPM onClick={handleApprove} />
-				<ApproveSourcing onClick={handleApprove} />
+				<EnhancedQc />
+				<ApproveDPM />
+				<ApproveSourcing />
 			</ButtonRow>
 			<Table
 				columns={[
 					...columns,
+					{
+						title: 'Load Actions',
+						width: 200,
+						fixed: 'right',
+						// eslint-disable-next-line react/display-name
+						render: (_, record) => <LoadActions record={record} />
+					},
 					{
 						title: '',
 						width: 100,

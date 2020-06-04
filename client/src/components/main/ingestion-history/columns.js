@@ -6,7 +6,7 @@ import {
 	formatName
 } from 'helper'
 //local helper
-import { getStatus, getActions } from './helper'
+import { getStatus } from './helper'
 
 export const columns = [
 	{
@@ -113,11 +113,5 @@ export const columns = [
 		width: 150,
 		fixed: 'right',
 		render: (_, record) => getStatus(record)
-	},
-	{
-		title: 'Load Actions',
-		width: 200,
-		fixed: 'right',
-		render: (_, record) => getActions(record)
 	}
 ]

@@ -12,7 +12,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-export const Backout = ({ record, refetch }) => {
+const Backout = ({ record, refetch }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
@@ -114,3 +114,5 @@ export const Backout = ({ record, refetch }) => {
 		</>
 	)
 }
+
+export default Backout

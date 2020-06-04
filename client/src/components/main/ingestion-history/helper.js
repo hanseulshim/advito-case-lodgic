@@ -1,6 +1,5 @@
 import React from 'react'
 import { formatDate } from 'helper'
-import { Checkbox } from 'antd'
 
 const getColor = (status) => (status === 'Approved' ? 'green' : 'red')
 
@@ -46,25 +45,4 @@ export const getStatus = (record) => {
 	return displayArr.length
 		? displayArr.map((el, i) => ({ ...el, key: i }))
 		: 'Open'
-}
-
-export const getActions = (record) => {
-	const { isDpm, statusDpm, isSourcing, statusSourcing } = record
-
-	const displayArr = []
-
-	if (
-		!isDpm ||
-		(!isDpm && isSourcing && statusSourcing.toLowerCase() === 'approved')
-	) {
-		displayArr.push(<Checkbox>DPM</Checkbox>)
-	}
-	if (
-		!isSourcing ||
-		(!isSourcing && isDpm && statusDpm.toLowerCase() === 'approved')
-	) {
-		displayArr.push(<Checkbox>Sourcing</Checkbox>)
-	}
-
-	return displayArr.length ? displayArr.map((el, i) => ({ ...el, key: i })) : []
 }

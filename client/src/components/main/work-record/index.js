@@ -61,7 +61,7 @@ const WorkRecord = () => {
 			history.push(`/work-record/${nextRecord}-${+recordIndex + 1}`)
 		} else
 			message.success(
-				'No more records to work. Redirecting you ingestion history...',
+				'No more records to work. Redirecting...',
 				5,
 				history.push(`/ingestion-history`)
 			)
