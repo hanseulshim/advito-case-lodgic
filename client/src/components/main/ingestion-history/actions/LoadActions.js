@@ -1,15 +1,31 @@
-import React, { useState, useContext } from 'react'
-import { store } from 'context/store'
+import React from 'react'
 import { Checkbox } from 'antd'
 
 const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
-	const globalState = useContext(store)
-	const { dispatch, state } = globalState
-	const { records } = state
-	const { loading } = records
-
 	const onChange = (type) => {
-		//Need to check if id already in there. If so, remove it from array
+		const index = selectedRecords.findIndex(
+			(selected) => selected.id === record.id
+		)
+		if (index === -1) {
+			setSelectedRecords([
+				...selectedRecords,
+				{ type, id: record.id, name: record.jobName }
+			])
+		} else if (index !== -1 && selectedRecords[index].type !== type) {
+			const filtered = selectedRecords.filter(
+				(selectedRecord) => selectedRecord.id !== record.id
+			)
+			const updated = {
+				...selectedRecords[index],
+				type
+			}
+			setSelectedRecords([{ ...updated }, ...filtered])
+		} else {
+			const filtered = selectedRecords.filter(
+				(selectedRecord) => selectedRecord.id !== record.id
+			)
+			setSelectedRecords([...filtered])
+		}
 	}
 
 	const { isDpm, statusDpm, isSourcing, statusSourcing } = record
@@ -18,13 +34,34 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 		!isDpm ||
 		(!isDpm && isSourcing && statusSourcing.toLowerCase() === 'approved')
 	) {
-		displayArr.push(<Checkbox onChange={() => onChange('DPM')}>DPM</Checkbox>)
+		displayArr.push(
+			<Checkbox
+				onChange={() => onChange('DPM')}
+				checked={selectedRecords.some(
+					(selectedRecord) =>
+						selectedRecord.id === record.id && selectedRecord.type === 'DPM'
+				)}
+			>
+				DPM
+			</Checkbox>
+		)
 	}
 	if (
 		!isSourcing ||
 		(!isSourcing && isDpm && statusDpm.toLowerCase() === 'approved')
 	) {
-		displayArr.push(<Checkbox>Sourcing</Checkbox>)
+		displayArr.push(
+			<Checkbox
+				onChange={() => onChange('Sourcing')}
+				checked={selectedRecords.some(
+					(selectedRecord) =>
+						selectedRecord.id === record.id &&
+						selectedRecord.type === 'Sourcing'
+				)}
+			>
+				Sourcing
+			</Checkbox>
+		)
 	}
 
 	return displayArr.length ? displayArr.map((el, i) => ({ ...el, key: i })) : []

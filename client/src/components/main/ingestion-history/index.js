@@ -30,6 +30,7 @@ const IngestionHistory = () => {
 	const { state } = globalState
 	const { clientId, dateRange } = state
 	const [pageNumber, setPageNumber] = useState(1)
+	const [selectedRecords, setSelectedRecords] = useState([])
 	const { loading, error, data, refetch } = useQuery(INGESTION_HOTEL_LIST, {
 		variables: {
 			clientId,
@@ -61,7 +62,13 @@ const IngestionHistory = () => {
 						width: 200,
 						fixed: 'right',
 						// eslint-disable-next-line react/display-name
-						render: (_, record) => <LoadActions record={record} />
+						render: (_, record) => (
+							<LoadActions
+								record={record}
+								selectedRecords={selectedRecords}
+								setSelectedRecords={setSelectedRecords}
+							/>
+						)
 					},
 					{
 						title: '',
