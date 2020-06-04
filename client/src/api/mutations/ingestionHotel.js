@@ -5,3 +5,9 @@ export const BACKOUT = gql`
 		backout(jobIngestionId: $jobIngestionId)
 	}
 `
+
+export const EXPORT_ACTIVITY_DATA_QC = gql`
+	mutation exportActivityDataQc($currencyType: String!) {
+		exportActivityDataQc(currencyType: $currencyType)
+	}
+`

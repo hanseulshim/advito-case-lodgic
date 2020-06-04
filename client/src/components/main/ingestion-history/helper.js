@@ -52,20 +52,18 @@ export const getActions = (record) => {
 	const { isDpm, statusDpm, isSourcing, statusSourcing } = record
 
 	const displayArr = []
-	const loading = statusDpm === 'Loaded' || statusSourcing === 'Loaded'
-	const finished = statusDpm === 'Approved' && statusSourcing === 'Approved'
 
-	if (!isDpm && !isSourcing) {
-		displayArr.push(<Checkbox>DPM</Checkbox>, <Checkbox>Sourcing</Checkbox>)
-	}
-	if (isDpm && !loading) {
-		displayArr.push(<Checkbox>Sourcing</Checkbox>)
-	}
-	if (isSourcing && !loading) {
+	if (
+		!isDpm ||
+		(!isDpm && isSourcing && statusSourcing.toLowerCase() === 'approved')
+	) {
 		displayArr.push(<Checkbox>DPM</Checkbox>)
 	}
-	if (finished) {
-		return
+	if (
+		!isSourcing ||
+		(!isSourcing && isDpm && statusDpm.toLowerCase() === 'approved')
+	) {
+		displayArr.push(<Checkbox>Sourcing</Checkbox>)
 	}
 
 	return displayArr.length ? displayArr.map((el, i) => ({ ...el, key: i })) : []

@@ -44,10 +44,6 @@ const IngestionHistory = () => {
 
 	const onPageChange = (e) => setPageNumber(e)
 
-	const handleActivityDataQc = (currency) => {
-		console.log(currency)
-	}
-
 	const handleEnhancedQc = (currencyType, currencySelection) => {
 		console.log(currencyType, currencySelection)
 	}
@@ -59,7 +55,7 @@ const IngestionHistory = () => {
 	return (
 		<>
 			<ButtonRow>
-				<ActivityDataQc onClick={handleActivityDataQc} />
+				<ActivityDataQc />
 				<EnhancedQc onClick={handleEnhancedQc} />
 				<ApproveDPM onClick={handleApprove} />
 				<ApproveSourcing onClick={handleApprove} />
