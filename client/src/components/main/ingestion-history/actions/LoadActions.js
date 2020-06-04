@@ -9,7 +9,7 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 		if (index === -1) {
 			setSelectedRecords([
 				...selectedRecords,
-				{ type, id: record.id, name: record.jobName }
+				{ type, id: record.id, jobName: record.jobName }
 			])
 		} else if (index !== -1 && selectedRecords[index].type !== type) {
 			const filtered = selectedRecords.filter(

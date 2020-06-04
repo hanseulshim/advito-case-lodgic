@@ -13,6 +13,7 @@ import EnhancedQc from './actions/EnhancedQc'
 import ActivityDataQc from './actions/ActivityDataQc'
 import ApproveSourcing from './actions/ApproveSourcing'
 import ApproveDPM from './actions/ApproveDPM'
+import LoadEnhancedQc from './actions/LoadEnhancedQc'
 
 const ButtonRow = styled.div`
 	display: flex;
@@ -91,23 +92,10 @@ const IngestionHistory = () => {
 				scroll={{ x: 1500, y: 700 }}
 				rowKey="id"
 			/>
-			<Button
-				disabled={
-					!data.ingestionHotelList.data.some(
-						(record) =>
-							record.statusDpm === 'Loaded' ||
-							record.statusSourcing === 'Loaded'
-					)
-				}
-				style={{
-					display: 'block',
-					width: '220px',
-					marginLeft: 'auto',
-					marginTop: '1em'
-				}}
-			>
-				Load for Enhanced QC Report
-			</Button>
+			<LoadEnhancedQc
+				selectedRecords={selectedRecords}
+				setSelectedRecords={setSelectedRecords}
+			/>
 		</>
 	)
 }
