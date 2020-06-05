@@ -23,7 +23,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 		setVisible(!visible)
 	}
 
-	const onOk = console.log('fired!')
+	const onOk = () => console.log('fired!')
 
 	return (
 		<>
@@ -47,7 +47,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 						Load for Enhanced QC Report
 					</>
 				}
-				onOk={() => onOk()}
+				onOk={onOk}
 				onCancel={toggleModal}
 			>
 				<>
