@@ -141,6 +141,7 @@ export const UNMATCHED_HOTEL_CONFIDENCE_LIST = gql`
 			stageActivityHotelId
 			hotelPropertyId
 			confidenceScore
+			matchScore
 			hotelName
 			address1
 			address2

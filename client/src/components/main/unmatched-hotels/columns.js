@@ -1,4 +1,4 @@
-import { formatDate, formatNum, formatCurrency, formatPercent } from 'helper'
+import { formatDate, formatNum, formatCurrency } from 'helper'
 //local helper
 
 export const columns = [
@@ -7,76 +7,75 @@ export const columns = [
 		width: 150,
 		dataIndex: 'roomSpend',
 		fixed: 'left',
-		render: (num) => formatCurrency(num),
+		render: (num) => formatCurrency(num)
 	},
 	{
 		title: 'Match %',
 		width: 130,
 		dataIndex: 'bestMatchScore',
-		fixed: 'left',
-		render: (num) => formatPercent(num),
+		fixed: 'left'
 	},
 	{
 		title: 'Hotel Name',
 		dataIndex: 'hotelName',
 		width: 150,
-		fixed: 'left',
+		fixed: 'left'
 	},
 	{
 		title: 'Chain',
 		dataIndex: 'hotelChainName',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'Source Type',
 		dataIndex: 'templateCategory',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'Source Name',
 		dataIndex: 'sourceName',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'Room Nights',
 		dataIndex: 'numberOfNights',
 		width: 150,
-		render: (num) => formatNum(num),
+		render: (num) => formatNum(num)
 	},
 	{
 		title: 'Ingested Date',
 		dataIndex: 'uploadTimestamp',
 		width: 150,
-		render: (date) => formatDate(date),
+		render: (date) => formatDate(date)
 	},
 	{
 		title: 'Address 1',
 		dataIndex: 'address1',
-		width: 200,
+		width: 200
 	},
 	{
 		title: 'Address 2',
 		dataIndex: 'address2',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'City Name',
 		dataIndex: 'cityName',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'State',
 		dataIndex: 'stateCode',
-		width: 100,
+		width: 100
 	},
 	{
 		title: 'Country Name',
 		dataIndex: 'countryName',
-		width: 150,
+		width: 150
 	},
 	{
 		title: 'Phone Number',
 		dataIndex: 'phoneNumber',
-		width: 150,
-	},
+		width: 150
+	}
 ]
