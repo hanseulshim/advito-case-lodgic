@@ -134,6 +134,13 @@ export default {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
 					throw new ApolloError('Type must be either dpm or sourcing', '500')
 				}
+				const date = new Date()
+				if (year > date.getFullYear() + 1 || year < date.getFullYear() - 5) {
+					throw new ApolloError(
+						'Year must be within valid range (within past 5 years or 1 year from now)',
+						'500'
+					)
+				}
 				if (
 					(type.toLowerCase() === 'dpm' && month < 1) ||
 					(type.toLowerCase() === 'dpm' && month > 12)
