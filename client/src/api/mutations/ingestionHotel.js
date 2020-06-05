@@ -2,10 +2,10 @@ import gql from 'graphql-tag'
 
 export const LOAD_ENHANCED_QC_REPORT = gql`
 	mutation loadEnhancedQcReport(
-		$jobIngestionIds: [Int!]
+		$jobIngestionIds: [Int]!
 		$type: String!
-		$year: String!
-		$month: string
+		$year: Int!
+		$month: Int
 	) {
 		loadEnhancedQcReport(
 			jobIngestionIds: $jobIngestionIds

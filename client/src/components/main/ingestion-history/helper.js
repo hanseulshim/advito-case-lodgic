@@ -7,7 +7,8 @@ const Text = ({ type, status, date }) => {
 	return (
 		<div style={{ color: getColor(status), fontSize: '.8em' }}>
 			<span>
-				{status} for {type}
+				{status ? status.charAt(0).toUpperCase() + status.slice(1) : null} for{' '}
+				{type}
 			</span>
 			<br />
 			<span> {formatDate(date)}</span>

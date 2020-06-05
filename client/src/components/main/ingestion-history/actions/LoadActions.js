@@ -4,16 +4,17 @@ import { Checkbox } from 'antd'
 const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 	const onChange = (type) => {
 		const index = selectedRecords.findIndex(
-			(selected) => selected.id === record.id
+			(selected) => selected.jobIngestionId === record.jobIngestionId
 		)
 		if (index === -1) {
 			setSelectedRecords([
 				...selectedRecords,
-				{ type, id: record.id, jobName: record.jobName }
+				{ type, jobIngestionId: record.jobIngestionId, jobName: record.jobName }
 			])
 		} else if (index !== -1 && selectedRecords[index].type !== type) {
 			const filtered = selectedRecords.filter(
-				(selectedRecord) => selectedRecord.id !== record.id
+				(selectedRecord) =>
+					selectedRecord.jobIngestionId !== record.jobIngestionId
 			)
 			const updated = {
 				...selectedRecords[index],
@@ -22,7 +23,8 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 			setSelectedRecords([{ ...updated }, ...filtered])
 		} else {
 			const filtered = selectedRecords.filter(
-				(selectedRecord) => selectedRecord.id !== record.id
+				(selectedRecord) =>
+					selectedRecord.jobIngestionId !== record.jobIngestionId
 			)
 			setSelectedRecords([...filtered])
 		}
@@ -39,7 +41,8 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 				onChange={() => onChange('DPM')}
 				checked={selectedRecords.some(
 					(selectedRecord) =>
-						selectedRecord.id === record.id && selectedRecord.type === 'DPM'
+						selectedRecord.jobIngestionId === record.jobIngestionId &&
+						selectedRecord.type === 'DPM'
 				)}
 			>
 				DPM
@@ -55,7 +58,7 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 				onChange={() => onChange('Sourcing')}
 				checked={selectedRecords.some(
 					(selectedRecord) =>
-						selectedRecord.id === record.id &&
+						selectedRecord.jobIngestionId === record.jobIngestionId &&
 						selectedRecord.type === 'Sourcing'
 				)}
 			>

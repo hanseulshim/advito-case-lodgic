@@ -95,6 +95,7 @@ const IngestionHistory = () => {
 			<LoadEnhancedQc
 				selectedRecords={selectedRecords}
 				setSelectedRecords={setSelectedRecords}
+				refetch={refetch}
 			/>
 		</>
 	)

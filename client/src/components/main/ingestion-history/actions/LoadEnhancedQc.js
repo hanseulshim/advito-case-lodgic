@@ -14,7 +14,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
+const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
@@ -22,6 +22,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 		onCompleted: () => {
 			setSelectedRecords([])
 			setVisible(false)
+			refetch()
 		}
 	})
 	const [visible, setVisible] = useState(false)
@@ -34,7 +35,9 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 	}
 
 	const onOk = async () => {
-		const jobIngestionIds = selectedRecords.map((record) => record.id)
+		const jobIngestionIds = selectedRecords.map(
+			(record) => record.jobIngestionId
+		)
 		try {
 			await loadQc({
 				variables: { jobIngestionIds, type, year, month }
@@ -70,18 +73,18 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 	const handleMonthChange = (month) => setMonth(month)
 
 	const months = [
-		'January',
-		'February',
-		'March',
-		'April',
-		'May',
-		'June',
-		'July',
-		'August',
-		'September',
-		'October',
-		'November',
-		'December'
+		{ label: 'January', value: 1 },
+		{ label: 'February', value: 2 },
+		{ label: 'March', value: 3 },
+		{ label: 'April', value: 4 },
+		{ label: 'May', value: 5 },
+		{ label: 'June', value: 6 },
+		{ label: 'July', value: 7 },
+		{ label: 'August', value: 8 },
+		{ label: 'September', value: 9 },
+		{ label: 'October', value: 10 },
+		{ label: 'November', value: 11 },
+		{ label: 'December', value: 12 }
 	]
 
 	return (
@@ -108,6 +111,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 				}
 				onOk={onOk}
 				onCancel={toggleModal}
+				confirmLoading={loading}
 			>
 				<>
 					<p>
@@ -126,17 +130,17 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 							onChange={handleYearChange}
 							style={{ width: 225 }}
 							placeholder={'Select year'}
-							confirmLoading={loading}
 						>
-							{getYears().map((year, i) => {
-								return (
-									<Option key={'year' + i} value={parseInt(year)}>
-										{year}
-									</Option>
-								)
-							})}
+							{getYears()
+								.reverse()
+								.map((year, i) => {
+									return (
+										<Option key={'year' + i} value={parseInt(year)}>
+											{year}
+										</Option>
+									)
+								})}
 						</Select>
-
 						{type === 'DPM' && (
 							<Select
 								onChange={handleMonthChange}
@@ -145,8 +149,8 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 							>
 								{months.map((month, i) => {
 									return (
-										<Option key={'month' + i} value={parseInt(month)}>
-											{month}
+										<Option key={'month' + i} value={month.value}>
+											{month.label}
 										</Option>
 									)
 								})}
