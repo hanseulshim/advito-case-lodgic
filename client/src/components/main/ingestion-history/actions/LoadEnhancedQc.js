@@ -25,8 +25,8 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 		}
 	})
 	const [visible, setVisible] = useState(false)
-	const [year, setYear] = useState('')
-	const [month, setMonth] = useState('')
+	const [year, setYear] = useState(null)
+	const [month, setMonth] = useState(null)
 	const type = selectedRecords.length > 0 ? selectedRecords[0].type : null
 
 	const toggleModal = () => {
@@ -130,7 +130,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 						>
 							{getYears().map((year, i) => {
 								return (
-									<Option key={'year' + i} value={year}>
+									<Option key={'year' + i} value={parseInt(year)}>
 										{year}
 									</Option>
 								)
@@ -145,7 +145,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 							>
 								{months.map((month, i) => {
 									return (
-										<Option key={'month' + i} value={month}>
+										<Option key={'month' + i} value={parseInt(month)}>
 											{month}
 										</Option>
 									)

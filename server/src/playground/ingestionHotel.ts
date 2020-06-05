@@ -14,11 +14,14 @@ export default {
         pageNumber: null
       ) {
         recordCount
+        dpmCount
+        sourcingCount
         data {
           id
           jobIngestionId
           templateNote
           templateCategory
+          jobName
           sourceName
           loadedBy
           dataStartDate
@@ -40,7 +43,14 @@ export default {
           statusSourcing
           dateStatusSourcing
         }
-			}
+      }
+      
+      approveFileList(
+        clientId: 348
+        startDate: "2020-01-01"
+        endDate: "2020-12-31"
+        type: ""
+      )
     }`
 	},
 	Mutation: {
@@ -49,8 +59,15 @@ export default {
 		headers: { Authorization: 'MY^PR3TTYP0NY' },
 		query: `
       mutation {
-        backout(jobIngestionId: null)
-        exportActivityDataQc(jobIngestionId: null, currencyType: null)
+        # loadEnhancedQcReport(jobIngestionIds: [], type: "", year: 2020, month: null)
+        # approveDpm(clientId: 348
+        #   startDate: "2020-01-01"
+        #   endDate: "2020-12-31")
+        # approveSourcing(clientId: 348
+        #   startDate: "2020-01-01"
+        #   endDate: "2020-12-31")
+        # backout(jobIngestionId: null)
+        # exportActivityDataQc(currencyType: "usd")
       }`
 	}
 }
