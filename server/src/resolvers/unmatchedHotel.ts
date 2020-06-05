@@ -167,7 +167,7 @@ export default {
 		): Promise<StageActivityHotelCandidateViewType[]> =>
 			StageActivityHotelCandidateView.query(hotel)
 				.where('stageActivityHotelId', stageActivityHotelId)
-				.orderBy('confidenceScore', 'DESC')
+				.orderBy('matchScore', 'DESC')
 	},
 	Mutation: {
 		matchHotel: async (

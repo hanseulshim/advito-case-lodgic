@@ -127,7 +127,8 @@ export default {
 	Mutation: {
 		loadEnhancedQcReport: async (
 			_: null,
-			{ jobIngestionIds, type, year, month }
+			{ jobIngestionIds, type, year, month },
+			{ advito }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
@@ -148,7 +149,7 @@ export default {
 					type.toLowerCase() === 'dpm' ? 'isSourcing' : 'isDpm'
 				const otherStatus =
 					type.toLowerCase() === 'dpm' ? 'statusSourcing' : 'statusDpm'
-				const jobIngestionHotels = await JobIngestionHotel.query().whereIn(
+				const jobIngestionHotels = await JobIngestionHotelView.query().whereIn(
 					'jobIngestionId',
 					jobIngestionIds
 				)
@@ -171,6 +172,15 @@ export default {
 						'500'
 					)
 				}
+				await Promise.all(
+					jobIngestionHotels.map((hotel) =>
+						advito.raw(
+							`select * from load_for_sourcing_dpm(${hotel.jobIngestionId}, ${
+								hotel.clientId
+							}, ${year}, ${month ? month : 'NULL'}, '${type.toLowerCase()}')`
+						)
+					)
+				)
 				await JobIngestionHotel.query()
 					.patch({
 						[property]: true,

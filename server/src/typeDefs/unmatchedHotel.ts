@@ -39,6 +39,7 @@ type StageActivityHotelCandidateView {
 	stageActivityHotelId: Int
 	hotelPropertyId: Int
 	confidenceScore: Float
+	matchScore: Float
 	hotelName: String
 	address1: String
 	address2: String

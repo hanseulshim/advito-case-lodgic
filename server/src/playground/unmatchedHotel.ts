@@ -100,6 +100,7 @@ export default {
       #   stageActivityHotelId
       #   hotelPropertyId
       #   confidenceScore
+      #   matchScore
       #   hotelName
       #   address1
       #   address2
