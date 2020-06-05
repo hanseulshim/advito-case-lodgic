@@ -27,7 +27,7 @@ export const UNMATCHED_HOTEL_LIST = gql`
 			data {
 				id
 				bestMatchScore
-				roomSpend
+				roomSpendUsd
 				hotelName
 				hotelChainName
 				templateCategory
@@ -80,7 +80,7 @@ export const UNMATCHED_HOTEL = gql`
 			data {
 				id
 				bestMatchScore
-				roomSpend
+				roomSpendUsd
 				hotelName
 				hotelChainName
 				templateCategory

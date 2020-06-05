@@ -5,7 +5,7 @@ export const columns = [
 	{
 		title: 'Converted Room Spend',
 		width: 150,
-		dataIndex: 'roomSpend',
+		dataIndex: 'roomSpendUsd',
 		fixed: 'left',
 		render: (num) => formatCurrency(num)
 	},
