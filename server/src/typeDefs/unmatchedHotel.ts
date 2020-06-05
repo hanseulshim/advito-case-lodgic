@@ -13,7 +13,7 @@ type UnmatchedHotel {
 type StageActivityHotelView {
 	id: Int
 	bestMatchScore: Float
-	roomSpend: Float
+	roomSpendUsd: Float
 	hotelName: String
 	hotelChainName: String
 	templateCategory: String
