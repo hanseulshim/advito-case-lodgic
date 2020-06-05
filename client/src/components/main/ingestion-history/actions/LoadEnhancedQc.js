@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
-import { Button, Modal, Select } from 'antd'
+import { Button, Modal } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
 
@@ -15,8 +15,8 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords }) => {
 	const { state } = globalState
 	const { clientName } = state
 	const [visible, setVisible] = useState(false)
-	const [year, setYear] = useState('')
-	const [month, setMonth] = useState('')
+	// const [year, setYear] = useState('')
+	// const [month, setMonth] = useState('')
 	const type = selectedRecords.length > 0 ? selectedRecords[0].type : null
 
 	const toggleModal = () => {
