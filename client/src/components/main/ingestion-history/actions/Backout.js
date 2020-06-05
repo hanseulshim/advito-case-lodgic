@@ -29,9 +29,7 @@ const Backout = ({ record, refetch }) => {
 		jobName,
 		jobIngestionId
 	} = record
-	const showBackout =
-		statusDpm.toLowerCase() !== 'approved' &&
-		statusSourcing.toLowerCase() !== 'approved'
+	const showBackout = statusDpm !== 'Approved' && statusSourcing !== 'Approved'
 	const loaded = statusDpm === 'Loaded' || statusSourcing === 'Loaded'
 	const open = !isDpm && !isSourcing
 

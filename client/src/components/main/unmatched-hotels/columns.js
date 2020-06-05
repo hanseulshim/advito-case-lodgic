@@ -13,7 +13,8 @@ export const columns = [
 		title: 'Match %',
 		width: 130,
 		dataIndex: 'bestMatchScore',
-		fixed: 'left'
+		fixed: 'left',
+		render: (num) => num + '%'
 	},
 	{
 		title: 'Hotel Name',
