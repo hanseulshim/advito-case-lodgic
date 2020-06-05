@@ -38,13 +38,27 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 		const jobIngestionIds = selectedRecords.map(
 			(record) => record.jobIngestionId
 		)
-		try {
-			await loadQc({
-				variables: { jobIngestionIds, type, year, month }
+		const equalTypes = selectedRecords.every(
+			(obj) => obj.type === selectedRecords[0].type
+		)
+		if (!equalTypes) {
+			Modal.error({
+				title: 'Error in Loading',
+				content:
+					'You must select files for DPM or Sourcing. You cannot complete the Load action for both at the same time'
 			})
-		} catch (e) {
-			error(e.message)
-			console.error('Error in backout ', e)
+			setYear(null)
+			setMonth(null)
+			toggleModal()
+		} else {
+			try {
+				await loadQc({
+					variables: { jobIngestionIds, type, year, month }
+				})
+			} catch (e) {
+				error(e.message)
+				console.error('Error in backout ', e)
+			}
 		}
 	}
 
