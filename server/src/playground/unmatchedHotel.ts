@@ -22,7 +22,7 @@ export default {
         data {
           id
           bestMatchScore
-          roomSpend
+          roomSpendUsd
           hotelName
           hotelChainName
           templateCategory
@@ -60,7 +60,7 @@ export default {
       #   data {
         #   id
         #   bestMatchScore
-        #   roomSpend
+        #   roomSpendUsd
         #   hotelName
         #   hotelChainName
         #   templateCategory
@@ -100,6 +100,7 @@ export default {
       #   stageActivityHotelId
       #   hotelPropertyId
       #   confidenceScore
+      #   matchScore
       #   hotelName
       #   address1
       #   address2

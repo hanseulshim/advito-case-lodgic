@@ -127,11 +127,19 @@ export default {
 	Mutation: {
 		loadEnhancedQcReport: async (
 			_: null,
-			{ jobIngestionIds, type, year, month }
+			{ jobIngestionIds, type, year, month },
+			{ advito }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
 					throw new ApolloError('Type must be either dpm or sourcing', '500')
+				}
+				const date = new Date()
+				if (year > date.getFullYear() + 1 || year < date.getFullYear() - 5) {
+					throw new ApolloError(
+						'Year must be within valid range (within past 5 years or 1 year from now)',
+						'500'
+					)
 				}
 				if (
 					(type.toLowerCase() === 'dpm' && month < 1) ||
@@ -148,7 +156,7 @@ export default {
 					type.toLowerCase() === 'dpm' ? 'isSourcing' : 'isDpm'
 				const otherStatus =
 					type.toLowerCase() === 'dpm' ? 'statusSourcing' : 'statusDpm'
-				const jobIngestionHotels = await JobIngestionHotel.query().whereIn(
+				const jobIngestionHotels = await JobIngestionHotelView.query().whereIn(
 					'jobIngestionId',
 					jobIngestionIds
 				)
@@ -171,6 +179,15 @@ export default {
 						'500'
 					)
 				}
+				await Promise.all(
+					jobIngestionHotels.map((hotel) =>
+						advito.raw(
+							`select * from load_for_sourcing_dpm(${hotel.jobIngestionId}, ${
+								hotel.clientId
+							}, ${year}, ${month ? month : 'NULL'}, '${type.toLowerCase()}')`
+						)
+					)
+				)
 				await JobIngestionHotel.query()
 					.patch({
 						[property]: true,

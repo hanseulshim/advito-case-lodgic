@@ -5,6 +5,7 @@ export class StageActivityHotelCandidateView extends Model {
 	stageActivityHotelId: number
 	hotelPropertyId: number
 	confidenceScore: number
+	matchScore: number
 	hotelName: string
 	address1: string
 	address2: string
