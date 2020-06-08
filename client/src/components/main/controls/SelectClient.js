@@ -29,8 +29,7 @@ const SelectClient = ({ onChange, clients }) => {
 					placeholder="Select a client"
 					onChange={onChange}
 					filterOption={(input, option) =>
-						option.props.children.toLowerCase().indexOf(input.toLowerCase()) >=
-						0
+						option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
 					}
 					optionFilterProp="children"
 				>
