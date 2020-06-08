@@ -37,7 +37,7 @@ const RecordHeader = ({ recordId, recordIndex, setNext }) => {
 
 	useEffect(() => {
 		refetch()
-	}, [recordId])
+	}, [recordId, refetch])
 
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />

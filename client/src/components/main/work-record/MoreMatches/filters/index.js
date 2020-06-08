@@ -41,10 +41,6 @@ const MatchFilters = ({ setFilters, recordId }) => {
 		id: ''
 	})
 
-	useEffect(() => {
-		clearFilters()
-	}, [recordId])
-
 	const clearFilters = () => {
 		updateFilters({
 			hotelName: '',
@@ -62,6 +58,10 @@ const MatchFilters = ({ setFilters, recordId }) => {
 		})
 		setFilters({})
 	}
+
+	useEffect(() => {
+		clearFilters()
+	}, [recordId])
 
 	const onChange = (value, key) => {
 		updateFilters({

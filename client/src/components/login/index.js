@@ -75,7 +75,7 @@ const Login = () => {
 	// Clear context when login is rendered
 	useEffect(() => {
 		dispatch({ type: 'clearContext' })
-	}, [])
+	}, [dispatch])
 
 	const handleSubmit = async ({ username, password }) => {
 		try {
