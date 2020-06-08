@@ -11,8 +11,8 @@ import { useHistory } from 'react-router-dom'
 const WorkRecord = () => {
 	let history = useHistory()
 	const { record } = useParams()
-	const recordId = record.split('-')[0]
-	const recordIndex = record.split('-')[1]
+	const recordId = parseInt(record.split('-')[0])
+	const recordIndex = parseInt(record.split('-')[1])
 	const [matchedHotel, setHotel] = useState(null)
 	const [nextRecord, setNextRecord] = useState(null)
 
@@ -58,7 +58,7 @@ const WorkRecord = () => {
 
 	const closeSuccess = () => {
 		if (nextRecord) {
-			history.push(`/work-record/${nextRecord}-${+recordIndex + 1}`)
+			history.push(`/work-record/${nextRecord}-${recordIndex}`)
 		} else
 			message.success(
 				'No more records to work. Redirecting...',
@@ -70,18 +70,19 @@ const WorkRecord = () => {
 	return (
 		<>
 			<RecordHeader
-				recordId={+recordId}
-				recordIndex={+recordIndex}
+				recordId={recordId}
+				recordIndex={recordIndex}
 				setNext={setNextRecord}
 			/>
 			<MatchesTable
-				recordId={+recordId}
+				recordId={recordId}
 				setMatchedHotel={setMatchedHotel}
 				matchedHotel={matchedHotel}
 				onMatchHotel={onMatchHotel}
 				style={{ marginBottom: '1em' }}
 			/>
 			<MoreMatches
+				recordId={recordId}
 				setMatchedHotel={setMatchedHotel}
 				matchedHotel={matchedHotel}
 				onMatchHotel={onMatchHotel}
