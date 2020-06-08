@@ -26,8 +26,8 @@ const ActivityDataQc = () => {
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
-		onCompleted: () => {
-			parseCSV('yup')
+		onCompleted: (data) => {
+			parseCSV(data)
 			setVisible(false)
 		}
 	})
