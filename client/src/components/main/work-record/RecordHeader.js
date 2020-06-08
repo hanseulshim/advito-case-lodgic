@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { store } from 'context/store'
 import { useHistory } from 'react-router-dom'
 import { useQuery } from '@apollo/client'
@@ -10,12 +10,12 @@ import { getFieldOrder, formatTitle } from './helper'
 import { formatNum } from 'helper'
 import './styles.scss'
 
-const RecordHeader = ({ recordIndex, setNext }) => {
+const RecordHeader = ({ recordId, recordIndex, setNext }) => {
 	let history = useHistory()
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange, filters } = state
-	const { loading, error, data } = useQuery(UNMATCHED_HOTEL, {
+	const { loading, error, data, refetch } = useQuery(UNMATCHED_HOTEL, {
 		variables: {
 			currPosition: recordIndex,
 			clientId,
@@ -34,6 +34,10 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 			setNext(data.unmatchedHotel.nextId)
 		}
 	})
+
+	useEffect(() => {
+		refetch()
+	}, [recordId])
 
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
