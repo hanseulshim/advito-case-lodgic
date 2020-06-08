@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import { Button, Input, Modal } from 'antd'
 import { moreMatchesFilters } from '../../helper'
@@ -25,7 +25,7 @@ const InputContainer = styled.div`
 	}
 `
 
-const MatchFilters = ({ setFilters }) => {
+const MatchFilters = ({ setFilters, recordId }) => {
 	const [filters, updateFilters] = useState({
 		hotelName: '',
 		hotelChainName: '',
@@ -38,8 +38,12 @@ const MatchFilters = ({ setFilters }) => {
 		apolloPropertyId: '',
 		amadeusPropertyId: '',
 		worldspanPropertyId: '',
-		id: '',
+		id: ''
 	})
+
+	useEffect(() => {
+		clearFilters()
+	}, [recordId])
 
 	const clearFilters = () => {
 		updateFilters({
@@ -54,7 +58,7 @@ const MatchFilters = ({ setFilters }) => {
 			apolloPropertyId: '',
 			amadeusPropertyId: '',
 			worldspanPropertyId: '',
-			id: '',
+			id: ''
 		})
 		setFilters({})
 	}
@@ -62,7 +66,7 @@ const MatchFilters = ({ setFilters }) => {
 	const onChange = (value, key) => {
 		updateFilters({
 			...filters,
-			[key]: value,
+			[key]: value
 		})
 	}
 
@@ -70,7 +74,7 @@ const MatchFilters = ({ setFilters }) => {
 		error({
 			title: 'Error in filters',
 			icon: <ExclamationCircleOutlined />,
-			content: 'Please only use alphanumeric characters in filters',
+			content: 'Please only use alphanumeric characters in filters'
 		})
 	}
 
