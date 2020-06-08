@@ -3,8 +3,12 @@ import { store } from 'context/store'
 import styled from 'styled-components'
 import SelectClient from './SelectClient'
 import SelectDateRange from './SelectDateRange'
+import { SpinLoader } from 'components/common/Loader'
+import ErrorMessage from 'components/common/ErrorMessage'
 import { Button } from 'antd'
 import { useHistory } from 'react-router-dom'
+import { useQuery } from '@apollo/client'
+import { CLIENT_LIST } from 'api/queries'
 
 const Container = styled.div`
 	display: flex;
@@ -18,19 +22,25 @@ const Container = styled.div`
 `
 
 const Controls = () => {
+	const { loading, error, data } = useQuery(CLIENT_LIST)
 	const globalState = useContext(store)
 	const { dispatch } = globalState
 	let history = useHistory()
 
 	const [inputs, setInputs] = useState({
 		clientId: null,
-		dateRange: [],
+		clientName: '',
+		dateRange: []
 	})
 
 	const handleClientChange = (e) => {
+		const clientName = data.clientList.find((client) => client.id === e)
+			.clientName
+
 		setInputs({
 			...inputs,
 			clientId: e,
+			clientName
 		})
 	}
 
@@ -40,7 +50,7 @@ const Controls = () => {
 			...inputs,
 			dateRange: dateStringArr.filter((date) => date === '').length
 				? []
-				: dateStringArr,
+				: dateStringArr
 		})
 	}
 
@@ -49,9 +59,12 @@ const Controls = () => {
 		history.push('/ingestion-history')
 	}
 
+	if (loading) return <SpinLoader />
+	if (error) return <ErrorMessage error={error} />
+
 	return (
 		<Container>
-			<SelectClient onChange={handleClientChange} />
+			<SelectClient onChange={handleClientChange} clients={data.clientList} />
 			<SelectDateRange onChange={handleDateChange} />
 			<Button
 				type="primary"

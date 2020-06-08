@@ -12,6 +12,7 @@ const StateProvider = ({ children }) => {
 				return {
 					...state,
 					clientId: action.value.inputs.clientId,
+					clientName: action.value.inputs.clientName,
 					dateRange: action.value.inputs.dateRange
 				}
 			case 'setFilters':

@@ -80,9 +80,9 @@ const RecordHeader = ({ recordIndex, setNext }) => {
 							}}
 							valueStyle={{ fontSize: '1em' }}
 							formatter={(value) =>
-								field === 'roomSpend' ? formatNum(value) : value
+								field === 'roomSpendUsd' ? formatNum(value) : value
 							}
-							prefix={field === 'roomSpend' ? '$' : null}
+							prefix={field === 'roomSpendUsd' ? '$' : null}
 						/>
 					)
 				})}

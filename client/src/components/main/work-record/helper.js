@@ -1,6 +1,6 @@
 export const getFieldOrder = () => {
 	return [
-		'roomSpend',
+		'roomSpendUsd',
 		'numberOfNights',
 		'hotelName',
 		'address1',
@@ -15,7 +15,7 @@ export const getFieldOrder = () => {
 		'apolloPropertyId',
 		'amadeusPropertyId',
 		'worldspanPropertyId',
-		'lanyonId',
+		'lanyonId'
 	]
 }
 
@@ -42,61 +42,61 @@ export const moreMatchesFilters = [
 	{
 		label: 'Hotel Name',
 		placeholder: 'Enter Hotel Name',
-		value: 'hotelName',
+		value: 'hotelName'
 	},
 	{
 		label: 'Address 1',
 		placeholder: 'Enter Address',
-		value: 'address1',
+		value: 'address1'
 	},
 	{
 		label: 'City',
 		placeholder: 'Enter City Name',
-		value: 'cityName',
+		value: 'cityName'
 	},
 	{
 		label: 'State',
 		placeholder: 'Enter State Code',
-		value: 'stateCode',
+		value: 'stateCode'
 	},
 	{
 		label: 'Country',
 		placeholder: 'Enter Country Name',
-		value: 'countryName',
+		value: 'countryName'
 	},
 	{
 		label: 'Chain Name',
 		placeholder: 'Enter Hotel Chain Name',
-		value: 'hotelChainName',
+		value: 'hotelChainName'
 	},
 	{
 		label: 'Lanyon ID',
 		placeholder: 'Enter Lanyon ID',
-		value: 'lanyonId',
+		value: 'lanyonId'
 	},
 	{
 		label: 'Sabre ID',
 		placeholder: 'Enter Sabre ID',
-		value: 'sabrePropertyId',
+		value: 'sabrePropertyId'
 	},
 	{
 		label: 'Apollo ID',
 		placeholder: 'Enter Apollo ID',
-		value: 'apolloPropertyId',
+		value: 'apolloPropertyId'
 	},
 	{
 		label: 'Amadeus ID',
 		placeholder: 'Enter Amadeus ID',
-		value: 'amadeusPropertyId',
+		value: 'amadeusPropertyId'
 	},
 	{
 		label: 'Worldspan ID',
 		placeholder: 'Enter Worldspan ID',
-		value: 'worldspanPropertyId',
+		value: 'worldspanPropertyId'
 	},
 	{
 		label: 'HMF ID',
 		placeholder: 'Enter HMF ID',
-		value: 'id',
-	},
+		value: 'id'
+	}
 ]
