@@ -44,3 +44,19 @@ export const INGESTION_HOTEL_LIST = gql`
 		}
 	}
 `
+
+export const APPROVE_FILE_LIST = gql`
+	query approvefileList(
+		$clientId: Int!
+		$startDate: String!
+		$endDate: String!
+		$type: String!
+	) {
+		approveFileList(
+			clientId: $clientId
+			startDate: $startDate
+			endDate: $endDate
+			type: $type
+		)
+	}
+`

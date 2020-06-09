@@ -1,5 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
+import { useQuery } from '@apollo/client'
+import { APPROVE_FILE_LIST } from 'api/queries'
+import { SpinLoader } from 'components/common/Loader'
+import ErrorMessage from 'components/common/ErrorMessage'
 import styled from 'styled-components'
 import { Button, Modal } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
@@ -19,8 +23,19 @@ const Icon = styled(ExclamationCircleOutlined)`
 const ApproveDPM = ({ onClick }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientName } = state
+	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
+
+	const { loading, error, data } = useQuery(APPROVE_FILE_LIST, {
+		variables: {
+			clientId,
+			startDate: dateRange[0],
+			endDate: dateRange[1],
+			type: 'dpm'
+		}
+	})
+	if (loading) return <SpinLoader />
+	if (error) return <ErrorMessage error={error} />
 
 	const toggleModal = () => {
 		setVisible(!visible)
@@ -54,6 +69,14 @@ const ApproveDPM = ({ onClick }) => {
 						not reversible.
 					</p>
 				</Header>
+				<div style={{ maxHeight: '300px', overflow: 'scroll' }}>
+					<ul>
+						{data.approveFileList.length > 0 &&
+							data.approveFileList.map((file, i) => {
+								return <li key={'file' + i}>{file}</li>
+							})}
+					</ul>
+				</div>
 			</Modal>
 		</>
 	)
