@@ -338,11 +338,11 @@ export default {
 		},
 		exportActivityDataQc: async (
 			_: null,
-			{ currencyType },
+			{ clientId, dataStartDate, dataEndDate, currencyType },
 			{ advito }
 		): Promise<string> => {
 			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc('${currencyType}')`
+				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}', '${dataEndDate}', '${currencyType}')`
 			)
 			try {
 				return parse(res.rows)

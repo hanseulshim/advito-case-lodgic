@@ -62,6 +62,6 @@ extend type Mutation {
 	approveSourcing(clientId: Int!
 		startDate: String!
 		endDate: String!): Boolean @auth
-	exportActivityDataQc(currencyType: String!): String @auth
+	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
 }
 `
