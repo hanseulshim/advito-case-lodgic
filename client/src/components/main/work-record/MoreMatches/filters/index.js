@@ -80,7 +80,7 @@ const MatchFilters = ({ setFilters, recordId }) => {
 
 	const getValidFilters = () => {
 		const validFilters = {}
-		Object.keys(filters).map((key) => {
+		Object.keys(filters).forEach((key) => {
 			if (filters[key]) {
 				validFilters[key] = filters[key]
 			}
