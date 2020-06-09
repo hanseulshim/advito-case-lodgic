@@ -47,3 +47,11 @@ export const getStatus = (record) => {
 		? displayArr.map((el, i) => ({ ...el, key: i }))
 		: 'Open'
 }
+
+export const exportCsv = (flatFile, fileName) => {
+	var hiddenElement = document.createElement('a')
+	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(flatFile)
+	hiddenElement.target = '_blank'
+	hiddenElement.download = `${fileName}.csv`
+	hiddenElement.click()
+}

@@ -23,7 +23,17 @@ export const BACKOUT = gql`
 `
 
 export const EXPORT_ACTIVITY_DATA_QC = gql`
-	mutation exportActivityDataQc($currencyType: String!) {
-		exportActivityDataQc(currencyType: $currencyType)
+	mutation exportActivityDataQc(
+		$currencyType: String!
+		$clientId: Int!
+		$dataStartDate: String!
+		$dataEndDate: String!
+	) {
+		exportActivityDataQc(
+			currencyType: $currencyType
+			clientId: $clientId
+			dataStartDate: $dataStartDate
+			dataEndDate: $dataEndDate
+		)
 	}
 `
