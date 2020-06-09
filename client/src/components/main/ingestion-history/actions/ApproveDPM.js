@@ -20,7 +20,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ApproveDPM = ({ onClick }) => {
+const ApproveDPM = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
@@ -42,7 +42,6 @@ const ApproveDPM = ({ onClick }) => {
 	}
 
 	const onOk = () => {
-		onClick()
 		toggleModal()
 	}
 
@@ -62,21 +61,27 @@ const ApproveDPM = ({ onClick }) => {
 				onOk={onOk}
 				onCancel={toggleModal}
 			>
-				<Header>
-					<p>
-						You are about to approve DPM data for {clientName}, confirming that
-						enhanced QC report has been approved by consultant. This action is
-						not reversible.
-					</p>
-				</Header>
-				<div style={{ maxHeight: '300px', overflow: 'scroll' }}>
-					<ul>
-						{data.approveFileList.length > 0 &&
-							data.approveFileList.map((file, i) => {
-								return <li key={'file' + i}>{file}</li>
-							})}
-					</ul>
-				</div>
+				{data.approveFileList.length > 0 ? (
+					<>
+						<Header>
+							<p>
+								You are about to approve DPM data for {clientName}, confirming
+								that enhanced QC report has been approved by consultant. This
+								action is not reversible.
+							</p>
+						</Header>
+						<h3>NOT REVERSIBLE</h3>
+						<div style={{ maxHeight: '300px', overflow: 'scroll' }}>
+							<ul>
+								{data.approveFileList.map((file, i) => {
+									return <li key={'file' + i}>{file}</li>
+								})}
+							</ul>
+						</div>
+					</>
+				) : (
+					<p>No files available to approve.</p>
+				)}
 			</Modal>
 		</>
 	)
