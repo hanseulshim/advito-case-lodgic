@@ -16,6 +16,7 @@ export class JobIngestionHotel extends Model {
 	isSourcing: boolean
 	statusSourcing: string
 	dateStatusSourcing: Date
+	ingestionNote: string
 
 	static tableName = 'job_ingestion_hotel'
 	static idColumn = 'jobIngestionId'

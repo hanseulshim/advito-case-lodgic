@@ -50,7 +50,7 @@ export class JobIngestionHotelView extends Model {
 		const startDate = moment(this.dataStartDate)
 		const endDate = moment(this.dataEndDate)
 		const inBetween = (startDate.valueOf() + endDate.valueOf()) / 2
-		return inBetween.toString()
+		return moment(inBetween).format()
 	}
 
 	unmatchedSpendPercent(): number {

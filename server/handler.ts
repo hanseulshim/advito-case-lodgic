@@ -1,13 +1,23 @@
-import 'source-map-support/register'
 import { ApolloServer } from 'apollo-server-lambda'
-import typeDefs from './src/typeDefs'
-import resolvers from './src/resolvers'
-import playground from './src/playground'
 import Knex from 'knex'
-import { ContextType } from './src/types'
-import { Model, knexSnakeCaseMappers } from 'objection'
-import { authenticateUser } from './src/utils'
+import moment from 'moment'
+import { knexSnakeCaseMappers, Model } from 'objection'
+import pg from 'pg'
+import 'source-map-support/register'
 import RequireAuthDirective from './src/authDirective'
+import playground from './src/playground'
+import resolvers from './src/resolvers'
+import typeDefs from './src/typeDefs'
+import { ContextType } from './src/types'
+import { authenticateUser } from './src/utils'
+const pgToString = (value): string => {
+	return moment(value).format()
+}
+pg.types.setTypeParser(1082, pgToString) // date
+pg.types.setTypeParser(1083, pgToString) // time
+pg.types.setTypeParser(1114, pgToString) // timestamp
+pg.types.setTypeParser(1184, pgToString) // timestamptz
+pg.types.setTypeParser(1266, pgToString) // timetz
 
 const advito = Knex({
 	client: 'pg',
