@@ -1,11 +1,14 @@
-import React, { useState } from 'react'
-import { useQuery } from '@apollo/client'
-import { CURRENCY_LIST } from 'api/queries'
+import React, { useState, useContext } from 'react'
+import { store } from 'context/store'
+import { useQuery, useMutation } from '@apollo/client'
+import { CURRENCY_LIST } from 'api'
+import { EXPORT_ENHANCED_QC } from 'api'
 import styled from 'styled-components'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 import { Button, Modal, Radio, Select } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import { exportCsv } from '../helper'
 
 const { Option } = Select
 
@@ -27,13 +30,19 @@ const Icon = styled(ExclamationCircleOutlined)`
 `
 
 const EnhancedQc = () => {
+	const globalState = useContext(store)
+	const { state } = globalState
+	const { clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
-
-	const { loading, error, data } = useQuery(CURRENCY_LIST)
-	if (loading) return <SpinLoader />
-	if (error) return <ErrorMessage error={error} />
+	const { error, data } = useQuery(CURRENCY_LIST)
+	const [exportQC, { loading }] = useMutation(EXPORT_ENHANCED_QC, {
+		onCompleted: ({ exportEnhancedQC }) => {
+			getCsv(exportEnhancedQC)
+			setVisible(false)
+		}
+	})
 
 	const toggleModal = () => {
 		setVisible(!visible)
@@ -41,15 +50,44 @@ const EnhancedQc = () => {
 	const handleCurrencyType = (e) => {
 		setCurrencyType(e.target.value)
 	}
-
 	const handleCurrencySelection = (e) => {
 		setCurrencySelection(e)
 	}
 
-	const onOk = () => {
-		toggleModal()
+	const onOk = async () => {
+		try {
+			await exportQC({
+				variables: {
+					currencyType:
+						currencyType === 'ingested' ? 'ingested' : currencySelection,
+					clientId,
+					dataStartDate: dateRange[0],
+					dataEndDate: dateRange[1]
+				}
+			})
+		} catch (e) {
+			showError(e.message)
+			console.error('Error in backout ', e)
+		}
 	}
 
+	const showError = (error) => {
+		Modal.error({
+			title: 'Error in Export',
+			content: error
+		})
+	}
+
+	const getCsv = (flatFile) => {
+		try {
+			exportCsv(flatFile, 'EnhancedQcExport')
+		} catch (e) {
+			error(e.message)
+			console.error(e)
+		}
+	}
+
+	if (error) return <ErrorMessage error={error} />
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
@@ -60,6 +98,7 @@ const EnhancedQc = () => {
 				title={'Enhanced QC Export'}
 				onOk={onOk}
 				onCancel={toggleModal}
+				confirmLoading={loading}
 			>
 				<Header>
 					<Icon />
@@ -75,8 +114,7 @@ const EnhancedQc = () => {
 								placeholder="Select currency"
 								onChange={handleCurrencySelection}
 								filterOption={(input, option) =>
-									option.props.children
-										.toString()
+									option.children[2]
 										.toLowerCase()
 										.indexOf(input.toLowerCase()) >= 0
 								}
@@ -86,7 +124,7 @@ const EnhancedQc = () => {
 							>
 								{data.currencyList.map((currency, i) => {
 									return (
-										<Option key={'currency' + i} value={currency.id}>
+										<Option key={'currency' + i} value={currency.currencyCode}>
 											{currency.currencyName} - {currency.currencyCode}
 										</Option>
 									)
