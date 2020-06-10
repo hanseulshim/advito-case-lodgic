@@ -305,7 +305,21 @@ export default {
 				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}', '${dataEndDate}', '${currencyType}')`
 			)
 			try {
-				return parse(res.rows)
+				return res.rows.length ? parse(res.rows) : ''
+			} catch (err) {
+				throw new ApolloError(err.message)
+			}
+		},
+		exportEnhancedQC: async (
+			_: null,
+			{ clientId, dataStartDate, dataEndDate, currencyType },
+			{ advito }
+		): Promise<string> => {
+			const res = await advito.raw(
+				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}', '${dataEndDate}', '${currencyType}')`
+			)
+			try {
+				return res.rows.length ? parse(res.rows) : ''
 			} catch (err) {
 				throw new ApolloError(err.message)
 			}

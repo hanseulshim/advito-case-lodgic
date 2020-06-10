@@ -62,5 +62,6 @@ extend type Mutation {
 		type: String!
 		currencyType: String!): Boolean @auth
 	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
+	exportEnhancedQC(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
 }
 `

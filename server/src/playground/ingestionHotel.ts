@@ -67,6 +67,7 @@ export default {
         #   currencyType: "usd")
         # backout(jobIngestionId: null)
         # exportActivityDataQc(clientId: 348, dataStartDate: "01-01-2020", dataEndDate: "12-31-2020", currencyType: "usd")
+        # exportEnhancedQC(clientId: 348, dataStartDate: "01-01-2020", dataEndDate: "12-31-2020", currencyType: "usd")
       }`
 	}
 }
