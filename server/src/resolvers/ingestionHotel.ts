@@ -11,6 +11,8 @@ import {
 } from '../models'
 import { JobIngestionHotelType } from '../types'
 
+const statuses = ['processed', 'loaded', 'approved']
+
 export default {
 	Query: {
 		ingestionHotelList: async (
@@ -32,12 +34,7 @@ export default {
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					),
+					.whereIn('jobStatus', statuses),
 				JobIngestionHotelView.query()
 					.count()
 					.first()
@@ -47,12 +44,7 @@ export default {
 					.andWhere('isComplete', true)
 					.andWhere('isDpm', true)
 					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					),
+					.whereIn('jobStatus', statuses),
 				JobIngestionHotelView.query()
 					.count()
 					.first()
@@ -62,23 +54,13 @@ export default {
 					.andWhere('isComplete', true)
 					.andWhere('isSourcing', true)
 					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					),
+					.whereIn('jobStatus', statuses),
 				JobIngestionHotelView.query()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					)
+					.whereIn('jobStatus', statuses)
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderBy(['dataStartDate', 'templateCategory', 'sourceName'])
@@ -110,12 +92,7 @@ export default {
 					.andWhere('isComplete', true)
 					.andWhere(property, true)
 					.whereRaw(`LOWER("${status}") = ?`, 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					)
+					.whereIn('jobStatus', statuses)
 				if (!jobIngestionHotel)
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
 				return jobIngestionHotel.map((job) => job.jobName)
@@ -188,92 +165,76 @@ export default {
 						)
 					)
 				)
-				await JobIngestionHotel.query()
-					.patch({
-						[property]: true,
-						[status]: 'Loaded',
-						[dateStatus]: new Date()
-					})
-					.whereIn('jobIngestionId', jobIngestionIds)
+				await Promise.all([
+					JobIngestionHotel.query()
+						.patch({
+							[property]: true,
+							[status]: 'Loaded',
+							[dateStatus]: new Date()
+						})
+						.whereIn('jobIngestionId', jobIngestionIds),
+					JobIngestion.query()
+						.patch({
+							jobStatus: 'loaded'
+						})
+						.whereIn('id', jobIngestionIds)
+				])
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message)
 			}
 		},
-		approveDpm: async (
+		approveFiles: async (
 			_: null,
-			{ clientId, startDate, endDate }
+			{ clientId, startDate, endDate, type, currencyType }
 		): Promise<boolean> => {
 			try {
-				const jobIngestionHotel = await JobIngestionHotelView.query()
+				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
+					throw new ApolloError('Type must be either dpm or sourcing', '500')
+				}
+				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
+				const status =
+					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
+				const statusCol =
+					type.toLowerCase() === 'dpm' ? 'status_dpm' : 'status_sourcing'
+				const dateStatus =
+					type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
+				const jobIngestionHotels = await JobIngestionHotelView.query()
 					.select('jobIngestionId')
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
 					.andWhere('isComplete', true)
-					.andWhere('isDpm', true)
-					.whereRaw('LOWER("status_dpm") = ?', 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					)
-				if (!jobIngestionHotel || jobIngestionHotel.length === 0)
+					.andWhere(property, true)
+					.whereRaw(`LOWER("${statusCol}") = ?`, 'loaded')
+					.whereIn('jobStatus', statuses)
+				if (!jobIngestionHotels || jobIngestionHotels.length === 0)
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
-				await JobIngestionHotel.query()
-					.patch({
-						isDpm: true,
-						statusDpm: 'Approved',
-						dateStatusDpm: new Date()
-					})
-					.whereIn(
-						'jobIngestionId',
-						jobIngestionHotel.map((job) => job.jobIngestionId)
-					)
-				return true
-			} catch (e) {
-				throw new ApolloError(e.message)
-			}
-		},
-		approveSourcing: async (
-			_: null,
-			{ clientId, startDate, endDate }
-		): Promise<boolean> => {
-			try {
-				const jobIngestionHotel = await JobIngestionHotelView.query()
-					.select('jobIngestionId')
-					.where('clientId', clientId)
-					.andWhere('dataStartDate', '>=', startDate)
-					.andWhere('dataEndDate', '<=', endDate)
-					.andWhere('isComplete', true)
-					.andWhere('isSourcing', true)
-					.whereRaw('LOWER("status_sourcing") = ?', 'loaded')
-					.whereIn(
-						'jobStatus',
-						process.env.ENVIRONMENT === 'PRODUCTION'
-							? ['done', 'ingested', 'processed', 'loaded', 'approved']
-							: ['processed', 'loaded', 'approved']
-					)
-				if (!jobIngestionHotel || jobIngestionHotel.length === 0)
-					throw new ApolloError('Job Ingestion Hotel not found', '500')
-				await JobIngestionHotel.query()
-					.patch({
-						isSourcing: true,
-						statusSourcing: 'Approved',
-						dateStatusSourcing: new Date()
-					})
-					.whereIn(
-						'jobIngestionId',
-						jobIngestionHotel.map((job) => job.jobIngestionId)
-					)
+
+				const jobIngestionIds = jobIngestionHotels.map(
+					(job) => job.jobIngestionId
+				)
+				await Promise.all([
+					JobIngestionHotel.query()
+						.patch({
+							[property]: true,
+							[status]: 'Approved',
+							[dateStatus]: new Date(),
+							ingestionNote: `Currency Type: ${currencyType}`
+						})
+						.whereIn('jobIngestionId', jobIngestionIds),
+					JobIngestion.query()
+						.patch({
+							jobStatus: 'approved'
+						})
+						.whereIn('id', jobIngestionIds)
+				])
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message)
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			const statuses = ['processed', 'loaded', 'approved']
 			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
 			if (
 				!jobIngestion ||
@@ -328,12 +289,11 @@ export default {
 					.whereIn(
 						'id',
 						hotelProjectPropertyList.map((v) => v.hotelProjectId)
-					)
+					),
+				JobIngestion.query().patchAndFetchById(jobIngestion.id, {
+					jobStatus: 'backout'
+				})
 			])
-
-			await JobIngestion.query().patchAndFetchById(jobIngestion.id, {
-				jobStatus: 'backout'
-			})
 			return true
 		},
 		exportActivityDataQc: async (

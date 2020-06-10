@@ -56,12 +56,11 @@ extend type Mutation {
 		year: Int!
 		month: Int
 	): Boolean @auth
-	approveDpm(clientId: Int!
+	approveFiles(clientId: Int!
 		startDate: String!
-		endDate: String!): Boolean @auth
-	approveSourcing(clientId: Int!
-		startDate: String!
-		endDate: String!): Boolean @auth
+		endDate: String!
+		type: String!
+		currencyType: String!): Boolean @auth
 	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
 }
 `

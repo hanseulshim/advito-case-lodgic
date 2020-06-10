@@ -60,12 +60,11 @@ export default {
 		query: `
       mutation {
         # loadEnhancedQcReport(jobIngestionIds: [], type: "", year: 2020, month: null)
-        # approveDpm(clientId: 348
+        # approveFiles(clientId: 348
         #   startDate: "2020-01-01"
-        #   endDate: "2020-12-31")
-        # approveSourcing(clientId: 348
-        #   startDate: "2020-01-01"
-        #   endDate: "2020-12-31")
+        #   endDate: "2020-12-31"
+        #   type: "dpm"
+        #   currencyType: "usd")
         # backout(jobIngestionId: null)
         # exportActivityDataQc(clientId: 348, dataStartDate: "01-01-2020", dataEndDate: "12-31-2020", currencyType: "usd")
       }`
