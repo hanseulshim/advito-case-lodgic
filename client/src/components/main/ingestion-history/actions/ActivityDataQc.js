@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
+import { store } from 'context/store'
 import styled from 'styled-components'
 import { useMutation } from '@apollo/client'
 import { EXPORT_ACTIVITY_DATA_QC } from 'api'
 import { Button, Modal, Radio } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
+import { exportCsv } from '../helper'
 
 const StyledRadio = styled(Radio)`
 	display: block;
@@ -23,11 +25,14 @@ const Icon = styled(ExclamationCircleOutlined)`
 `
 
 const ActivityDataQc = () => {
+	const globalState = useContext(store)
+	const { state } = globalState
+	const { clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
-		onCompleted: () => {
-			parseCSV('yup')
+		onCompleted: ({ exportActivityDataQc }) => {
+			getCsv(exportActivityDataQc)
 			setVisible(false)
 		}
 	})
@@ -42,7 +47,12 @@ const ActivityDataQc = () => {
 	const onOk = async () => {
 		try {
 			await exportQC({
-				variables: { currencyType }
+				variables: {
+					currencyType,
+					clientId,
+					dataStartDate: dateRange[0],
+					dataEndDate: dateRange[1]
+				}
 			})
 		} catch (e) {
 			error(e.message)
@@ -57,8 +67,13 @@ const ActivityDataQc = () => {
 		})
 	}
 
-	const parseCSV = (flatFile) => {
-		console.log('Got the file: ', flatFile)
+	const getCsv = (flatFile) => {
+		try {
+			exportCsv(flatFile, 'ActivityDataQcExport')
+		} catch (e) {
+			error(e.message)
+			console.error(e)
+		}
 	}
 
 	return (
