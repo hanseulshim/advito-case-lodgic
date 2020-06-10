@@ -26,7 +26,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const EnhancedQc = ({ onClick }) => {
+const EnhancedQc = () => {
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
