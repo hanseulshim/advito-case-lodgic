@@ -47,7 +47,6 @@ const EnhancedQc = ({ onClick }) => {
 	}
 
 	const onOk = () => {
-		onClick(currencyType, currencySelection)
 		toggleModal()
 	}
 
