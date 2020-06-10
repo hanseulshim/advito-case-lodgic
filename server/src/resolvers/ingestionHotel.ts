@@ -186,7 +186,7 @@ export default {
 		},
 		approveFiles: async (
 			_: null,
-			{ clientId, startDate, endDate, type, currencyType }
+			{ clientId, startDate, endDate, type }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
@@ -219,8 +219,7 @@ export default {
 						.patch({
 							[property]: true,
 							[status]: 'Approved',
-							[dateStatus]: new Date(),
-							ingestionNote: `Currency Type: ${currencyType}`
+							[dateStatus]: new Date()
 						})
 						.whereIn('jobIngestionId', jobIngestionIds),
 					JobIngestion.query()

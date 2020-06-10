@@ -59,8 +59,7 @@ extend type Mutation {
 	approveFiles(clientId: Int!
 		startDate: String!
 		endDate: String!
-		type: String!
-		currencyType: String!): Boolean @auth
+		type: String!): Boolean @auth
 	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
 	exportEnhancedQC(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
 }
