@@ -201,7 +201,6 @@ export default {
 				const dateStatus =
 					type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
 				const jobIngestionHotels = await JobIngestionHotelView.query()
-					.select('jobIngestionId')
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
