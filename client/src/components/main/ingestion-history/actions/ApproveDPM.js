@@ -26,7 +26,7 @@ const ApproveDPM = () => {
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
-	const [loadFiles, { loading, error, data, refetch }] = useLazyQuery(
+	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,
 		{
 			variables: {
@@ -44,7 +44,6 @@ const ApproveDPM = () => {
 		{
 			onCompleted: () => {
 				showSuccess()
-				refetch()
 			}
 		}
 	)
