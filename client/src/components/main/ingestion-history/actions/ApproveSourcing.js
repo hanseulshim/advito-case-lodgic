@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react'
-import { useQuery } from '@apollo/client'
-import { APPROVE_FILE_LIST } from 'api/queries'
+import { useQuery, useMutation } from '@apollo/client'
+import { APPROVE_FILE_LIST } from 'api'
+import { APPROVE_FILES } from 'api'
 import { store } from 'context/store'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
@@ -26,7 +27,7 @@ const ApproveSourcing = () => {
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
 
-	const { loading, error, data } = useQuery(APPROVE_FILE_LIST, {
+	const { loading, error, data, refetch } = useQuery(APPROVE_FILE_LIST, {
 		variables: {
 			clientId,
 			startDate: dateRange[0],
@@ -34,17 +35,55 @@ const ApproveSourcing = () => {
 			type: 'sourcing'
 		}
 	})
-	if (loading) return <SpinLoader />
-	if (error) return <ErrorMessage error={error} />
+
+	const [approveFiles, { loading: loadingMutation }] = useMutation(
+		APPROVE_FILES,
+		{
+			onCompleted: () => {
+				showSuccess()
+				refetch()
+			}
+		}
+	)
 
 	const toggleModal = () => {
 		setVisible(!visible)
 	}
 
-	const onOk = () => {
-		toggleModal()
+	const onOk = async () => {
+		try {
+			await approveFiles({
+				variables: {
+					clientId,
+					startDate: dateRange[0],
+					endDate: dateRange[1],
+					type: 'sourcing'
+				}
+			})
+		} catch (e) {
+			showError(e.message)
+			console.error('Error in backout ', e)
+		}
 	}
 
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'Files successfully approved',
+			okText: 'Close',
+			onOk: toggleModal()
+		})
+	}
+
+	const showError = (error) => {
+		Modal.error({
+			title: 'Error approving files',
+			content: error
+		})
+	}
+
+	if (loading) return <SpinLoader />
+	if (error) return <ErrorMessage error={error} />
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={toggleModal} danger>
@@ -60,6 +99,8 @@ const ApproveSourcing = () => {
 				}
 				onOk={onOk}
 				onCancel={toggleModal}
+				confirmLoading={loadingMutation}
+				okButtonProps={{ disabled: !data.approveFileList.length > 0 }}
 			>
 				{data.approveFileList.length > 0 ? (
 					<>

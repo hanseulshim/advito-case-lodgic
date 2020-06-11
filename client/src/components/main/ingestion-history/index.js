@@ -48,7 +48,7 @@ const IngestionHistory = () => {
 	const onPageChange = (e) => setPageNumber(e)
 
 	return (
-		<>
+		<div style={{ paddingBottom: '2em' }}>
 			<ButtonRow>
 				<ActivityDataQc />
 				<EnhancedQc />
@@ -97,7 +97,7 @@ const IngestionHistory = () => {
 				setSelectedRecords={setSelectedRecords}
 				refetch={refetch}
 			/>
-		</>
+		</div>
 	)
 }
 

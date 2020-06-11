@@ -109,7 +109,8 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 					display: 'block',
 					width: '220px',
 					marginLeft: 'auto',
-					marginTop: '1em'
+					position: 'relative',
+					bottom: '3.5em'
 				}}
 				onClick={toggleModal}
 			>

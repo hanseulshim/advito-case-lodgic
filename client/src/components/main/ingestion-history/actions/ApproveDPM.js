@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
-import { useQuery } from '@apollo/client'
-import { APPROVE_FILE_LIST } from 'api/queries'
+import { useLazyQuery, useMutation } from '@apollo/client'
+import { APPROVE_FILE_LIST } from 'api'
+import { APPROVE_FILES } from 'api'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 import styled from 'styled-components'
@@ -25,29 +26,73 @@ const ApproveDPM = () => {
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
-
-	const { loading, error, data } = useQuery(APPROVE_FILE_LIST, {
-		variables: {
-			clientId,
-			startDate: dateRange[0],
-			endDate: dateRange[1],
-			type: 'dpm'
+	const [loadFiles, { loading, error, data, refetch }] = useLazyQuery(
+		APPROVE_FILE_LIST,
+		{
+			variables: {
+				clientId,
+				startDate: dateRange[0],
+				endDate: dateRange[1],
+				type: 'dpm'
+			},
+			fetchPolicy: 'network-only'
 		}
-	})
-	if (loading) return <SpinLoader />
-	if (error) return <ErrorMessage error={error} />
+	)
+
+	const [approveFiles, { loading: loadingMutation }] = useMutation(
+		APPROVE_FILES,
+		{
+			onCompleted: () => {
+				showSuccess()
+				refetch()
+			}
+		}
+	)
+
+	const loadFileList = () => {
+		loadFiles()
+		toggleModal()
+	}
 
 	const toggleModal = () => {
 		setVisible(!visible)
 	}
 
-	const onOk = () => {
-		toggleModal()
+	const onOk = async () => {
+		try {
+			await approveFiles({
+				variables: {
+					clientId,
+					startDate: dateRange[0],
+					endDate: dateRange[1],
+					type: 'dpm'
+				}
+			})
+		} catch (e) {
+			showError(e.message)
+			console.error('Error in backout ', e)
+		}
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'Files successfully approved',
+			okText: 'Close',
+			onOk: toggleModal()
+		})
+	}
+
+	const showError = (error) => {
+		Modal.error({
+			title: 'Error',
+			content: error
+		})
 	}
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={toggleModal} danger>
+			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
 				Approve files for DPM
 			</Button>
 			<Modal
@@ -60,28 +105,35 @@ const ApproveDPM = () => {
 				}
 				onOk={onOk}
 				onCancel={toggleModal}
+				confirmLoading={loadingMutation}
+				okButtonProps={{
+					disabled: !data || data.approveFileList.length < 1
+				}}
 			>
-				{data.approveFileList.length > 0 ? (
-					<>
-						<Header>
-							<p>
-								You are about to approve DPM data for {clientName}, confirming
-								that enhanced QC report has been approved by consultant. This
-								action is not reversible.
-							</p>
-						</Header>
-						<h3>NOT REVERSIBLE</h3>
-						<div style={{ maxHeight: '300px', overflow: 'scroll' }}>
-							<ul>
-								{data.approveFileList.map((file, i) => {
-									return <li key={'file' + i}>{file}</li>
-								})}
-							</ul>
-						</div>
-					</>
-				) : (
-					<p>No files available to approve.</p>
-				)}
+				{loading && <SpinLoader />}
+				{error && <ErrorMessage error={error} />}
+				{data &&
+					(data.approveFileList.length > 0 ? (
+						<>
+							<Header>
+								<p>
+									You are about to approve DPM data for {clientName}, confirming
+									that enhanced QC report has been approved by consultant. This
+									action is not reversible.
+								</p>
+							</Header>
+							<h3>NOT REVERSIBLE</h3>
+							<div style={{ maxHeight: '300px', overflow: 'scroll' }}>
+								<ul>
+									{data.approveFileList.map((file, i) => {
+										return <li key={'file' + i}>{file}</li>
+									})}
+								</ul>
+							</div>
+						</>
+					) : (
+						<p>No files available for approving</p>
+					))}
 			</Modal>
 		</>
 	)

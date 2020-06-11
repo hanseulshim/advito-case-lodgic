@@ -53,3 +53,19 @@ export const EXPORT_ENHANCED_QC = gql`
 		)
 	}
 `
+
+export const APPROVE_FILES = gql`
+	mutation approveFiles(
+		$clientId: Int!
+		$startDate: String!
+		$endDate: String!
+		$type: String!
+	) {
+		approveFiles(
+			clientId: $clientId
+			startDate: $startDate
+			endDate: $endDate
+			type: $type
+		)
+	}
+`
