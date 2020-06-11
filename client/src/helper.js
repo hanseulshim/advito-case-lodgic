@@ -3,7 +3,10 @@ import moment from 'moment'
 import numeral from 'numeral'
 
 export const formatDate = (date) => {
-	return date ? moment(date).format('MMMM DD, YYYY') : ''
+	if (date) {
+		const split = date.split('+')
+		return moment(split[0]).format('MMMM DD, YYYY')
+	} else return ''
 }
 
 export const formatNum = (num) => {
