@@ -186,7 +186,8 @@ export default {
 		},
 		approveFiles: async (
 			_: null,
-			{ clientId, startDate, endDate, type }
+			{ clientId, startDate, endDate, type },
+			{ advito }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
@@ -213,6 +214,15 @@ export default {
 
 				const jobIngestionIds = jobIngestionHotels.map(
 					(job) => job.jobIngestionId
+				)
+				await Promise.all(
+					jobIngestionHotels.map((hotel) =>
+						advito.raw(
+							`select * from approve_for_sourcing_dpm(
+								${hotel.jobIngestionId}, ${hotel.clientId},'${type.toLowerCase()}'
+							)`
+						)
+					)
 				)
 				await Promise.all([
 					JobIngestionHotel.query()
