@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { store } from 'context/store'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { APPROVE_FILE_LIST } from 'api'
@@ -26,6 +26,7 @@ const ApproveDPM = ({ refetchIngestionHistory }) => {
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
+
 	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,
 		{
@@ -48,6 +49,11 @@ const ApproveDPM = ({ refetchIngestionHistory }) => {
 			}
 		}
 	)
+
+	// Call this once to get the fileList length
+	useEffect(() => {
+		loadFiles()
+	})
 
 	const loadFileList = () => {
 		loadFiles()
@@ -93,7 +99,7 @@ const ApproveDPM = ({ refetchIngestionHistory }) => {
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
-				Approve files for DPM
+				Approve files for DPM {data && `(${data.approveFileList.length})`}
 			</Button>
 			<Modal
 				visible={visible}

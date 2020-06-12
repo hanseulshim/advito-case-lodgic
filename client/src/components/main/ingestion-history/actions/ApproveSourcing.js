@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { APPROVE_FILE_LIST } from 'api'
 import { APPROVE_FILES } from 'api'
@@ -49,6 +49,11 @@ const ApproveSourcing = ({ refetchIngestionHistory }) => {
 		}
 	)
 
+	// Call this once to get the fileList length
+	useEffect(() => {
+		loadFiles()
+	}, [])
+
 	const loadFileList = () => {
 		loadFiles()
 		toggleModal()
@@ -93,7 +98,7 @@ const ApproveSourcing = ({ refetchIngestionHistory }) => {
 	return (
 		<>
 			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
-				Approve files for Sourcing
+				Approve files for Sourcing {data && `(${data.approveFileList.length})`}
 			</Button>
 			<Modal
 				visible={visible}
