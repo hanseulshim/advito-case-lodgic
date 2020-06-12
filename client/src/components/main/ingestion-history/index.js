@@ -14,6 +14,7 @@ import ActivityDataQc from './actions/ActivityDataQc'
 import ApproveSourcing from './actions/ApproveSourcing'
 import ApproveDPM from './actions/ApproveDPM'
 import LoadEnhancedQc from './actions/LoadEnhancedQc'
+import './columns.scss'
 
 const ButtonRow = styled.div`
 	display: flex;
