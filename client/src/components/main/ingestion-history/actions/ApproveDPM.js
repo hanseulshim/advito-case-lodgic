@@ -21,7 +21,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ApproveDPM = () => {
+const ApproveDPM = ({ refetchIngestionHistory }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
@@ -44,6 +44,7 @@ const ApproveDPM = () => {
 		{
 			onCompleted: () => {
 				showSuccess()
+				refetchIngestionHistory()
 			}
 		}
 	)
