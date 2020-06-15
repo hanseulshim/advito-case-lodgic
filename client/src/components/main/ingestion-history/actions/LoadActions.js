@@ -42,20 +42,19 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 		(statusDpm && statusDpm.toLowerCase() === 'loaded') ||
 		(statusSourcing && statusSourcing.toLowerCase() === 'loaded')
 	const showDpm =
-		!isDpm &&
-		isSourcing &&
-		statusSourcing.toLowerCase() === 'approved' &&
-		!loading
+		!isDpm ||
+		(!isDpm && isSourcing && statusSourcing.toLowerCase() === 'approved')
 
 	const showSourcing =
-		!isSourcing && isDpm && statusDpm.toLowerCase() === 'approved' && !loading
+		!isSourcing ||
+		(!isSourcing && isDpm && statusDpm.toLowerCase() === 'approved')
 
 	return (
 		<div style={{ display: 'flex', justifyContent: 'space-between' }}>
 			<Checkbox
 				onChange={() => onChange('DPM')}
 				style={{
-					visibility: showDpm ? '' : 'hidden'
+					visibility: loading ? 'hidden' : showDpm ? '' : 'hidden'
 				}}
 				checked={selectedRecords.some(
 					(selectedRecord) =>
@@ -68,7 +67,7 @@ const LoadActions = ({ record, selectedRecords, setSelectedRecords }) => {
 			<Checkbox
 				onChange={() => onChange('Sourcing')}
 				style={{
-					visibility: showSourcing ? '' : 'hidden'
+					visibility: loading ? 'hidden' : showSourcing ? '' : 'hidden'
 				}}
 				checked={selectedRecords.some(
 					(selectedRecord) =>
