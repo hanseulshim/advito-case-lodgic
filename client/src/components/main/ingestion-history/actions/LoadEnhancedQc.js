@@ -22,6 +22,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 		onCompleted: () => {
 			setSelectedRecords([])
 			setVisible(false)
+			showSuccess()
 			refetch()
 		}
 	})
@@ -60,6 +61,15 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 				console.error('Error in backout ', e)
 			}
 		}
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'Files successfully loaded.',
+			okText: 'Close',
+			onOk: toggleModal()
+		})
 	}
 
 	const error = (error) => {

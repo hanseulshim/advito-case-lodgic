@@ -53,8 +53,14 @@ const IngestionHistory = () => {
 			<ButtonRow>
 				<ActivityDataQc />
 				<EnhancedQc />
-				<ApproveDPM refetchIngestionHistory={refetch} />
-				<ApproveSourcing refetchIngestionHistory={refetch} />
+				<ApproveDPM
+					refetchIngestionHistory={refetch}
+					ingestionHotelList={data.ingestionHotelList}
+				/>
+				<ApproveSourcing
+					refetchIngestionHistory={refetch}
+					ingestionHotelList={data.ingestionHotelList}
+				/>
 			</ButtonRow>
 			<Table
 				columns={[

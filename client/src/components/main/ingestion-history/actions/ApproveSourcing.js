@@ -21,7 +21,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ApproveSourcing = ({ refetchIngestionHistory }) => {
+const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
@@ -49,15 +49,9 @@ const ApproveSourcing = ({ refetchIngestionHistory }) => {
 		}
 	)
 
-	// Call this once to get the fileList length
 	useEffect(() => {
 		loadFiles()
-	}, [])
-
-	const loadFileList = () => {
-		loadFiles()
-		toggleModal()
-	}
+	}, [ingestionHotelList])
 
 	const toggleModal = () => {
 		setVisible(!visible)
@@ -97,7 +91,7 @@ const ApproveSourcing = ({ refetchIngestionHistory }) => {
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
+			<Button icon={<DownloadOutlined />} onClick={toggleModal} danger>
 				Approve files for Sourcing {data && `(${data.approveFileList.length})`}
 			</Button>
 			<Modal
