@@ -76,7 +76,7 @@ const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const showSuccess = () => {
 		Modal.success({
 			title: 'Success',
-			content: 'Files successfully approved',
+			content: 'File(s) successfully approved',
 			okText: 'Close',
 			onOk: toggleModal()
 		})

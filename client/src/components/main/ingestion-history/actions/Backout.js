@@ -17,7 +17,10 @@ const Backout = ({ record, refetch }) => {
 	const { state } = globalState
 	const { clientName } = state
 	const [backout, { loading }] = useMutation(BACKOUT, {
-		onCompleted: () => refetch()
+		onCompleted: () => {
+			showSuccess()
+			refetch()
+		}
 	})
 	const [visible, setVisible] = useState(false)
 
@@ -46,6 +49,15 @@ const Backout = ({ record, refetch }) => {
 			error(e.message)
 			console.error('Error in backout ', e)
 		}
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'File(s) successfully backed out',
+			okText: 'Close',
+			onOk: toggleModal()
+		})
 	}
 
 	const error = (error) => {

@@ -66,7 +66,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const showSuccess = () => {
 		Modal.success({
 			title: 'Success',
-			content: 'Files successfully loaded.',
+			content: 'File(s) successfully loaded.',
 			okText: 'Close',
 			onOk: toggleModal()
 		})
