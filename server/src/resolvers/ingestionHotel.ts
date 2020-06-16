@@ -310,7 +310,7 @@ export default {
 			{ advito }
 		): Promise<string> => {
 			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}', '${dataEndDate}', '${currencyType}')`
+				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}'::date, '${dataEndDate}'::date, '${currencyType}')`
 			)
 			try {
 				return res.rows.length ? parse(res.rows) : ''
@@ -324,7 +324,7 @@ export default {
 			{ advito }
 		): Promise<string> => {
 			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}', '${dataEndDate}', '${currencyType}')`
+				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}'::date, '${dataEndDate}'::date, '${currencyType}')`
 			)
 			try {
 				return res.rows.length ? parse(res.rows) : ''
