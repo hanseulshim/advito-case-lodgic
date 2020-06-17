@@ -31,6 +31,7 @@ export class JobIngestionHotelView extends Model {
 	isComplete: boolean
 	jobStatus: string
 	clientId: string
+	ingestionNote: string
 
 	static tableName = 'v_job_ingestion_hotel'
 

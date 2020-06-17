@@ -104,7 +104,7 @@ export default {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
 				return jobIngestionHotel.map((job) => job.jobName)
 			} catch (e) {
-				throw new ApolloError(e.message)
+				throw new ApolloError(e.message, '500')
 			}
 		},
 		checkLoadEnhancedQcReport: async (
@@ -112,6 +112,7 @@ export default {
 			{ jobIngestionIds, type }
 		): Promise<boolean> => {
 			try {
+				if (type.toLowerCase() === 'swag') return true
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
 					throw new ApolloError('Type must be either dpm or sourcing', '500')
 				}
@@ -125,11 +126,35 @@ export default {
 				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
 				}
+				if (
+					jobIngestionHotels.some(
+						(hotel) =>
+							typeof hotel.ingestionNote === 'string' &&
+							hotel.ingestionNote.includes('error')
+					) &&
+					jobIngestionHotels.filter(
+						(hotel) =>
+							(typeof hotel.ingestionNote === 'string' &&
+								hotel.ingestionNote.includes('error')) ||
+							(hotel[property] && hotel[status].toLowerCase() === 'loaded')
+					).length === jobIngestionHotels.length
+				) {
+					throw new ApolloError(
+						`Failed to load enhanced qc report for these hotels: ${jobIngestionHotels
+							.filter(
+								(hotel) =>
+									typeof hotel.ingestionNote === 'string' &&
+									hotel.ingestionNote.includes('error')
+							)
+							.map((hotel) => hotel.jobIngestionId)}`,
+						'500'
+					)
+				}
 				return jobIngestionHotels.every(
 					(hotel) => hotel[property] && hotel[status].toLowerCase() === 'loaded'
 				)
 			} catch (e) {
-				throw new ApolloError(e.message)
+				throw new ApolloError(e.message, '500')
 			}
 		}
 	},
@@ -187,23 +212,30 @@ export default {
 						'500'
 					)
 				}
-				const params = {
-					FunctionName: 'advito-ingestion-dev-load-enhanced-qc',
-					InvocationType: 'Event',
-					Payload: JSON.stringify({
-						jobIngestionHotels: jobIngestionHotels.map((hotel) => ({
-							jobIngestionId: hotel.jobIngestionId,
-							clientId: hotel.clientId,
-							year,
-							month: month ? month : 'NULL',
-							type: type.toLowerCase()
-						}))
-					})
-				}
-				lambda.invoke(params, function (err) {
-					if (err) {
-						throw Error(err.message)
+				jobIngestionHotels.forEach((hotel) => {
+					const params = {
+						FunctionName:
+							process.env.ENVIRONMENT === 'PRODUCTION'
+								? 'advito-ingestion-production-load-enhanced-qc'
+								: process.env.ENVIRONMENT === 'STAGING'
+								? 'advito-ingestion-staging-load-enhanced-qc'
+								: 'advito-ingestion-dev-load-enhanced-qc',
+						InvocationType: 'Event',
+						Payload: JSON.stringify({
+							jobIngestionHotel: {
+								jobIngestionId: hotel.jobIngestionId,
+								clientId: hotel.clientId,
+								year,
+								month: month ? month : 'NULL',
+								type: type.toLowerCase()
+							}
+						})
 					}
+					lambda.invoke(params, function (err) {
+						if (err) {
+							throw Error(err.message)
+						}
+					})
 				})
 				// await Promise.all(
 				// 	jobIngestionHotels.map((hotel) =>
@@ -230,7 +262,7 @@ export default {
 				// ])
 				return true
 			} catch (e) {
-				throw new ApolloError(e.message)
+				throw new ApolloError(e.message, '500')
 			}
 		},
 		approveFiles: async (
@@ -288,7 +320,7 @@ export default {
 				])
 				return true
 			} catch (e) {
-				throw new ApolloError(e.message)
+				throw new ApolloError(e.message, '500')
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
@@ -364,7 +396,7 @@ export default {
 			try {
 				return res.rows.length ? parse(res.rows) : ''
 			} catch (err) {
-				throw new ApolloError(err.message)
+				throw new ApolloError(err.message, '500')
 			}
 		},
 		exportEnhancedQC: async (
@@ -378,7 +410,7 @@ export default {
 			try {
 				return res.rows.length ? parse(res.rows) : ''
 			} catch (err) {
-				throw new ApolloError(err.message)
+				throw new ApolloError(err.message, '500')
 			}
 		}
 	}

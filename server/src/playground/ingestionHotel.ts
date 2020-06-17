@@ -52,7 +52,7 @@ export default {
       #   type: ""
       # )
 
-      # checkLoadEnhancedQcReport(jobIngestionIds: [], type: "sourcing")
+      # checkLoadEnhancedQcReport(jobIngestionIds: [18823, 18824, 18826], type: "sourcing")
     }`
 	},
 	Mutation: {
