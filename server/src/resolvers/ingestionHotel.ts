@@ -1,4 +1,5 @@
 import { ApolloError } from 'apollo-server-lambda'
+import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
 import {
 	HotelProject,
@@ -10,6 +11,12 @@ import {
 	StageActivityHotelCandidate
 } from '../models'
 import { JobIngestionHotelType } from '../types'
+
+const lambda = new AWS.Lambda({
+	region: 'us-east-2',
+	accessKeyId: process.env.ACCESS_KEY_ID,
+	secretAccessKey: process.env.SECRET_ACCESS_KEY
+})
 
 const statuses = ['processed', 'loaded', 'approved']
 
@@ -99,13 +106,37 @@ export default {
 			} catch (e) {
 				throw new ApolloError(e.message)
 			}
+		},
+		checkLoadEnhancedQcReport: async (
+			_: null,
+			{ jobIngestionIds, type }
+		): Promise<boolean> => {
+			try {
+				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
+					throw new ApolloError('Type must be either dpm or sourcing', '500')
+				}
+				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
+				const status =
+					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
+				const jobIngestionHotels = await JobIngestionHotelView.query().whereIn(
+					'jobIngestionId',
+					jobIngestionIds
+				)
+				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				}
+				return jobIngestionHotels.every(
+					(hotel) => hotel[property] && hotel[status].toLowerCase() === 'loaded'
+				)
+			} catch (e) {
+				throw new ApolloError(e.message)
+			}
 		}
 	},
 	Mutation: {
 		loadEnhancedQcReport: async (
 			_: null,
-			{ jobIngestionIds, type, year, month },
-			{ advito }
+			{ jobIngestionIds, type, year, month }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
@@ -125,10 +156,10 @@ export default {
 					throw new ApolloError('DPM types must have a valid month', '500')
 				}
 				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
-				const status =
-					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
-				const dateStatus =
-					type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
+				// const status =
+				// 	type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
+				// const dateStatus =
+				// 	type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
 				const otherProperty =
 					type.toLowerCase() === 'dpm' ? 'isSourcing' : 'isDpm'
 				const otherStatus =
@@ -156,29 +187,47 @@ export default {
 						'500'
 					)
 				}
-				await Promise.all(
-					jobIngestionHotels.map((hotel) =>
-						advito.raw(
-							`select * from load_for_sourcing_dpm(${hotel.jobIngestionId}, ${
-								hotel.clientId
-							}, ${year}, ${month ? month : 'NULL'}, '${type.toLowerCase()}')`
-						)
-					)
-				)
-				await Promise.all([
-					JobIngestionHotel.query()
-						.patch({
-							[property]: true,
-							[status]: 'Loaded',
-							[dateStatus]: new Date()
-						})
-						.whereIn('jobIngestionId', jobIngestionIds),
-					JobIngestion.query()
-						.patch({
-							jobStatus: 'loaded'
-						})
-						.whereIn('id', jobIngestionIds)
-				])
+				const params = {
+					FunctionName: 'advito-ingestion-dev-load-enhanced-qc',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						jobIngestionHotels: jobIngestionHotels.map((hotel) => ({
+							jobIngestionId: hotel.jobIngestionId,
+							clientId: hotel.clientId,
+							year,
+							month: month ? month : 'NULL',
+							type: type.toLowerCase()
+						}))
+					})
+				}
+				lambda.invoke(params, function (err) {
+					if (err) {
+						throw Error(err.message)
+					}
+				})
+				// await Promise.all(
+				// 	jobIngestionHotels.map((hotel) =>
+				// 		advito.raw(
+				// 			`select * from load_for_sourcing_dpm(${hotel.jobIngestionId}, ${
+				// 				hotel.clientId
+				// 			}, ${year}, ${month ? month : 'NULL'}, '${type.toLowerCase()}')`
+				// 		)
+				// 	)
+				// )
+				// await Promise.all([
+				// 	JobIngestionHotel.query()
+				// 		.patch({
+				// 			[property]: true,
+				// 			[status]: 'Loaded',
+				// 			[dateStatus]: new Date()
+				// 		})
+				// 		.whereIn('jobIngestionId', jobIngestionIds),
+				// 	JobIngestion.query()
+				// 		.patch({
+				// 			jobStatus: 'loaded'
+				// 		})
+				// 		.whereIn('id', jobIngestionIds)
+				// ])
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message)

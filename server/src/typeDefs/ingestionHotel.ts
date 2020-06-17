@@ -46,6 +46,10 @@ extend type Query {
 		endDate: String!
 		type: String!
 	): [String] @auth
+	checkLoadEnhancedQcReport(
+		jobIngestionIds: [Int]!
+		type: String!
+	): Boolean @auth
 }
 
 extend type Mutation {
