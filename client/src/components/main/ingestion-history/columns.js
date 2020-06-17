@@ -98,15 +98,27 @@ export const columns = [
 		width: 150
 	},
 	{
-		title: '# Unmatched Hotels',
-		dataIndex: 'unmatchedCount',
-		width: 150
-	},
-	{
-		title: 'Unmatched % Spend',
-		dataIndex: 'unmatchedSpendPercent',
-		width: 150,
-		render: (num) => formatPercent(num)
+		title: 'Unmatched',
+		align: 'center',
+		className: 'unmatched-header',
+		width: 300,
+		children: [
+			{
+				title: '#',
+				align: 'center',
+				className: 'unmatched-column-left',
+				dataIndex: 'unmatchedCount',
+				width: 150
+			},
+			{
+				title: '%',
+				align: 'center',
+				className: 'unmatched-column-right',
+				dataIndex: 'unmatchedSpendPercent',
+				width: 150,
+				render: (num) => formatPercent(num)
+			}
+		]
 	},
 	{
 		title: 'Status',

@@ -55,3 +55,31 @@ export const exportCsv = (flatFile, fileName) => {
 	hiddenElement.download = `${fileName}.csv`
 	hiddenElement.click()
 }
+
+export const getYears = () => {
+	const current = new Date().getFullYear()
+	return [
+		current - 5,
+		current - 4,
+		current - 3,
+		current - 2,
+		current - 1,
+		current,
+		current + 1
+	]
+}
+
+export const months = [
+	{ label: 'January', value: 1 },
+	{ label: 'February', value: 2 },
+	{ label: 'March', value: 3 },
+	{ label: 'April', value: 4 },
+	{ label: 'May', value: 5 },
+	{ label: 'June', value: 6 },
+	{ label: 'July', value: 7 },
+	{ label: 'August', value: 8 },
+	{ label: 'September', value: 9 },
+	{ label: 'October', value: 10 },
+	{ label: 'November', value: 11 },
+	{ label: 'December', value: 12 }
+]

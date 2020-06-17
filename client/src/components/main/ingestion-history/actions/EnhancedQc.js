@@ -8,6 +8,7 @@ import ErrorMessage from 'components/common/ErrorMessage'
 import { Button, Modal, Radio, Select } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { exportCsv } from '../helper'
+import moment from 'moment'
 
 const { Option } = Select
 
@@ -31,7 +32,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 const EnhancedQc = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientId, dateRange } = state
+	const { clientId, dateRange, clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
@@ -40,11 +41,15 @@ const EnhancedQc = () => {
 		onCompleted: ({ exportEnhancedQC }) => {
 			getCsv(exportEnhancedQC)
 			setVisible(false)
+			setCurrencyType('ingested')
+			setCurrencySelection('')
 		}
 	})
 
 	const toggleModal = () => {
 		setVisible(!visible)
+		setCurrencyType('ingested')
+		setCurrencySelection('')
 	}
 	const handleCurrencyType = (e) => {
 		setCurrencyType(e.target.value)
@@ -78,8 +83,9 @@ const EnhancedQc = () => {
 	}
 
 	const getCsv = (flatFile) => {
+		const formattedDate = moment(new Date()).format('YYYY_MM_DD')
 		try {
-			exportCsv(flatFile, 'EnhancedQcExport')
+			exportCsv(flatFile, `${clientName}_EnhancedQc_${formattedDate}`)
 		} catch (e) {
 			error(e.message)
 			console.error(e)
@@ -98,6 +104,10 @@ const EnhancedQc = () => {
 				onOk={onOk}
 				onCancel={toggleModal}
 				confirmLoading={loading}
+				okButtonProps={{
+					disabled:
+						!currencyType || (currencyType === 'other' && !currencySelection)
+				}}
 			>
 				<Header>
 					<Icon />
