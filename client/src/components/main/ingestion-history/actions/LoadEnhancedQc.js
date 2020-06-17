@@ -29,7 +29,6 @@ const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPolling }) => {
 
 	const [loadQc, { loading }] = useMutation(LOAD_ENHANCED_QC_REPORT, {
 		onCompleted: () => {
-			console.log('initial poll')
 			setVisible(false)
 			checkLoadStatus()
 			setPolling(1)
