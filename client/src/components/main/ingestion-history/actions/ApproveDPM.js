@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { store } from 'context/store'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { APPROVE_FILE_LIST } from 'api'
@@ -21,11 +21,12 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ApproveDPM = () => {
+const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
+
 	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,
 		{
@@ -44,14 +45,14 @@ const ApproveDPM = () => {
 		{
 			onCompleted: () => {
 				showSuccess()
+				refetchIngestionHistory()
 			}
 		}
 	)
 
-	const loadFileList = () => {
+	useEffect(() => {
 		loadFiles()
-		toggleModal()
-	}
+	}, [ingestionHotelList])
 
 	const toggleModal = () => {
 		setVisible(!visible)
@@ -76,7 +77,7 @@ const ApproveDPM = () => {
 	const showSuccess = () => {
 		Modal.success({
 			title: 'Success',
-			content: 'Files successfully approved',
+			content: 'File(s) successfully approved',
 			okText: 'Close',
 			onOk: toggleModal()
 		})
@@ -91,8 +92,8 @@ const ApproveDPM = () => {
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
-				Approve files for DPM
+			<Button icon={<DownloadOutlined />} onClick={toggleModal} danger>
+				Approve files for DPM {data && `(${data.approveFileList.length})`}
 			</Button>
 			<Modal
 				visible={visible}

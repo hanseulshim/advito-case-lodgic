@@ -1,0 +1,23 @@
+.unmatched-column-left {
+	border-left: 1px solid #dee1df;
+}
+
+.unmatched-column-right {
+	border-right: 1px solid #dee1df;
+	border-left: 1px solid #dee1df;
+}
+
+th.ant-table-cell.unmatched-column-left {
+	border: none;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+th.ant-table-cell.unmatched-column-right {
+	border: none;
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+.ant-table-cell.unmatched-header {
+	padding-bottom: 0;
+}

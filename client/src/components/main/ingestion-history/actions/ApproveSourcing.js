@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { useLazyQuery, useMutation } from '@apollo/client'
 import { APPROVE_FILE_LIST } from 'api'
 import { APPROVE_FILES } from 'api'
@@ -21,7 +21,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const ApproveSourcing = () => {
+const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
@@ -44,14 +44,14 @@ const ApproveSourcing = () => {
 		{
 			onCompleted: () => {
 				showSuccess()
+				refetchIngestionHistory()
 			}
 		}
 	)
 
-	const loadFileList = () => {
+	useEffect(() => {
 		loadFiles()
-		toggleModal()
-	}
+	}, [ingestionHotelList])
 
 	const toggleModal = () => {
 		setVisible(!visible)
@@ -76,7 +76,7 @@ const ApproveSourcing = () => {
 	const showSuccess = () => {
 		Modal.success({
 			title: 'Success',
-			content: 'Files successfully approved',
+			content: 'File(s) successfully approved',
 			okText: 'Close',
 			onOk: toggleModal()
 		})
@@ -91,8 +91,8 @@ const ApproveSourcing = () => {
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={loadFileList} danger>
-				Approve files for Sourcing
+			<Button icon={<DownloadOutlined />} onClick={toggleModal} danger>
+				Approve files for Sourcing {data && `(${data.approveFileList.length})`}
 			</Button>
 			<Modal
 				visible={visible}

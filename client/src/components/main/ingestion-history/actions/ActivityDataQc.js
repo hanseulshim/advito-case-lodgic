@@ -6,6 +6,7 @@ import { EXPORT_ACTIVITY_DATA_QC } from 'api'
 import { Button, Modal, Radio } from 'antd'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { exportCsv } from '../helper'
+import moment from 'moment'
 
 const StyledRadio = styled(Radio)`
 	display: block;
@@ -27,18 +28,20 @@ const Icon = styled(ExclamationCircleOutlined)`
 const ActivityDataQc = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientId, dateRange } = state
+	const { clientId, dateRange, clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
 		onCompleted: ({ exportActivityDataQc }) => {
 			getCsv(exportActivityDataQc)
 			setVisible(false)
+			setCurrencyType('')
 		}
 	})
 
 	const toggleModal = () => {
 		setVisible(!visible)
+		setCurrencyType('')
 	}
 	const handleCurrencyType = (e) => {
 		setCurrencyType(e.target.value)
@@ -68,8 +71,9 @@ const ActivityDataQc = () => {
 	}
 
 	const getCsv = (flatFile) => {
+		const formattedDate = moment(new Date()).format('YYYY_MM_DD')
 		try {
-			exportCsv(flatFile, 'ActivityDataQcExport')
+			exportCsv(flatFile, `${clientName}_ActivityDataQc_${formattedDate}`)
 		} catch (e) {
 			error(e.message)
 			console.error(e)
