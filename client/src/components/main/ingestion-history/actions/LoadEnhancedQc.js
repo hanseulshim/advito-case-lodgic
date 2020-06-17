@@ -15,63 +15,30 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
+const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPolling }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [year, setYear] = useState(null)
 	const [month, setMonth] = useState(null)
-
-	const [loadQc, { loading }] = useMutation(LOAD_ENHANCED_QC_REPORT, {
-		onCompleted: () => {
-			setVisible(false)
-			setSelectedRecords([])
-			clearInputs()
-			showSuccess()
-			refetch()
-		}
-	})
-
+	const jobIngestionIds = selectedRecords.map((record) => record.jobIngestionId)
 	const type = selectedRecords.length
 		? selectedRecords[0].type.toLowerCase()
 		: null
 
+	const [loadQc, { loading }] = useMutation(LOAD_ENHANCED_QC_REPORT, {
+		onCompleted: () => {
+			console.log('initial poll')
+			setVisible(false)
+			checkLoadStatus()
+			setPolling(1)
+		}
+	})
+
 	const toggleModal = () => {
 		setVisible(!visible)
-	}
-
-	const onOk = async () => {
-		const jobIngestionIds = selectedRecords.map(
-			(record) => record.jobIngestionId
-		)
-		const equalTypes = selectedRecords.every(
-			(obj) => obj.type === selectedRecords[0].type
-		)
-		if (!equalTypes) {
-			showError(
-				'You must select files for DPM or Sourcing. You cannot complete the Load action for both at the same time'
-			)
-			toggleModal()
-			clearInputs()
-		} else {
-			try {
-				await loadQc({
-					variables: { jobIngestionIds, type, year, month }
-				})
-			} catch (e) {
-				showError(e.message)
-			}
-		}
-	}
-
-	const showSuccess = () => {
-		Modal.success({
-			title: 'Success',
-			content: 'File(s) successfully loaded.',
-			okText: 'Close',
-			onOk: toggleModal()
-		})
+		clearInputs()
 	}
 
 	const showError = (error) => {
@@ -84,6 +51,26 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const clearInputs = () => {
 		setYear(null)
 		setMonth(null)
+	}
+
+	const onOk = async () => {
+		const equalTypes = selectedRecords.every(
+			(obj) => obj.type === selectedRecords[0].type
+		)
+		if (!equalTypes) {
+			showError(
+				'You must select files for DPM or Sourcing. You cannot complete the Load action for both at the same time'
+			)
+			toggleModal()
+		} else {
+			try {
+				await loadQc({
+					variables: { jobIngestionIds, type, year, month }
+				})
+			} catch (e) {
+				showError(e.message)
+			}
+		}
 	}
 
 	return (
