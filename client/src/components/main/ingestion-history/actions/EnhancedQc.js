@@ -41,11 +41,15 @@ const EnhancedQc = () => {
 		onCompleted: ({ exportEnhancedQC }) => {
 			getCsv(exportEnhancedQC)
 			setVisible(false)
+			setCurrencyType('ingested')
+			setCurrencySelection('')
 		}
 	})
 
 	const toggleModal = () => {
 		setVisible(!visible)
+		setCurrencyType('ingested')
+		setCurrencySelection('')
 	}
 	const handleCurrencyType = (e) => {
 		setCurrencyType(e.target.value)
@@ -100,6 +104,10 @@ const EnhancedQc = () => {
 				onOk={onOk}
 				onCancel={toggleModal}
 				confirmLoading={loading}
+				okButtonProps={{
+					disabled:
+						!currencyType || (currencyType === 'other' && !currencySelection)
+				}}
 			>
 				<Header>
 					<Icon />

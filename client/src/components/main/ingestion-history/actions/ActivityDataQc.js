@@ -35,11 +35,13 @@ const ActivityDataQc = () => {
 		onCompleted: ({ exportActivityDataQc }) => {
 			getCsv(exportActivityDataQc)
 			setVisible(false)
+			setCurrencyType('')
 		}
 	})
 
 	const toggleModal = () => {
 		setVisible(!visible)
+		setCurrencyType('')
 	}
 	const handleCurrencyType = (e) => {
 		setCurrencyType(e.target.value)

@@ -24,15 +24,20 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 			setVisible(false)
 			showSuccess()
 			refetch()
+			setYear(null)
+			setMonth(null)
 		}
 	})
 	const [visible, setVisible] = useState(false)
 	const [year, setYear] = useState(null)
 	const [month, setMonth] = useState(null)
-	const type = selectedRecords.length > 0 ? selectedRecords[0].type : null
+	const type =
+		selectedRecords.length > 0 ? selectedRecords[0].type.toLowerCase() : null
 
 	const toggleModal = () => {
 		setVisible(!visible)
+		setYear(null)
+		setMonth(null)
 	}
 
 	const onOk = async () => {
@@ -58,7 +63,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 				})
 			} catch (e) {
 				error(e.message)
-				console.error('Error in backout ', e)
+				console.error('Error in loading for enhanced QC ', e)
 			}
 		}
 	}
@@ -137,11 +142,13 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 				onOk={onOk}
 				onCancel={toggleModal}
 				confirmLoading={loading}
+				okButtonProps={{ disabled: !year || (type === 'dpm' && !month) }}
 			>
 				<>
 					<p>
-						You are about to load {type} data for {clientName}, confirming the
-						activity data has been tested and approved by consultants.
+						You are about to load {type === 'dpm' ? 'DPM' : 'Sourcing'} data for{' '}
+						{clientName}, confirming the activity data has been tested and
+						approved by consultants.
 					</p>
 					<h3>NOT REVERSIBLE</h3>
 					<p> The following files will be processed:</p>
@@ -155,6 +162,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 							onChange={handleYearChange}
 							style={{ width: 225 }}
 							placeholder={'Select year'}
+							value={year}
 						>
 							{getYears()
 								.reverse()
@@ -166,11 +174,12 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 									)
 								})}
 						</Select>
-						{type === 'DPM' && (
+						{type === 'dpm' && (
 							<Select
 								onChange={handleMonthChange}
 								style={{ width: 225 }}
 								placeholder={'Select month'}
+								value={month}
 							>
 								{months.map((month, i) => {
 									return (
