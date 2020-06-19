@@ -114,7 +114,7 @@ export const columns = [
 				title: '%',
 				align: 'center',
 				className: 'unmatched-column-right',
-				dataIndex: 'unmatchedSpendPercent',
+				dataIndex: 'unmatchedCountPercent',
 				width: 150,
 				render: (num) => formatPercent(num)
 			}
