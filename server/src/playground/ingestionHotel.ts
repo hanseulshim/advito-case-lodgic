@@ -35,6 +35,7 @@ export default {
           conversionDate
           countRows
           unmatchedCount
+          unmatchedCountPercent
           unmatchedSpendPercent
           isDpm
           statusDpm
