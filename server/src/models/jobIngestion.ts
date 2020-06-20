@@ -41,8 +41,25 @@ export class StageActivityHotelCandidate extends Model {
 export class HotelProjectProperty extends Model {
 	id: number
 	hotelProjectId: number
+	hotelPropertyId: number
+	agencyJobIngestionId: number
+	ccJobIngestionId: number
+	supplierJobIngestionId: number
+	agencyDateCurrencyConversion: string
+	agencyRoomNights: number
+	agencySpendUsd: number
+	ccDateCurrencyConversion: string
+	ccRoomNights: number
+	ccSpendUsd: number
+	supplierDateCurrencyConversion: string
+	supplierRoomNights: number
+	supplierSpendUsd: number
 
 	static tableName = 'hotel_project_property'
+}
+
+export class HotelProjectPropertyDay extends Model {
+	static tableName = 'hotel_project_property_day'
 }
 
 export class HotelProject extends Model {
