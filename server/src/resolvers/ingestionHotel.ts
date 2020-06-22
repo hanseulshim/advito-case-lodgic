@@ -293,6 +293,10 @@ export default {
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
+			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
+			await JobIngestion.query()
+				.patch({ jobStatus: 'backout' })
+				.findById(jobIngestionId)
 			const params = {
 				FunctionName:
 					process.env.ENVIRONMENT === 'PRODUCTION'
@@ -302,7 +306,8 @@ export default {
 						: 'advito-ingestion-production-backout',
 				InvocationType: 'Event',
 				Payload: JSON.stringify({
-					jobIngestionId
+					jobIngestionId,
+					jobStatus: jobIngestion.jobStatus
 				})
 			}
 			lambda.invoke(params, function (err) {
