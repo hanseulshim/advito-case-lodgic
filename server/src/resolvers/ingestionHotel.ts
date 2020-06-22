@@ -2,13 +2,9 @@ import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
 import {
-	HotelProject,
-	HotelProjectProperty,
 	JobIngestion,
 	JobIngestionHotel,
-	JobIngestionHotelView,
-	StageActivityHotel,
-	StageActivityHotelCandidate
+	JobIngestionHotelView
 } from '../models'
 import { JobIngestionHotelType } from '../types'
 
@@ -181,10 +177,6 @@ export default {
 					throw new ApolloError('DPM types must have a valid month', '500')
 				}
 				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
-				// const status =
-				// 	type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
-				// const dateStatus =
-				// 	type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
 				const otherProperty =
 					type.toLowerCase() === 'dpm' ? 'isSourcing' : 'isDpm'
 				const otherStatus =
@@ -237,29 +229,6 @@ export default {
 						}
 					})
 				})
-				// await Promise.all(
-				// 	jobIngestionHotels.map((hotel) =>
-				// 		advito.raw(
-				// 			`select * from load_for_sourcing_dpm(${hotel.jobIngestionId}, ${
-				// 				hotel.clientId
-				// 			}, ${year}, ${month ? month : 'NULL'}, '${type.toLowerCase()}')`
-				// 		)
-				// 	)
-				// )
-				// await Promise.all([
-				// 	JobIngestionHotel.query()
-				// 		.patch({
-				// 			[property]: true,
-				// 			[status]: 'Loaded',
-				// 			[dateStatus]: new Date()
-				// 		})
-				// 		.whereIn('jobIngestionId', jobIngestionIds),
-				// 	JobIngestion.query()
-				// 		.patch({
-				// 			jobStatus: 'loaded'
-				// 		})
-				// 		.whereIn('id', jobIngestionIds)
-				// ])
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message, '500')
@@ -324,65 +293,23 @@ export default {
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
-			if (
-				!jobIngestion ||
-				!jobIngestion.isComplete ||
-				!statuses.includes(jobIngestion.jobStatus)
-			) {
-				throw new ApolloError('Job Ingestion Hotel not found', '500')
-			} else if (!statuses.includes(jobIngestion.jobStatus)) {
-				throw new ApolloError(
-					'Job Ingestion does not have status of complete',
-					'500'
-				)
-			} else if (!statuses.includes(jobIngestion.jobStatus)) {
-				throw new ApolloError(
-					'Job Ingestion does not have one of the following status: processed, loaded, approved.',
-					'500'
-				)
-			}
-
-			const hotelProjectPropertyList = await HotelProjectProperty.query()
-				.distinct('hotelProjectId')
-				.where('agencyJobIngestionId', jobIngestion.id)
-				.orWhere('ccJobIngestionId', jobIngestion.id)
-				.orWhere('supplierJobIngestionId', jobIngestion.id)
-			const stageActivityHotelList = await StageActivityHotel.query()
-				.where('jobIngestionId', jobIngestion.id)
-				.select('id')
-
-			await Promise.all([
-				HotelProjectProperty.query()
-					.delete()
-					.where('agencyJobIngestionId', jobIngestion.id)
-					.orWhere('ccJobIngestionId', jobIngestion.id)
-					.orWhere('supplierJobIngestionId', jobIngestion.id),
-				StageActivityHotelCandidate.query()
-					.delete()
-					.whereIn(
-						'stageActivityHotelId',
-						stageActivityHotelList.map((v) => v.id)
-					)
-			])
-
-			await Promise.all([
-				StageActivityHotel.query()
-					.delete()
-					.where('jobIngestionId', jobIngestion.id),
-				JobIngestionHotel.query()
-					.delete()
-					.where('jobIngestionId', jobIngestion.id),
-				HotelProject.query()
-					.delete()
-					.whereIn(
-						'id',
-						hotelProjectPropertyList.map((v) => v.hotelProjectId)
-					),
-				JobIngestion.query().patchAndFetchById(jobIngestion.id, {
-					jobStatus: 'backout'
+			const params = {
+				FunctionName:
+					process.env.ENVIRONMENT === 'PRODUCTION'
+						? 'advito-ingestion-dev-backout'
+						: process.env.ENVIRONMENT === 'STAGING'
+						? 'advito-ingestion-staging-backout'
+						: 'advito-ingestion-production-backout',
+				InvocationType: 'Event',
+				Payload: JSON.stringify({
+					jobIngestionId
 				})
-			])
+			}
+			lambda.invoke(params, function (err) {
+				if (err) {
+					throw Error(err.message)
+				}
+			})
 			return true
 		},
 		exportActivityDataQc: async (

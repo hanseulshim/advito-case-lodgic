@@ -61,6 +61,10 @@ export class JobIngestionHotelView extends Model {
 			: 0
 	}
 
+	unmatchedCountPercent(): number {
+		return +this.countRows ? +this.unmatchedCount / +this.countRows : 0
+	}
+
 	convertedAbrUsd(): number {
 		return +this.roomNightsTotal
 			? (+this.unmatchedSpendUsd + +this.matchedSpendUsd) /
