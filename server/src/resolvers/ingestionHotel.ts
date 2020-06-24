@@ -1,7 +1,13 @@
 import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
-import { JobIngestion, JobIngestionHotelView } from '../models'
+import {
+	JobIngestion,
+	JobIngestionHotelView,
+	StageActivityHotel,
+	ActivityHotel,
+	StageActivityHotelCandidate
+} from '../models'
 import { JobIngestionHotelType } from '../types'
 
 const lambda = new AWS.Lambda({
@@ -344,14 +350,13 @@ export default {
 			const params = {
 				FunctionName:
 					process.env.ENVIRONMENT === 'PRODUCTION'
-						? 'advito-ingestion-dev-backout'
+						? 'advito-ingestion-production-backout'
 						: process.env.ENVIRONMENT === 'STAGING'
 						? 'advito-ingestion-staging-backout'
-						: 'advito-ingestion-production-backout',
+						: 'advito-ingestion-dev-backout',
 				InvocationType: 'Event',
 				Payload: JSON.stringify({
-					jobIngestionId,
-					jobStatus: jobIngestion.jobStatus
+					jobIngestionId
 				})
 			}
 			lambda.invoke(params, function (err) {
@@ -359,6 +364,24 @@ export default {
 					throw Error(err.message)
 				}
 			})
+
+			const stageActivityHotelList = await StageActivityHotel.query()
+				.where('jobIngestionId', jobIngestion.id)
+				.select('id')
+			const stageActivityHotelIds = stageActivityHotelList.map((v) => v.id)
+
+			await Promise.all([
+				ActivityHotel.query()
+					.delete()
+					.whereIn('stageId', stageActivityHotelIds),
+				StageActivityHotelCandidate.query()
+					.delete()
+					.whereIn('stageActivityHotelId', stageActivityHotelIds)
+			])
+			await StageActivityHotel.query()
+				.delete()
+				.where('jobIngestionId', jobIngestion.id)
+
 			return true
 		},
 		exportActivityDataQc: async (
