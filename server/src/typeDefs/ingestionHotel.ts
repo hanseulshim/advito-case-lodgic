@@ -51,6 +51,12 @@ extend type Query {
 		jobIngestionIds: [Int]!
 		type: String!
 	): Boolean @auth
+	checkApproveFiles(
+		clientId: Int!
+		startDate: String!
+		endDate: String!
+		type: String!
+	): Boolean @auth
 }
 
 extend type Mutation {

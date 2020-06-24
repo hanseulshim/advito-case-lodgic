@@ -54,6 +54,12 @@ export default {
       # )
 
       # checkLoadEnhancedQcReport(jobIngestionIds: [18823, 18824, 18826], type: "sourcing")
+      # checkApproveFiles(
+      #   clientId: 348
+      #   startDate: "2020-01-01"
+      #   endDate: "2020-12-31"
+      #   type: "sourcing"
+      # )
     }`
 	},
 	Mutation: {
