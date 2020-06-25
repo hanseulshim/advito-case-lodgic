@@ -264,28 +264,27 @@ export default {
 						'500'
 					)
 				}
-				jobIngestionHotels.forEach((hotel) => {
-					const params = {
-						FunctionName:
-							process.env.ENVIRONMENT === 'PRODUCTION'
-								? 'advito-ingestion-production-load-enhanced-qc'
-								: process.env.ENVIRONMENT === 'STAGING'
-								? 'advito-ingestion-staging-load-enhanced-qc'
-								: 'advito-ingestion-dev-load-enhanced-qc',
-						InvocationType: 'Event',
-						Payload: JSON.stringify({
-							jobIngestionId: hotel.jobIngestionId,
-							clientId: hotel.clientId,
-							year,
-							month: month ? month : 'NULL',
-							type: type.toLowerCase()
-						})
-					}
-					lambda.invoke(params, function (err) {
-						if (err) {
-							throw Error(err.message)
-						}
+				const clientId = jobIngestionHotels[0].clientId
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-load-enhanced-qc'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-load-enhanced-qc'
+							: 'advito-ingestion-dev-load-enhanced-qc',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						jobIngestionIds: jobIngestionIds,
+						clientId: clientId,
+						year,
+						month: month ? month : 'NULL',
+						type: type.toLowerCase()
 					})
+				}
+				lambda.invoke(params, function (err) {
+					if (err) {
+						throw Error(err.message)
+					}
 				})
 				return true
 			} catch (e) {
