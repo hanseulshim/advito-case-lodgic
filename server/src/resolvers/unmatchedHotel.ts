@@ -18,6 +18,8 @@ const getOrderBy = (sortType: string): string => {
 	return `${orderBy} ${sortOrder}`
 }
 
+const statuses = ['processed', 'loaded', 'approved']
+
 export default {
 	Query: {
 		unmatchedHotelList: async (
@@ -48,6 +50,7 @@ export default {
 				.andWhere('templateCategory', templateCategory)
 				.andWhere('sourceName', sourceName)
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+				.whereIn('jobStatus', statuses)
 
 			return {
 				recordCount: +count,
@@ -61,6 +64,7 @@ export default {
 					.andWhere('templateCategory', templateCategory)
 					.andWhere('sourceName', sourceName)
 					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+					.whereIn('jobStatus', statuses)
 					.offset(OFFSET)
 					.limit(LIMIT)
 					.orderByRaw(getOrderBy(sortType))
@@ -93,6 +97,7 @@ export default {
 							.andWhere('templateCategory', templateCategory)
 							.andWhere('sourceName', sourceName)
 							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+							.whereIn('jobStatus', statuses)
 							.orderByRaw(getOrderBy(sortType))
 							.limit(2)
 					: await StageActivityHotelView.query()
@@ -105,6 +110,7 @@ export default {
 							.andWhere('templateCategory', templateCategory)
 							.andWhere('sourceName', sourceName)
 							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+							.whereIn('jobStatus', statuses)
 							.orderByRaw(getOrderBy(sortType))
 							.offset(currPosition - 1)
 							.limit(3)
@@ -120,6 +126,7 @@ export default {
 				.andWhere('templateCategory', templateCategory)
 				.andWhere('sourceName', sourceName)
 				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
+				.whereIn('jobStatus', statuses)
 
 			const index = list.length === 0 ? null : list.length === 2 ? 0 : 1
 			const data = index === null ? null : list[index]
@@ -144,6 +151,7 @@ export default {
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
 				.orderBy('templateCategory')
+				.whereIn('jobStatus', statuses)
 			return result.map((r) => r.templateCategory)
 		},
 		sourceNameList: async (
@@ -158,6 +166,7 @@ export default {
 				.andWhere('dataEndDate', '<=', endDate)
 				.andWhere('templateCategory', templateCategory)
 				.orderBy('sourceName')
+				.whereIn('jobStatus', statuses)
 			return result.map((r) => r.sourceName)
 		},
 		unmatchedHotelConfidenceList: async (
