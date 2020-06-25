@@ -207,6 +207,9 @@ export default {
 						'500'
 					)
 				}
+				await JobIngestionHotel.query()
+					.patch({ ingestionNote: '' })
+					.whereIn('jobInestionId', jobIngestionIds)
 				const clientId = jobIngestionHotels[0].clientId
 				const params = {
 					FunctionName:
