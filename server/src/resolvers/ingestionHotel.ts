@@ -217,13 +217,11 @@ export default {
 							: 'advito-ingestion-dev-load-enhanced-qc',
 					InvocationType: 'Event',
 					Payload: JSON.stringify({
-						jobIngestionHotel: {
-							jobIngestionIds: jobIngestionIds,
-							clientId: clientId,
-							year,
-							month: month ? month : 'NULL',
-							type: type.toLowerCase()
-						}
+						jobIngestionIds: jobIngestionIds,
+						clientId: clientId,
+						year,
+						month: month ? month : 'NULL',
+						type: type.toLowerCase()
 					})
 				}
 				lambda.invoke(params, function (err) {
