@@ -1,13 +1,7 @@
 import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
-import {
-	JobIngestion,
-	JobIngestionHotelView,
-	StageActivityHotel,
-	ActivityHotel,
-	StageActivityHotelCandidate
-} from '../models'
+import { JobIngestion, JobIngestionHotelView } from '../models'
 import { JobIngestionHotelType } from '../types'
 
 const lambda = new AWS.Lambda({
@@ -212,6 +206,17 @@ export default {
 			} catch (e) {
 				throw new ApolloError(e.message, '500')
 			}
+		},
+		checkBackout: async (_: null, { jobIngestionId }): Promise<boolean> => {
+			try {
+				const job = await JobIngestion.query().findById(jobIngestionId)
+				if (!job) {
+					throw new ApolloError('Job Ingestion not found', '500')
+				}
+				return job.jobStatus === 'backout'
+			} catch (e) {
+				throw new ApolloError(e)
+			}
 		}
 	},
 	Mutation: {
@@ -342,46 +347,24 @@ export default {
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
-			await JobIngestion.query()
-				.patch({ jobStatus: 'backout' })
-				.findById(jobIngestionId)
-			const params = {
-				FunctionName:
-					process.env.ENVIRONMENT === 'PRODUCTION'
-						? 'advito-ingestion-production-backout'
-						: process.env.ENVIRONMENT === 'STAGING'
-						? 'advito-ingestion-staging-backout'
-						: 'advito-ingestion-dev-backout',
-				InvocationType: 'Event',
-				Payload: JSON.stringify({
-					jobIngestionId
-				})
-			}
-			lambda.invoke(params, function (err) {
-				if (err) {
-					throw Error(err.message)
+			try {
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-backout'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-backout'
+							: 'advito-ingestion-dev-backout',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						jobIngestionId
+					})
 				}
-			})
-
-			const stageActivityHotelList = await StageActivityHotel.query()
-				.where('jobIngestionId', jobIngestion.id)
-				.select('id')
-			const stageActivityHotelIds = stageActivityHotelList.map((v) => v.id)
-
-			await Promise.all([
-				ActivityHotel.query()
-					.delete()
-					.whereIn('stageId', stageActivityHotelIds),
-				StageActivityHotelCandidate.query()
-					.delete()
-					.whereIn('stageActivityHotelId', stageActivityHotelIds)
-			])
-			await StageActivityHotel.query()
-				.delete()
-				.where('jobIngestionId', jobIngestion.id)
-
-			return true
+				await lambda.invoke(params).promise()
+				return true
+			} catch (e) {
+				throw new ApolloError(e, '500')
+			}
 		},
 		exportActivityDataQc: async (
 			_: null,

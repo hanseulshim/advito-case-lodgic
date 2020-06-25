@@ -57,6 +57,7 @@ extend type Query {
 		endDate: String!
 		type: String!
 	): Boolean @auth
+	checkBackout(jobIngestionId: Int!): Boolean @auth
 }
 
 extend type Mutation {
