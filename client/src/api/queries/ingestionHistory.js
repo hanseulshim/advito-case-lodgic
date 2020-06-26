@@ -66,3 +66,9 @@ export const CHECK_LOAD_ENHANCED_QC_REPORT = gql`
 		checkLoadEnhancedQcReport(jobIngestionIds: $jobIngestionIds, type: $type)
 	}
 `
+
+export const CHECK_BACKOUT = gql`
+	query checkBackout($jobIngestionId: Int!) {
+		checkBackout(jobIngestionId: $jobIngestionId)
+	}
+`
