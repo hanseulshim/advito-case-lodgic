@@ -1,7 +1,8 @@
 import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
-import { useMutation } from '@apollo/client'
-import { LOAD_ENHANCED_QC_REPORT } from 'api'
+import { useMutation, useQuery } from '@apollo/client'
+import { SpinLoader } from 'components/common/Loader'
+import { LOAD_ENHANCED_QC_REPORT, CHECK_LOAD_ENHANCED_QC_REPORT } from 'api'
 import { Button, Modal, Select } from 'antd'
 import { ExclamationCircleOutlined } from '@ant-design/icons'
 import styled from 'styled-components'
@@ -15,12 +16,45 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPollCount }) => {
+// DUMB COMPONENT TO RENDER WHILE POLLING
+const LoadEnhancedQcPolling = ({
+	jobIngestionIds,
+	type,
+	setLoadPolling,
+	setSelectedRecords,
+	refetch,
+	showSuccess
+}) => {
+	const { data } = useQuery(CHECK_LOAD_ENHANCED_QC_REPORT, {
+		variables: { jobIngestionIds, type },
+		pollInterval: 3000
+	})
+
+	if (data && data.checkLoadEnhancedQcReport) {
+		setLoadPolling(false)
+		showSuccess()
+		refetch()
+		setSelectedRecords([])
+	}
+	return (
+		<Modal
+			visible={true}
+			footer={null}
+			closable={false}
+			title={'Loading for Enhanced QC'}
+		>
+			<SpinLoader />
+		</Modal>
+	)
+}
+
+const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [year, setYear] = useState(null)
+	const [loadPolling, setLoadPolling] = useState(false)
 	const [month, setMonth] = useState(null)
 	const jobIngestionIds = selectedRecords.map((record) => record.jobIngestionId)
 	const type = selectedRecords.length
@@ -29,9 +63,11 @@ const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPollCount }) => {
 
 	const [loadQc, { loading }] = useMutation(LOAD_ENHANCED_QC_REPORT, {
 		onCompleted: () => {
-			setVisible(false)
-			checkLoadStatus()
-			setPollCount(1)
+			toggleModal()
+			setLoadPolling(true)
+		},
+		onError: (e) => {
+			showError(e.message)
 		}
 	})
 
@@ -44,6 +80,15 @@ const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPollCount }) => {
 		Modal.error({
 			title: 'Error in Loading',
 			content: error
+		})
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'File(s) successfully loaded for enhanced QC',
+			okText: 'Close',
+			onOk: toggleModal()
 		})
 	}
 
@@ -149,6 +194,16 @@ const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPollCount }) => {
 					</div>
 				</>
 			</Modal>
+			{loadPolling && (
+				<LoadEnhancedQcPolling
+					jobIngestionIds={jobIngestionIds}
+					type={type}
+					setLoadPolling={setLoadPolling}
+					refetch={refetch}
+					setSelectedRecords={setSelectedRecords}
+					showSuccess={showSuccess}
+				/>
+			)}
 		</>
 	)
 }

@@ -51,6 +51,9 @@ const Backout = ({ record, refetch }) => {
 		onCompleted: () => {
 			setVisible(false)
 			setPollingBackout(true)
+		},
+		onError: (e) => {
+			error(e.message)
 		}
 	})
 	const [visible, setVisible] = useState(false)

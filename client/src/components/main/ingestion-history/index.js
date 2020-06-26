@@ -1,10 +1,10 @@
 import React, { useState, useContext } from 'react'
 import styled from 'styled-components'
-import { useQuery, useLazyQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client'
 import { store } from 'context/store'
-import { INGESTION_HOTEL_LIST, CHECK_LOAD_ENHANCED_QC_REPORT } from 'api'
+import { INGESTION_HOTEL_LIST } from 'api'
 import { columns } from './columns'
-import { Table, Modal } from 'antd'
+import { Table } from 'antd'
 import { SpinLoader } from 'components/common/Loader'
 import LoadActions from './actions/LoadActions'
 import Backout from './actions/Backout'
@@ -33,13 +33,6 @@ const IngestionHistory = () => {
 	const { clientId, dateRange } = state
 	const [pageNumber, setPageNumber] = useState(1)
 	const [selectedRecords, setSelectedRecords] = useState([])
-	const [pollCount, setPollCount] = useState(0)
-	const jobIngestionIds = selectedRecords.length
-		? selectedRecords.map((record) => record.jobIngestionId)
-		: []
-	const type = selectedRecords.length
-		? selectedRecords[0].type.toLowerCase()
-		: null
 
 	const { loading, error, data, refetch } = useQuery(INGESTION_HOTEL_LIST, {
 		variables: {
@@ -51,48 +44,7 @@ const IngestionHistory = () => {
 		fetchPolicy: 'network-only'
 	})
 
-	const [
-		checkLoadStatus,
-		{ data: loadStatus, stopPolling, called, startPolling }
-	] = useLazyQuery(CHECK_LOAD_ENHANCED_QC_REPORT, {
-		notifyOnNetworkStatusChange: true,
-		variables: {
-			jobIngestionIds,
-			// Easter Egg for the lads
-			type: type || 'swag'
-		},
-		onError: (e) => {
-			if (pollCount > 0) {
-				erasePoll()
-				Modal.error({
-					title: 'Error in Loading For Enhanced QC Report',
-					content: e.message
-				})
-			}
-		},
-		fetchPolicy: 'network-only'
-	})
-
 	const onPageChange = (e) => setPageNumber(e)
-
-	const erasePoll = () => {
-		setPollCount(0)
-		stopPolling()
-		setSelectedRecords([])
-		refetch()
-	}
-
-	if (called && loadStatus && pollCount === 1) {
-		startPolling(3000)
-		setPollCount(pollCount + 1)
-	} else if (
-		loadStatus &&
-		loadStatus.checkLoadEnhancedQcReport &&
-		selectedRecords.length > 0 &&
-		pollCount > 0
-	) {
-		erasePoll()
-	}
 
 	if (loading) return <SpinLoader />
 	if (error) return <ErrorMessage error={error} />
@@ -151,16 +103,7 @@ const IngestionHistory = () => {
 				selectedRecords={selectedRecords}
 				setSelectedRecords={setSelectedRecords}
 				refetch={refetch}
-				checkLoadStatus={checkLoadStatus}
-				setPollCount={setPollCount}
 			/>
-			<Modal visible={pollCount > 0} closable={false} footer={null}>
-				<p>
-					We are currently loading your selected files. This can take up to a
-					minute...
-				</p>
-				<SpinLoader />
-			</Modal>
 		</div>
 	)
 }
