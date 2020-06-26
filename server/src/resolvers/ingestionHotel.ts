@@ -1,7 +1,11 @@
 import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
-import { JobIngestion, JobIngestionHotelView } from '../models'
+import {
+	JobIngestion,
+	JobIngestionHotelView,
+	JobIngestionHotel
+} from '../models'
 import { JobIngestionHotelType } from '../types'
 
 const lambda = new AWS.Lambda({
