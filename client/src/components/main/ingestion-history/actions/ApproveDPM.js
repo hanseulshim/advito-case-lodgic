@@ -1,8 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { store } from 'context/store'
-import { useLazyQuery, useMutation } from '@apollo/client'
-import { APPROVE_FILE_LIST } from 'api'
-import { APPROVE_FILES } from 'api'
+import { useLazyQuery, useQuery, useMutation } from '@apollo/client'
+import { APPROVE_FILE_LIST, APPROVE_FILES, CHECK_APPROVE_FILES } from 'api'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
 import styled from 'styled-components'
@@ -21,11 +20,41 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
+// DUMB COMPONENT TO RENDER WHILE POLLING
+const ApproveFileListPolling = ({
+	variables,
+	setPolling,
+	refetch,
+	showSuccess
+}) => {
+	const { data } = useQuery(CHECK_APPROVE_FILES, {
+		variables: { ...variables },
+		pollInterval: 3000
+	})
+
+	if (data && data.checkApproveFiles) {
+		setPolling(false)
+		showSuccess()
+		refetch()
+	}
+	return (
+		<Modal
+			visible={true}
+			footer={null}
+			closable={false}
+			title={'Approving files...'}
+		>
+			<SpinLoader />
+		</Modal>
+	)
+}
+
 const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
+	const [polling, setPolling] = useState(false)
 
 	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,
@@ -44,8 +73,11 @@ const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 		APPROVE_FILES,
 		{
 			onCompleted: () => {
-				showSuccess()
-				refetchIngestionHistory()
+				setPolling(true)
+				toggleModal()
+			},
+			onError: (e) => {
+				showError(e.message)
 			}
 		}
 	)
@@ -70,7 +102,7 @@ const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 			})
 		} catch (e) {
 			showError(e.message)
-			console.error('Error in backout ', e)
+			console.error('Error in approving ', e)
 		}
 	}
 
@@ -78,8 +110,7 @@ const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 		Modal.success({
 			title: 'Success',
 			content: 'File(s) successfully approved',
-			okText: 'Close',
-			onOk: toggleModal()
+			okText: 'Close'
 		})
 	}
 
@@ -135,6 +166,19 @@ const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 						<p>No files available for approving</p>
 					))}
 			</Modal>
+			{polling && (
+				<ApproveFileListPolling
+					variables={{
+						clientId,
+						startDate: dateRange[0],
+						endDate: dateRange[1],
+						type: 'dpm'
+					}}
+					setPolling={setPolling}
+					refetch={refetchIngestionHistory}
+					showSuccess={showSuccess}
+				/>
+			)}
 		</>
 	)
 }
