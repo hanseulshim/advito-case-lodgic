@@ -1,14 +1,7 @@
 import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
 import { parse } from 'json2csv'
-import {
-	JobIngestion,
-	JobIngestionHotelView,
-	StageActivityHotel,
-	ActivityHotel,
-	StageActivityHotelCandidate,
-	JobIngestionHotel
-} from '../models'
+import { JobIngestion, JobIngestionHotelView } from '../models'
 import { JobIngestionHotelType } from '../types'
 
 const lambda = new AWS.Lambda({
@@ -155,6 +148,75 @@ export default {
 			} catch (e) {
 				throw new ApolloError(e.message, '500')
 			}
+		},
+		checkApproveFiles: async (
+			_: null,
+			{ clientId, startDate, endDate, type }
+		): Promise<boolean> => {
+			try {
+				if (type.toLowerCase() === 'swag') return true
+				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
+					throw new ApolloError('Type must be either dpm or sourcing', '500')
+				}
+				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
+				const status =
+					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
+				const statusCol =
+					type.toLowerCase() === 'dpm' ? 'status_dpm' : 'status_sourcing'
+				const jobIngestionHotels = await JobIngestionHotelView.query()
+					.select()
+					.where('clientId', clientId)
+					.andWhere('dataStartDate', '>=', startDate)
+					.andWhere('dataEndDate', '<=', endDate)
+					.andWhere('isComplete', true)
+					.andWhere(property, true)
+					.whereRaw(`LOWER("${statusCol}") = ?`, 'approved')
+					.whereIn('jobStatus', statuses)
+				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
+					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				}
+				if (
+					jobIngestionHotels.some(
+						(hotel) =>
+							typeof hotel.ingestionNote === 'string' &&
+							hotel.ingestionNote.includes('error')
+					) &&
+					jobIngestionHotels.filter(
+						(hotel) =>
+							(typeof hotel.ingestionNote === 'string' &&
+								hotel.ingestionNote.includes('error')) ||
+							(hotel[property] && hotel[status].toLowerCase() === 'approved')
+					).length === jobIngestionHotels.length
+				) {
+					throw new ApolloError(
+						`Failed to approve files for these hotels: ${jobIngestionHotels
+							.filter(
+								(hotel) =>
+									typeof hotel.ingestionNote === 'string' &&
+									hotel.ingestionNote.includes('error')
+							)
+							.map((hotel) => hotel.jobIngestionId)}`,
+						'500'
+					)
+				}
+				return jobIngestionHotels.every(
+					(hotel) =>
+						hotel[property] && hotel[status].toLowerCase() === 'approved'
+				)
+			} catch (e) {
+				throw new ApolloError(e.message, '500')
+			}
+		},
+		checkBackout: async (_: null, { jobIngestionId }): Promise<boolean> => {
+			try {
+				const job = await JobIngestion.query().findById(jobIngestionId)
+				if (!job) {
+					throw new ApolloError('Job Ingestion not found', '500')
+				}
+				return job.jobStatus === 'backout'
+			} catch (e) {
+				throw new ApolloError(e)
+			}
 		}
 	},
 	Mutation: {
@@ -239,21 +301,17 @@ export default {
 		},
 		approveFiles: async (
 			_: null,
-			{ clientId, startDate, endDate, type },
-			{ advito }
+			{ clientId, startDate, endDate, type }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
 					throw new ApolloError('Type must be either dpm or sourcing', '500')
 				}
 				const property = type.toLowerCase() === 'dpm' ? 'isDpm' : 'isSourcing'
-				const status =
-					type.toLowerCase() === 'dpm' ? 'statusDpm' : 'statusSourcing'
 				const statusCol =
 					type.toLowerCase() === 'dpm' ? 'status_dpm' : 'status_sourcing'
-				const dateStatus =
-					type.toLowerCase() === 'dpm' ? 'dateStatusDpm' : 'dateStatusSourcing'
 				const jobIngestionHotels = await JobIngestionHotelView.query()
+					.select()
 					.where('clientId', clientId)
 					.andWhere('dataStartDate', '>=', startDate)
 					.andWhere('dataEndDate', '<=', endDate)
@@ -261,81 +319,55 @@ export default {
 					.andWhere(property, true)
 					.whereRaw(`LOWER("${statusCol}") = ?`, 'loaded')
 					.whereIn('jobStatus', statuses)
-				if (!jobIngestionHotels || jobIngestionHotels.length === 0)
+				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
+				}
 
-				const jobIngestionIds = jobIngestionHotels.map(
-					(job) => job.jobIngestionId
-				)
-				await Promise.all(
-					jobIngestionHotels.map((hotel) =>
-						advito.raw(
-							`select * from approve_for_sourcing_dpm(
-								${hotel.jobIngestionId}, ${hotel.clientId},'${type.toLowerCase()}'
-							)`
-						)
-					)
-				)
-				await Promise.all([
-					JobIngestionHotel.query()
-						.patch({
-							[property]: true,
-							[status]: 'Approved',
-							[dateStatus]: new Date()
+				jobIngestionHotels.forEach((hotel) => {
+					const params = {
+						FunctionName:
+							process.env.ENVIRONMENT === 'PRODUCTION'
+								? 'advito-ingestion-production-approve-file'
+								: process.env.ENVIRONMENT === 'STAGING'
+								? 'advito-ingestion-staging-approve-file'
+								: 'advito-ingestion-dev-approve-file',
+						InvocationType: 'Event',
+						Payload: JSON.stringify({
+							jobIngestionId: hotel.jobIngestionId,
+							clientId: hotel.clientId,
+							type: type.toLowerCase()
 						})
-						.whereIn('jobIngestionId', jobIngestionIds),
-					JobIngestion.query()
-						.patch({
-							jobStatus: 'approved'
-						})
-						.whereIn('id', jobIngestionIds)
-				])
+					}
+					lambda.invoke(params, function (err) {
+						if (err) {
+							throw Error(err.message)
+						}
+					})
+				})
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message, '500')
 			}
 		},
 		backout: async (_: null, { jobIngestionId }): Promise<boolean> => {
-			const jobIngestion = await JobIngestion.query().findById(jobIngestionId)
-			await JobIngestion.query()
-				.patch({ jobStatus: 'backout' })
-				.findById(jobIngestionId)
-			const params = {
-				FunctionName:
-					process.env.ENVIRONMENT === 'PRODUCTION'
-						? 'advito-ingestion-production-backout'
-						: process.env.ENVIRONMENT === 'STAGING'
-						? 'advito-ingestion-staging-backout'
-						: 'advito-ingestion-dev-backout',
-				InvocationType: 'Event',
-				Payload: JSON.stringify({
-					jobIngestionId
-				})
-			}
-			lambda.invoke(params, function (err) {
-				if (err) {
-					throw Error(err.message)
+			try {
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-backout'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-backout'
+							: 'advito-ingestion-dev-backout',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						jobIngestionId
+					})
 				}
-			})
-
-			const stageActivityHotelList = await StageActivityHotel.query()
-				.where('jobIngestionId', jobIngestion.id)
-				.select('id')
-			const stageActivityHotelIds = stageActivityHotelList.map((v) => v.id)
-
-			await Promise.all([
-				ActivityHotel.query()
-					.delete()
-					.whereIn('stageId', stageActivityHotelIds),
-				StageActivityHotelCandidate.query()
-					.delete()
-					.whereIn('stageActivityHotelId', stageActivityHotelIds)
-			])
-			await StageActivityHotel.query()
-				.delete()
-				.where('jobIngestionId', jobIngestion.id)
-
-			return true
+				await lambda.invoke(params).promise()
+				return true
+			} catch (e) {
+				throw new ApolloError(e, '500')
+			}
 		},
 		exportActivityDataQc: async (
 			_: null,
