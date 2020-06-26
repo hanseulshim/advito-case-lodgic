@@ -275,7 +275,7 @@ export default {
 				}
 				await JobIngestionHotel.query()
 					.patch({ ingestionNote: '' })
-					.whereIn('jobInestionId', jobIngestionIds)
+					.whereIn('jobIngestionId', jobIngestionIds)
 				const clientId = jobIngestionHotels[0].clientId
 				const params = {
 					FunctionName:
