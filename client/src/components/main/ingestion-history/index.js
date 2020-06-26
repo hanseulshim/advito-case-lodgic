@@ -152,7 +152,7 @@ const IngestionHistory = () => {
 				setSelectedRecords={setSelectedRecords}
 				refetch={refetch}
 				checkLoadStatus={checkLoadStatus}
-				setPolling={setPollCount}
+				setPollCount={setPollCount}
 			/>
 			<Modal visible={pollCount > 0} closable={false} footer={null}>
 				<p>

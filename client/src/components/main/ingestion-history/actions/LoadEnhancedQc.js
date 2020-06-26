@@ -15,7 +15,7 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
-const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPolling }) => {
+const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPollCount }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
@@ -31,7 +31,7 @@ const LoadEnhancedQc = ({ selectedRecords, checkLoadStatus, setPolling }) => {
 		onCompleted: () => {
 			setVisible(false)
 			checkLoadStatus()
-			setPolling(1)
+			setPollCount(1)
 		}
 	})
 
