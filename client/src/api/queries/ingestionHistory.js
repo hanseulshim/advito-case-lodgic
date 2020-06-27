@@ -32,7 +32,7 @@ export const INGESTION_HOTEL_LIST = gql`
 				conversionDate
 				countRows
 				unmatchedCount
-				unmatchedCountPercent
+				unmatchedSpendPercent
 				isDpm
 				statusDpm
 				dateStatusDpm
