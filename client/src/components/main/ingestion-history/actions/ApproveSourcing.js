@@ -25,9 +25,10 @@ const ApproveFileListPolling = ({
 	variables,
 	setPolling,
 	refetch,
-	showSuccess
+	showSuccess,
+	showError
 }) => {
-	const { data } = useQuery(CHECK_APPROVE_FILES, {
+	const { data, error } = useQuery(CHECK_APPROVE_FILES, {
 		variables: { ...variables },
 		pollInterval: 3000
 	})
@@ -36,6 +37,10 @@ const ApproveFileListPolling = ({
 		setPolling(false)
 		showSuccess()
 		refetch()
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
 	}
 	return (
 		<Modal
@@ -176,6 +181,7 @@ const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 					setPolling={setPolling}
 					refetch={refetchIngestionHistory}
 					showSuccess={showSuccess}
+					showError={showError}
 				/>
 			)}
 		</>

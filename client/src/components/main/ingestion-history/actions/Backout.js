@@ -16,19 +16,24 @@ const Icon = styled(ExclamationCircleOutlined)`
 //DUMB COMPONENT TO RENDER WHILE POLLING
 const BackoutPolling = ({
 	jobIngestionId,
-	setPollingBackout,
+	setPolling,
 	refetch,
-	showSuccess
+	showSuccess,
+	showError
 }) => {
-	const { data } = useQuery(CHECK_BACKOUT, {
+	const { data, error } = useQuery(CHECK_BACKOUT, {
 		variables: { jobIngestionId },
 		pollInterval: 3000
 	})
 
 	if (data && data.checkBackout) {
-		setPollingBackout(false)
+		setPolling(false)
 		showSuccess()
 		refetch()
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
 	}
 	return (
 		<Modal
@@ -46,11 +51,11 @@ const Backout = ({ record, refetch }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName } = state
-	const [isPollingBackout, setPollingBackout] = useState(false)
+	const [polling, setPolling] = useState(false)
 	const [backout, { loading }] = useMutation(BACKOUT, {
 		onCompleted: () => {
 			setVisible(false)
-			setPollingBackout(true)
+			setPolling(true)
 		},
 		onError: (e) => {
 			error(e.message)
@@ -153,12 +158,13 @@ const Backout = ({ record, refetch }) => {
 					</>
 				</div>
 			</Modal>
-			{isPollingBackout && (
+			{polling && (
 				<BackoutPolling
 					jobIngestionId={jobIngestionId}
-					setPollingBackout={setPollingBackout}
+					setPolling={setPolling}
 					refetch={refetch}
 					showSuccess={showSuccess}
+					showError={error}
 				/>
 			)}
 		</>

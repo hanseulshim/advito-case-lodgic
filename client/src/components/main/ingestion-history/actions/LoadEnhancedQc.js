@@ -20,21 +20,28 @@ const Icon = styled(ExclamationCircleOutlined)`
 const LoadEnhancedQcPolling = ({
 	jobIngestionIds,
 	type,
-	setLoadPolling,
+	setPolling,
 	setSelectedRecords,
 	refetch,
-	showSuccess
+	showSuccess,
+	showError
 }) => {
-	const { data } = useQuery(CHECK_LOAD_ENHANCED_QC_REPORT, {
+	const { data, error } = useQuery(CHECK_LOAD_ENHANCED_QC_REPORT, {
 		variables: { jobIngestionIds, type },
 		pollInterval: 3000
 	})
 
 	if (data && data.checkLoadEnhancedQcReport) {
-		setLoadPolling(false)
+		setPolling(false)
 		showSuccess()
 		refetch()
 		setSelectedRecords([])
+		return null
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
+		return null
 	}
 	return (
 		<Modal
@@ -54,7 +61,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [year, setYear] = useState(null)
-	const [loadPolling, setLoadPolling] = useState(false)
+	const [polling, setPolling] = useState(false)
 	const [month, setMonth] = useState(null)
 	const jobIngestionIds = selectedRecords.map((record) => record.jobIngestionId)
 	const type = selectedRecords.length
@@ -64,7 +71,7 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 	const [loadQc, { loading }] = useMutation(LOAD_ENHANCED_QC_REPORT, {
 		onCompleted: () => {
 			toggleModal()
-			setLoadPolling(true)
+			setPolling(true)
 		},
 		onError: (e) => {
 			showError(e.message)
@@ -193,14 +200,15 @@ const LoadEnhancedQc = ({ selectedRecords, setSelectedRecords, refetch }) => {
 					</div>
 				</>
 			</Modal>
-			{loadPolling && (
+			{polling && (
 				<LoadEnhancedQcPolling
 					jobIngestionIds={jobIngestionIds}
 					type={type}
-					setLoadPolling={setLoadPolling}
+					setPolling={setPolling}
 					refetch={refetch}
 					setSelectedRecords={setSelectedRecords}
 					showSuccess={showSuccess}
+					showError={showError}
 				/>
 			)}
 		</>
