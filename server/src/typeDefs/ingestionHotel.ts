@@ -58,6 +58,8 @@ extend type Query {
 		type: String!
 	): Boolean @auth
 	checkBackout(jobIngestionId: Int!): Boolean @auth
+	checkExportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!): String @auth
+	checkExportEnhancedQC(clientId: Int!, dataStartDate: String!, dataEndDate: String!): String @auth
 }
 
 extend type Mutation {
@@ -72,7 +74,7 @@ extend type Mutation {
 		startDate: String!
 		endDate: String!
 		type: String!): Boolean @auth
-	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
-	exportEnhancedQC(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): String @auth
+	exportActivityDataQc(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): Boolean @auth
+	exportEnhancedQC(clientId: Int!, dataStartDate: String!, dataEndDate: String!, currencyType: String!): Boolean @auth
 }
 `

@@ -1,7 +1,7 @@
 import { ApolloError } from 'apollo-server-lambda'
 import AWS from 'aws-sdk'
-import { parse } from 'json2csv'
 import {
+	ExportQc,
 	JobIngestion,
 	JobIngestionHotelView,
 	JobIngestionHotel
@@ -177,7 +177,7 @@ export default {
 					.whereRaw(`LOWER("${statusCol}") = ?`, 'approved')
 					.whereIn('jobStatus', statuses)
 				if (!jobIngestionHotels || jobIngestionHotels.length === 0) {
-					throw new ApolloError('Job Ingestion Hotel not found', '500')
+					return false
 				}
 				if (
 					jobIngestionHotels.some(
@@ -218,6 +218,48 @@ export default {
 					throw new ApolloError('Job Ingestion not found', '500')
 				}
 				return job.jobStatus === 'backout'
+			} catch (e) {
+				throw new ApolloError(e)
+			}
+		},
+		checkExportActivityDataQc: async (
+			_: null,
+			{ clientId, dataStartDate, dataEndDate }
+		): Promise<string> => {
+			try {
+				const exportQc = await ExportQc.query()
+					.select()
+					.where('clientId', clientId)
+					.andWhere('exportType', 'activity')
+					.andWhere('dataStartDate', dataStartDate)
+					.andWhere('dataEndDate', dataEndDate)
+					.first()
+				if (!exportQc) {
+					return null
+				}
+				await ExportQc.query().deleteById(exportQc.id)
+				return exportQc.exportData
+			} catch (e) {
+				throw new ApolloError(e)
+			}
+		},
+		checkExportEnhancedQC: async (
+			_: null,
+			{ clientId, dataStartDate, dataEndDate }
+		): Promise<string> => {
+			try {
+				const exportQc = await ExportQc.query()
+					.select()
+					.where('clientId', clientId)
+					.andWhere('exportType', 'enhanced')
+					.andWhere('dataStartDate', dataStartDate)
+					.andWhere('dataEndDate', dataEndDate)
+					.first()
+				if (!exportQc) {
+					return null
+				}
+				await ExportQc.query().deleteById(exportQc.id)
+				return exportQc.exportData
 			} catch (e) {
 				throw new ApolloError(e)
 			}
@@ -375,28 +417,52 @@ export default {
 		},
 		exportActivityDataQc: async (
 			_: null,
-			{ clientId, dataStartDate, dataEndDate, currencyType },
-			{ advito }
-		): Promise<string> => {
-			const res = await advito.raw(
-				`select * from export_stage_activity_hotel_qc(${clientId}, '${dataStartDate}'::date, '${dataEndDate}'::date, '${currencyType}')`
-			)
+			{ clientId, dataStartDate, dataEndDate, currencyType }
+		): Promise<boolean> => {
 			try {
-				return res.rows.length ? parse(res.rows) : ''
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-export-activity-data-qc'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-export-activity-data-qc'
+							: 'advito-ingestion-dev-export-activity-data-qc',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						clientId,
+						dataStartDate,
+						dataEndDate,
+						currencyType
+					})
+				}
+				await lambda.invoke(params).promise()
+				return true
 			} catch (err) {
 				throw new ApolloError(err.message, '500')
 			}
 		},
 		exportEnhancedQC: async (
 			_: null,
-			{ clientId, dataStartDate, dataEndDate, currencyType },
-			{ advito }
-		): Promise<string> => {
-			const res = await advito.raw(
-				`select * from export_enhanced_qc(${clientId}, '${dataStartDate}'::date, '${dataEndDate}'::date, '${currencyType}')`
-			)
+			{ clientId, dataStartDate, dataEndDate, currencyType }
+		): Promise<boolean> => {
 			try {
-				return res.rows.length ? parse(res.rows) : ''
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-export-enhanced-qc'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-export-enhanced-qc'
+							: 'advito-ingestion-dev-export-enhanced-qc',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						clientId,
+						dataStartDate,
+						dataEndDate,
+						currencyType
+					})
+				}
+				await lambda.invoke(params).promise()
+				return true
 			} catch (err) {
 				throw new ApolloError(err.message, '500')
 			}
