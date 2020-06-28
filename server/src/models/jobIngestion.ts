@@ -70,3 +70,13 @@ export class HotelProject extends Model {
 	projectMonth: number
 	static tableName = 'hotel_project'
 }
+
+export class ExportQc extends Model {
+	id: number
+	clientId: number
+	exportType: string
+	exportData: string
+	dataStartDate: string
+	dataEndDate: string
+	static tableName = 'export_qc'
+}

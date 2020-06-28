@@ -17,6 +17,8 @@ export class StageActivityHotelView extends Model {
 	countryName: string
 	phoneNumber: string
 	count: string
+	jobIngestionId: string
+	jobStatus: string
 
 	static tableName = 'v_stage_activity_hotel'
 }
