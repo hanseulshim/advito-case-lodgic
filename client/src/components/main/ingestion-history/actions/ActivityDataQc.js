@@ -1,9 +1,10 @@
 import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
 import styled from 'styled-components'
-import { useMutation } from '@apollo/client'
-import { EXPORT_ACTIVITY_DATA_QC } from 'api'
+import { useMutation, useQuery } from '@apollo/client'
+import { EXPORT_ACTIVITY_DATA_QC, CHECK_EXPORT_ACTIVITY_DATA_QC } from 'api'
 import { Button, Modal, Radio } from 'antd'
+import { SpinLoader } from 'components/common/Loader'
 import { DownloadOutlined, ExclamationCircleOutlined } from '@ant-design/icons'
 import { exportCsv } from '../helper'
 import moment from 'moment'
@@ -25,15 +26,56 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
+// DUMB COMPONENT TO RENDER WHILE POLLING
+const ExportPolling = ({
+	variables,
+	setPolling,
+	getCsv,
+	showSuccess,
+	showError
+}) => {
+	const { data, error } = useQuery(CHECK_EXPORT_ACTIVITY_DATA_QC, {
+		variables: { ...variables },
+		pollInterval: 3000
+	})
+
+	if (data && data.checkExportActivityDataQc) {
+		setPolling(false)
+		showSuccess()
+		getCsv(data.exportActivityDataQc)
+		return null
+	}
+	if (data && data.checkExportActivityDataQc === null) {
+		setPolling(false)
+		showError('No activity data is available for exporting.')
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
+		return null
+	}
+	return (
+		<Modal
+			visible={true}
+			footer={null}
+			closable={false}
+			title={'Checking for Activity Data QC Export...'}
+		>
+			<SpinLoader />
+		</Modal>
+	)
+}
+
 const ActivityDataQc = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange, clientName } = state
 	const [visible, setVisible] = useState(false)
+	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
-		onCompleted: ({ exportActivityDataQc }) => {
-			getCsv(exportActivityDataQc)
+		onCompleted: () => {
+			setPolling(true)
 			setVisible(false)
 			setCurrencyType('')
 		}
@@ -58,15 +100,23 @@ const ActivityDataQc = () => {
 				}
 			})
 		} catch (e) {
-			error(e.message)
+			showError(e.message)
 			console.error('Error in backout ', e)
 		}
 	}
 
-	const error = (error) => {
+	const showError = (error) => {
 		Modal.error({
 			title: 'Error in Export',
 			content: error
+		})
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'Successfully exported for Activity Data QC',
+			okText: 'Close'
 		})
 	}
 
@@ -75,7 +125,7 @@ const ActivityDataQc = () => {
 		try {
 			exportCsv(flatFile, `${clientName}_ActivityDataQc_${formattedDate}`)
 		} catch (e) {
-			error(e.message)
+			showError(e.message)
 			console.error(e)
 		}
 	}
@@ -102,6 +152,19 @@ const ActivityDataQc = () => {
 					<StyledRadio value={'usd'}>USD Currency</StyledRadio>
 				</Radio.Group>
 			</Modal>
+			{polling && (
+				<ExportPolling
+					variables={{
+						dataStartDate: dateRange[0],
+						dataEndDate: dateRange[1],
+						clientId
+					}}
+					setPolling={setPolling}
+					getCsv={getCsv}
+					showSuccess={showSuccess}
+					showError={showError}
+				/>
+			)}
 		</>
 	)
 }

@@ -88,3 +88,31 @@ export const CHECK_BACKOUT = gql`
 		checkBackout(jobIngestionId: $jobIngestionId)
 	}
 `
+
+export const CHECK_EXPORT_ACTIVITY_DATA_QC = gql`
+	query checkExportActivityDataQc(
+		$clientId: Int!
+		$dataStartDate: String!
+		$dataEndDate: String!
+	) {
+		checkExportActivityDataQc(
+			clientId: $clientId
+			dataStartDate: $dataStartDate
+			dataEndDate: $dataEndDate
+		)
+	}
+`
+
+export const CHECK_EXPORT_ENHANCED_QC = gql`
+	query checkExportEnhancedQC(
+		$clientId: Int!
+		$dataStartDate: String!
+		$dataEndDate: String!
+	) {
+		checkExportEnhancedQC(
+			clientId: $clientId
+			dataStartDate: $dataStartDate
+			dataEndDate: $dataEndDate
+		)
+	}
+`

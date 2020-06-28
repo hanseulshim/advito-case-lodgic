@@ -2,7 +2,8 @@ import React, { useState, useContext } from 'react'
 import { store } from 'context/store'
 import { useQuery, useMutation } from '@apollo/client'
 import { CURRENCY_LIST } from 'api'
-import { EXPORT_ENHANCED_QC } from 'api'
+import { EXPORT_ENHANCED_QC, CHECK_EXPORT_ENHANCED_QC } from 'api'
+import { SpinLoader } from 'components/common/Loader'
 import styled from 'styled-components'
 import ErrorMessage from 'components/common/ErrorMessage'
 import { Button, Modal, Radio, Select } from 'antd'
@@ -29,17 +30,58 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
+// DUMB COMPONENT TO RENDER WHILE POLLING
+const ExportPolling = ({
+	variables,
+	setPolling,
+	getCsv,
+	showSuccess,
+	showError
+}) => {
+	const { data, error } = useQuery(CHECK_EXPORT_ENHANCED_QC, {
+		variables: { ...variables },
+		pollInterval: 3000
+	})
+
+	if (data && data.checkExportEnhancedQC) {
+		setPolling(false)
+		showSuccess()
+		getCsv(data.exportActivityDataQc)
+		return null
+	}
+	if (data && data.checkExportEnhancedQC === null) {
+		setPolling(false)
+		showError('No enhanced QC data is available for exporting.')
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
+		return null
+	}
+	return (
+		<Modal
+			visible={true}
+			footer={null}
+			closable={false}
+			title={'Checking for Enhanced QC Export...'}
+		>
+			<SpinLoader />
+		</Modal>
+	)
+}
+
 const EnhancedQc = () => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange, clientName } = state
 	const [visible, setVisible] = useState(false)
+	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('ingested')
 	const [currencySelection, setCurrencySelection] = useState('')
 	const { error, data } = useQuery(CURRENCY_LIST)
 	const [exportQC, { loading }] = useMutation(EXPORT_ENHANCED_QC, {
-		onCompleted: ({ exportEnhancedQC }) => {
-			getCsv(exportEnhancedQC)
+		onCompleted: () => {
+			setPolling(true)
 			setVisible(false)
 			setCurrencyType('ingested')
 			setCurrencySelection('')
@@ -79,6 +121,14 @@ const EnhancedQc = () => {
 		Modal.error({
 			title: 'Error in Export',
 			content: error
+		})
+	}
+
+	const showSuccess = () => {
+		Modal.success({
+			title: 'Success',
+			content: 'Successfully exported for Enhanced Data QC',
+			okText: 'Close'
 		})
 	}
 
@@ -143,6 +193,19 @@ const EnhancedQc = () => {
 					</div>
 				</Radio.Group>
 			</Modal>
+			{polling && (
+				<ExportPolling
+					variables={{
+						dataStartDate: dateRange[0],
+						dataEndDate: dateRange[1],
+						clientId
+					}}
+					setPolling={setPolling}
+					getCsv={getCsv}
+					showSuccess={showSuccess}
+					showError={showError}
+				/>
+			)}
 		</>
 	)
 }
