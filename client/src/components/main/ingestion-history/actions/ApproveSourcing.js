@@ -1,7 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
-import { useLazyQuery, useMutation } from '@apollo/client'
-import { APPROVE_FILE_LIST } from 'api'
-import { APPROVE_FILES } from 'api'
+import { useLazyQuery, useMutation, useQuery } from '@apollo/client'
+import { APPROVE_FILE_LIST, APPROVE_FILES, CHECK_APPROVE_FILES } from 'api'
 import { store } from 'context/store'
 import { SpinLoader } from 'components/common/Loader'
 import ErrorMessage from 'components/common/ErrorMessage'
@@ -21,11 +20,47 @@ const Icon = styled(ExclamationCircleOutlined)`
 	height: 10px;
 `
 
+// DUMB COMPONENT TO RENDER WHILE POLLING
+const ApproveFileListPolling = ({
+	variables,
+	setPolling,
+	refetch,
+	showSuccess,
+	showError
+}) => {
+	const { data, error } = useQuery(CHECK_APPROVE_FILES, {
+		variables: { ...variables },
+		pollInterval: 3000,
+		fetchPolicy: 'network-only'
+	})
+
+	if (data && data.checkApproveFiles) {
+		setPolling(false)
+		showSuccess()
+		refetch()
+	}
+	if (error) {
+		setPolling(false)
+		showError(error.message)
+	}
+	return (
+		<Modal
+			visible={true}
+			footer={null}
+			closable={false}
+			title={'Approving files...'}
+		>
+			<SpinLoader />
+		</Modal>
+	)
+}
+
 const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
+	const [polling, setPolling] = useState(false)
 	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,
 		{
@@ -43,8 +78,11 @@ const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 		APPROVE_FILES,
 		{
 			onCompleted: () => {
-				showSuccess()
-				refetchIngestionHistory()
+				setPolling(true)
+				toggleModal()
+			},
+			onError: (e) => {
+				showError(e.message)
 			}
 		}
 	)
@@ -77,8 +115,7 @@ const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 		Modal.success({
 			title: 'Success',
 			content: 'File(s) successfully approved',
-			okText: 'Close',
-			onOk: toggleModal()
+			okText: 'Close'
 		})
 	}
 
@@ -134,6 +171,20 @@ const ApproveSourcing = ({ refetchIngestionHistory, ingestionHotelList }) => {
 						<p>No files available for approving</p>
 					))}
 			</Modal>
+			{polling && (
+				<ApproveFileListPolling
+					variables={{
+						clientId,
+						startDate: dateRange[0],
+						endDate: dateRange[1],
+						type: 'sourcing'
+					}}
+					setPolling={setPolling}
+					refetch={refetchIngestionHistory}
+					showSuccess={showSuccess}
+					showError={showError}
+				/>
+			)}
 		</>
 	)
 }

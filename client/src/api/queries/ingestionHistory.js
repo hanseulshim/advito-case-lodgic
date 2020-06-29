@@ -61,8 +61,58 @@ export const APPROVE_FILE_LIST = gql`
 	}
 `
 
+export const CHECK_APPROVE_FILES = gql`
+	query checkApproveFiles(
+		$clientId: Int!
+		$startDate: String!
+		$endDate: String!
+		$type: String!
+	) {
+		checkApproveFiles(
+			clientId: $clientId
+			startDate: $startDate
+			endDate: $endDate
+			type: $type
+		)
+	}
+`
+
 export const CHECK_LOAD_ENHANCED_QC_REPORT = gql`
 	query checkLoadEnhancedQcReport($jobIngestionIds: [Int]!, $type: String!) {
 		checkLoadEnhancedQcReport(jobIngestionIds: $jobIngestionIds, type: $type)
+	}
+`
+
+export const CHECK_BACKOUT = gql`
+	query checkBackout($jobIngestionId: Int!) {
+		checkBackout(jobIngestionId: $jobIngestionId)
+	}
+`
+
+export const CHECK_EXPORT_ACTIVITY_DATA_QC = gql`
+	query checkExportActivityDataQc(
+		$clientId: Int!
+		$dataStartDate: String!
+		$dataEndDate: String!
+	) {
+		checkExportActivityDataQc(
+			clientId: $clientId
+			dataStartDate: $dataStartDate
+			dataEndDate: $dataEndDate
+		)
+	}
+`
+
+export const CHECK_EXPORT_ENHANCED_QC = gql`
+	query checkExportEnhancedQC(
+		$clientId: Int!
+		$dataStartDate: String!
+		$dataEndDate: String!
+	) {
+		checkExportEnhancedQC(
+			clientId: $clientId
+			dataStartDate: $dataStartDate
+			dataEndDate: $dataEndDate
+		)
 	}
 `

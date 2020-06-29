@@ -30,6 +30,7 @@ const RecordHeader = ({ recordId, recordIndex, setNext }) => {
 			...(filters.sortType && { sortType: filters.sortType })
 		},
 		fetchPolicy: 'network-only',
+		notifyOnNetworkStatusChange: true,
 		onCompleted: () => {
 			setNext(data.unmatchedHotel.nextId)
 		}

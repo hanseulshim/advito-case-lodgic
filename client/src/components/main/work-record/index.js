@@ -26,7 +26,6 @@ const WorkRecord = () => {
 	useEffect(() => {
 		//Reset matched hotel if user goes to a new record
 		setHotel(null)
-		setNextRecord(null)
 	}, [record])
 
 	const setMatchedHotel = (record) => {
