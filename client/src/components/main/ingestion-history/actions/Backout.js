@@ -23,7 +23,8 @@ const BackoutPolling = ({
 }) => {
 	const { data, error } = useQuery(CHECK_BACKOUT, {
 		variables: { jobIngestionId },
-		pollInterval: 3000
+		pollInterval: 3000,
+		fetchPolicy: 'network-only'
 	})
 
 	if (data && data.checkBackout) {

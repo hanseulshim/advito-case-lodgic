@@ -36,16 +36,17 @@ const ExportPolling = ({
 }) => {
 	const { data, error } = useQuery(CHECK_EXPORT_ACTIVITY_DATA_QC, {
 		variables: { ...variables },
-		pollInterval: 3000
+		pollInterval: 3000,
+		fetchPolicy: 'network-only'
 	})
 
 	if (data && data.checkExportActivityDataQc) {
 		setPolling(false)
 		showSuccess()
-		getCsv(data.exportActivityDataQc)
+		getCsv(data.checkExportActivityDataQc)
 		return null
 	}
-	if (data && data.checkExportActivityDataQc === null) {
+	if (data && data.checkExportActivityDataQc === '') {
 		setPolling(false)
 		showError('No activity data is available for exporting.')
 	}

@@ -30,7 +30,8 @@ const ApproveFileListPolling = ({
 }) => {
 	const { data, error } = useQuery(CHECK_APPROVE_FILES, {
 		variables: { ...variables },
-		pollInterval: 3000
+		pollInterval: 3000,
+		fetchPolicy: 'network-only'
 	})
 
 	if (data && data.checkApproveFiles) {

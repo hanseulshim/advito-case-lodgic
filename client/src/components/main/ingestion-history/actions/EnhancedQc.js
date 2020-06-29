@@ -40,16 +40,17 @@ const ExportPolling = ({
 }) => {
 	const { data, error } = useQuery(CHECK_EXPORT_ENHANCED_QC, {
 		variables: { ...variables },
-		pollInterval: 3000
+		pollInterval: 3000,
+		fetchPolicy: 'network-only'
 	})
 
 	if (data && data.checkExportEnhancedQC) {
 		setPolling(false)
 		showSuccess()
-		getCsv(data.exportActivityDataQc)
+		getCsv(data.checkExportEnhancedQC)
 		return null
 	}
-	if (data && data.checkExportEnhancedQC === null) {
+	if (data && data.checkExportEnhancedQC === '') {
 		setPolling(false)
 		showError('No enhanced QC data is available for exporting.')
 	}
