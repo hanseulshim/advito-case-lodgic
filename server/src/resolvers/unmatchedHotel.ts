@@ -92,48 +92,45 @@ export default {
 				cityName
 			}
 		): Promise<StageActivityHotelSingleType> => {
-			const list =
-				currPosition === 0
-					? await StageActivityHotelView.query()
-							.skipUndefined()
-							.where('clientId', clientId)
-							.whereNull('matchedHotelPropertyId')
-							.andWhere('dataStartDate', '>=', startDate)
-							.andWhere('dataEndDate', '<=', endDate)
-							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-							.andWhere('templateCategory', templateCategory)
-							.andWhere('sourceName', sourceName)
-							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-							.whereIn('jobStatus', statuses)
-							.orderByRaw(getOrderBy(sortType))
-							.limit(2)
-					: await StageActivityHotelView.query()
-							.skipUndefined()
-							.where('clientId', clientId)
-							.whereNull('matchedHotelPropertyId')
-							.andWhere('dataStartDate', '>=', startDate)
-							.andWhere('dataEndDate', '<=', endDate)
-							.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-							.andWhere('templateCategory', templateCategory)
-							.andWhere('sourceName', sourceName)
-							.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-							.whereIn('jobStatus', statuses)
-							.orderByRaw(getOrderBy(sortType))
-							.offset(currPosition - 1)
-							.limit(3)
-			const { count } = await StageActivityHotelView.query()
-				.skipUndefined()
+			const countQuery = StageActivityHotelView.query()
 				.count()
 				.first()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
-				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-				.andWhere('templateCategory', templateCategory)
-				.andWhere('sourceName', sourceName)
-				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 				.whereIn('jobStatus', statuses)
+			const query = StageActivityHotelView.query()
+				.where('clientId', clientId)
+				.whereNull('matchedHotelPropertyId')
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.whereIn('jobStatus', statuses)
+				.orderByRaw(getOrderBy(sortType))
+			if (hotelName) {
+				query.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+				countQuery.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+			}
+			if (templateCategory) {
+				query.where('templateCategory', templateCategory)
+				countQuery.where('templateCategory', templateCategory)
+			}
+			if (sourceName) {
+				query.where('sourceName', sourceName)
+				countQuery.where('sourceName', sourceName)
+			}
+			if (cityName) {
+				query.where('cityName', 'ILIKE', `%${cityName || ''}%`)
+				countQuery.where('cityName', 'ILIKE', `%${cityName || ''}%`)
+			}
+			if (currPosition === 0) {
+				query.limit(2)
+			} else {
+				query.limit(3)
+			}
+			const list = await query
+
+			const { count } = await countQuery
 
 			const index = list.length === 0 ? null : list.length === 2 ? 0 : 1
 			const data = index === null ? null : list[index]
