@@ -38,37 +38,44 @@ export default {
 		): Promise<StageActivityHotelType> => {
 			const LIMIT = 25
 			const OFFSET = Math.max(0, +pageNumber - 1) * LIMIT
-			const { count } = await StageActivityHotelView.query()
-				.skipUndefined()
+			const query = StageActivityHotelView.query()
+				.where('clientId', clientId)
+				.whereNull('matchedHotelPropertyId')
+				.andWhere('dataStartDate', '>=', startDate)
+				.andWhere('dataEndDate', '<=', endDate)
+				.whereIn('jobStatus', statuses)
+				.offset(OFFSET)
+				.limit(LIMIT)
+				.orderByRaw(getOrderBy(sortType))
+				.orderBy('id')
+			const countQuery = StageActivityHotelView.query()
 				.count()
 				.first()
 				.where('clientId', clientId)
 				.whereNull('matchedHotelPropertyId')
 				.andWhere('dataStartDate', '>=', startDate)
 				.andWhere('dataEndDate', '<=', endDate)
-				.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-				.andWhere('templateCategory', templateCategory)
-				.andWhere('sourceName', sourceName)
-				.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
 				.whereIn('jobStatus', statuses)
-
+			if (hotelName) {
+				query.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+				countQuery.where('hotelName', 'ILIKE', `%${hotelName || ''}%`)
+			}
+			if (templateCategory) {
+				query.where('templateCategory', templateCategory)
+				countQuery.where('templateCategory', templateCategory)
+			}
+			if (sourceName) {
+				query.where('sourceName', sourceName)
+				countQuery.where('sourceName', sourceName)
+			}
+			if (cityName) {
+				query.where('cityName', 'ILIKE', `%${cityName || ''}%`)
+				countQuery.where('cityName', 'ILIKE', `%${cityName || ''}%`)
+			}
+			const { count } = await countQuery
 			return {
 				recordCount: +count,
-				data: await StageActivityHotelView.query()
-					.skipUndefined()
-					.where('clientId', clientId)
-					.whereNull('matchedHotelPropertyId')
-					.andWhere('dataStartDate', '>=', startDate)
-					.andWhere('dataEndDate', '<=', endDate)
-					.andWhere('hotelName', 'ILIKE', `%${hotelName || ''}%`)
-					.andWhere('templateCategory', templateCategory)
-					.andWhere('sourceName', sourceName)
-					.andWhere('cityName', 'ILIKE', `%${cityName || ''}%`)
-					.whereIn('jobStatus', statuses)
-					.offset(OFFSET)
-					.limit(LIMIT)
-					.orderByRaw(getOrderBy(sortType))
-					.orderBy('id')
+				data: await query
 			}
 		},
 		unmatchedHotel: async (
