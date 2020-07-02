@@ -17,7 +17,7 @@ const RecordHeader = ({ recordId, recordIndex, setNext }) => {
 	const { clientId, dateRange, filters } = state
 	const { loading, error, data, refetch } = useQuery(UNMATCHED_HOTEL, {
 		variables: {
-			currPosition: recordIndex,
+			currPosition: recordIndex - 1,
 			clientId,
 			startDate: dateRange[0],
 			endDate: dateRange[1],
@@ -65,7 +65,7 @@ const RecordHeader = ({ recordId, recordIndex, setNext }) => {
 					simple
 					showSizeChanger={false}
 					showQuickJumper={false}
-					current={data.unmatchedHotel.currPosition + 1}
+					current={recordIndex}
 					total={data.unmatchedHotel.recordCount}
 					pageSize={1}
 					onChange={onPageChange}
