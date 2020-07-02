@@ -15,7 +15,7 @@ const getOrderBy = (sortType: string): string => {
 	const sortOrder = sortType.toLowerCase().includes('asc')
 		? 'ASC'
 		: 'DESC NULLS LAST'
-	return `${orderBy} ${sortOrder}`
+	return `${orderBy} ${sortOrder}, ID ASC`
 }
 
 const statuses = ['processed', 'loaded', 'approved']
@@ -47,7 +47,6 @@ export default {
 				.offset(OFFSET)
 				.limit(LIMIT)
 				.orderByRaw(getOrderBy(sortType))
-				.orderBy('id')
 			const countQuery = StageActivityHotelView.query()
 				.count()
 				.first()
