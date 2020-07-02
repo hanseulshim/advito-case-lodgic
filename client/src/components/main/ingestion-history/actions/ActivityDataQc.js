@@ -70,7 +70,7 @@ const ExportPolling = ({
 const ActivityDataQc = ({ selectedRecords }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientId, dateRange, clientName } = state
+	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
@@ -108,10 +108,7 @@ const ActivityDataQc = ({ selectedRecords }) => {
 				await exportQC({
 					variables: {
 						currencyType,
-						clientId,
-						jobIngestionIds,
-						dataStartDate: dateRange[0],
-						dataEndDate: dateRange[1]
+						jobIngestionIds
 					}
 				})
 			} catch (e) {
@@ -175,9 +172,7 @@ const ActivityDataQc = ({ selectedRecords }) => {
 			{polling && (
 				<ExportPolling
 					variables={{
-						dataStartDate: dateRange[0],
-						dataEndDate: dateRange[1],
-						clientId
+						jobIngestionIds
 					}}
 					setPolling={setPolling}
 					getCsv={getCsv}
