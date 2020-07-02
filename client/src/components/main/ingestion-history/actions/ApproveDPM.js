@@ -61,6 +61,7 @@ const ApproveDPM = ({ refetchIngestionHistory, ingestionHotelList }) => {
 	const { clientName, clientId, dateRange } = state
 	const [visible, setVisible] = useState(false)
 	const [polling, setPolling] = useState(false)
+	const { id } = JSON.parse(localStorage.getItem('advito-user'))
 
 	const [loadFiles, { loading, error, data }] = useLazyQuery(
 		APPROVE_FILE_LIST,

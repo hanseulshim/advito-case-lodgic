@@ -67,13 +67,15 @@ const ExportPolling = ({
 	)
 }
 
-const ActivityDataQc = () => {
+const ActivityDataQc = ({ selectedRecords }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
 	const { clientId, dateRange, clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
+	const jobIngestionIds = selectedRecords.map((record) => record.jobIngestionId)
+
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
 		onCompleted: () => {
 			setPolling(true)
@@ -96,6 +98,7 @@ const ActivityDataQc = () => {
 				variables: {
 					currencyType,
 					clientId,
+					jobIngestionIds,
 					dataStartDate: dateRange[0],
 					dataEndDate: dateRange[1]
 				}

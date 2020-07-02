@@ -28,12 +28,14 @@ export const EXPORT_ACTIVITY_DATA_QC = gql`
 		$clientId: Int!
 		$dataStartDate: String!
 		$dataEndDate: String!
+		$jobIngestionIds: [Int]!
 	) {
 		exportActivityDataQc(
 			currencyType: $currencyType
 			clientId: $clientId
 			dataStartDate: $dataStartDate
 			dataEndDate: $dataEndDate
+			jobIngestionIds: $jobIngestionIds
 		)
 	}
 `
