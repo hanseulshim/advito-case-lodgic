@@ -224,15 +224,12 @@ export default {
 		},
 		checkExportActivityDataQc: async (
 			_: null,
-			{ clientId, dataStartDate, dataEndDate }
+			{ jobIngestionIds }
 		): Promise<string> => {
 			try {
 				const exportQc = await ExportQc.query()
 					.select()
-					.where('clientId', clientId)
-					.andWhere('exportType', 'activity')
-					.andWhere('dataStartDate', dataStartDate)
-					.andWhere('dataEndDate', dataEndDate)
+					.where('jobIngestionIds', jobIngestionIds.sort().join(', '))
 					.first()
 				if (!exportQc) {
 					return null
@@ -417,9 +414,15 @@ export default {
 		},
 		exportActivityDataQc: async (
 			_: null,
-			{ clientId, dataStartDate, dataEndDate, currencyType }
+			{ jobIngestionIds, currencyType }
 		): Promise<boolean> => {
 			try {
+				if (currencyType !== 'ingested' && currencyType !== 'usd') {
+					throw new ApolloError(
+						'currency type must be either ingested or usd',
+						'500'
+					)
+				}
 				const params = {
 					FunctionName:
 						process.env.ENVIRONMENT === 'PRODUCTION'
@@ -429,9 +432,7 @@ export default {
 							: 'advito-ingestion-dev-export-activity-data-qc',
 					InvocationType: 'Event',
 					Payload: JSON.stringify({
-						clientId,
-						dataStartDate,
-						dataEndDate,
+						jobIngestionIds,
 						currencyType
 					})
 				}

@@ -75,7 +75,7 @@ export default {
         #   endDate: "2020-12-31"
         #   type: "dpm")
         # backout(jobIngestionId: null)
-        # exportActivityDataQc(clientId: 348, dataStartDate: "01-01-2020", dataEndDate: "12-31-2020", currencyType: "usd")
+        # exportActivityDataQc(jobIngestionIds: [], currencyType: "usd")
         # exportEnhancedQC(clientId: 348, dataStartDate: "01-01-2020", dataEndDate: "12-31-2020", currencyType: "usd")
       }`
 	}
