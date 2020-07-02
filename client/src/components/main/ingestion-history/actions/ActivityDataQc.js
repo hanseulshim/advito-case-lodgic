@@ -74,7 +74,9 @@ const ActivityDataQc = ({ selectedRecords }) => {
 	const [visible, setVisible] = useState(false)
 	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
-	const jobIngestionIds = selectedRecords.map((record) => record.jobIngestionId)
+	const jobIngestionIds = selectedRecords.length
+		? selectedRecords.map((record) => record.jobIngestionId)
+		: []
 
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
 		onCompleted: () => {
@@ -93,19 +95,29 @@ const ActivityDataQc = ({ selectedRecords }) => {
 	}
 
 	const onOk = async () => {
-		try {
-			await exportQC({
-				variables: {
-					currencyType,
-					clientId,
-					jobIngestionIds,
-					dataStartDate: dateRange[0],
-					dataEndDate: dateRange[1]
-				}
-			})
-		} catch (e) {
-			showError(e.message)
-			console.error('Error in backout ', e)
+		const equalTypes = selectedRecords.every(
+			(obj) => obj.type === selectedRecords[0].type
+		)
+		if (!equalTypes) {
+			showError(
+				'You must select files for either DPM or Sourcing. You cannot complete the export with both selected.'
+			)
+			toggleModal()
+		} else {
+			try {
+				await exportQC({
+					variables: {
+						currencyType,
+						clientId,
+						jobIngestionIds,
+						dataStartDate: dateRange[0],
+						dataEndDate: dateRange[1]
+					}
+				})
+			} catch (e) {
+				showError(e.message)
+				console.error('Error in backout ', e)
+			}
 		}
 	}
 
@@ -136,7 +148,11 @@ const ActivityDataQc = ({ selectedRecords }) => {
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
+			<Button
+				icon={<DownloadOutlined />}
+				onClick={toggleModal}
+				disabled={!jobIngestionIds.length}
+			>
 				Activity Data QC Export
 			</Button>
 			<Modal

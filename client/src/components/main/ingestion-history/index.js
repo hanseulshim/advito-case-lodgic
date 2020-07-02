@@ -51,7 +51,7 @@ const IngestionHistory = () => {
 	return (
 		<div style={{ paddingBottom: '2em' }}>
 			<ButtonRow>
-				<ActivityDataQc />
+				<ActivityDataQc selectedRecords={selectedRecords} />
 				<EnhancedQc />
 				<ApproveDPM
 					refetchIngestionHistory={refetch}
