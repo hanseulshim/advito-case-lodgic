@@ -126,7 +126,7 @@ export default {
 			if (currPosition === 0) {
 				query.limit(2)
 			} else {
-				query.limit(3)
+				query.limit(3).offset(currPosition - 1)
 			}
 			const list = await query
 
