@@ -49,8 +49,9 @@ export const getStatus = (record) => {
 }
 
 export const exportCsv = (flatFile, fileName) => {
-	var hiddenElement = document.createElement('a')
-	hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(flatFile)
+	const hiddenElement = document.createElement('a')
+	hiddenElement.href =
+		'data:text/csv;charset=utf-8,' + encodeURIComponent(flatFile)
 	hiddenElement.target = '_blank'
 	hiddenElement.download = `${fileName}.csv`
 	hiddenElement.click()
