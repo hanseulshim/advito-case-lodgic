@@ -67,13 +67,17 @@ const ExportPolling = ({
 	)
 }
 
-const ActivityDataQc = () => {
+const ActivityDataQc = ({ selectedRecords }) => {
 	const globalState = useContext(store)
 	const { state } = globalState
-	const { clientId, dateRange, clientName } = state
+	const { clientName } = state
 	const [visible, setVisible] = useState(false)
 	const [polling, setPolling] = useState(false)
 	const [currencyType, setCurrencyType] = useState('')
+	const jobIngestionIds = selectedRecords.length
+		? selectedRecords.map((record) => record.jobIngestionId)
+		: []
+
 	const [exportQC, { loading }] = useMutation(EXPORT_ACTIVITY_DATA_QC, {
 		onCompleted: () => {
 			setPolling(true)
@@ -91,18 +95,26 @@ const ActivityDataQc = () => {
 	}
 
 	const onOk = async () => {
-		try {
-			await exportQC({
-				variables: {
-					currencyType,
-					clientId,
-					dataStartDate: dateRange[0],
-					dataEndDate: dateRange[1]
-				}
-			})
-		} catch (e) {
-			showError(e.message)
-			console.error('Error in backout ', e)
+		const equalTypes = selectedRecords.every(
+			(obj) => obj.type === selectedRecords[0].type
+		)
+		if (!equalTypes) {
+			showError(
+				'You must select files for either DPM or Sourcing. You cannot complete the export with both selected.'
+			)
+			toggleModal()
+		} else {
+			try {
+				await exportQC({
+					variables: {
+						currencyType,
+						jobIngestionIds
+					}
+				})
+			} catch (e) {
+				showError(e.message)
+				console.error('Error in backout ', e)
+			}
 		}
 	}
 
@@ -133,7 +145,11 @@ const ActivityDataQc = () => {
 
 	return (
 		<>
-			<Button icon={<DownloadOutlined />} onClick={toggleModal}>
+			<Button
+				icon={<DownloadOutlined />}
+				onClick={toggleModal}
+				disabled={!jobIngestionIds.length}
+			>
 				Activity Data QC Export
 			</Button>
 			<Modal
@@ -156,9 +172,7 @@ const ActivityDataQc = () => {
 			{polling && (
 				<ExportPolling
 					variables={{
-						dataStartDate: dateRange[0],
-						dataEndDate: dateRange[1],
-						clientId
+						jobIngestionIds
 					}}
 					setPolling={setPolling}
 					getCsv={getCsv}

@@ -90,16 +90,8 @@ export const CHECK_BACKOUT = gql`
 `
 
 export const CHECK_EXPORT_ACTIVITY_DATA_QC = gql`
-	query checkExportActivityDataQc(
-		$clientId: Int!
-		$dataStartDate: String!
-		$dataEndDate: String!
-	) {
-		checkExportActivityDataQc(
-			clientId: $clientId
-			dataStartDate: $dataStartDate
-			dataEndDate: $dataEndDate
-		)
+	query checkExportActivityDataQc($jobIngestionIds: [Int]!) {
+		checkExportActivityDataQc(jobIngestionIds: $jobIngestionIds)
 	}
 `
 
