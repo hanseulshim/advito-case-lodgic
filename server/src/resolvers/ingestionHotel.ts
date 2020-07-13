@@ -344,7 +344,8 @@ export default {
 		},
 		approveFiles: async (
 			_: null,
-			{ clientId, startDate, endDate, type }
+			{ clientId, startDate, endDate, type },
+			{ user }
 		): Promise<boolean> => {
 			try {
 				if (type.toLowerCase() !== 'dpm' && type.toLowerCase() !== 'sourcing') {
@@ -366,27 +367,24 @@ export default {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
 				}
 
-				jobIngestionHotels.forEach((hotel) => {
-					const params = {
-						FunctionName:
-							process.env.ENVIRONMENT === 'PRODUCTION'
-								? 'advito-ingestion-production-approve-file'
-								: process.env.ENVIRONMENT === 'STAGING'
-								? 'advito-ingestion-staging-approve-file'
-								: 'advito-ingestion-dev-approve-file',
-						InvocationType: 'Event',
-						Payload: JSON.stringify({
-							jobIngestionId: hotel.jobIngestionId,
-							clientId: hotel.clientId,
-							type: type.toLowerCase()
-						})
-					}
-					lambda.invoke(params, function (err) {
-						if (err) {
-							throw Error(err.message)
-						}
+				const jobIngestionIds = jobIngestionHotels.map((hotel) => hotel.id)
+
+				const params = {
+					FunctionName:
+						process.env.ENVIRONMENT === 'PRODUCTION'
+							? 'advito-ingestion-production-approve-file'
+							: process.env.ENVIRONMENT === 'STAGING'
+							? 'advito-ingestion-staging-approve-file'
+							: 'advito-ingestion-dev-approve-file',
+					InvocationType: 'Event',
+					Payload: JSON.stringify({
+						jobIngestionIds,
+						clientId: clientId,
+						type: type.toLowerCase(),
+						userId: user.id
 					})
-				})
+				}
+				await lambda.invoke(params).promise()
 				return true
 			} catch (e) {
 				throw new ApolloError(e.message, '500')
