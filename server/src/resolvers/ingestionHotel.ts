@@ -367,7 +367,9 @@ export default {
 					throw new ApolloError('Job Ingestion Hotel not found', '500')
 				}
 
-				const jobIngestionIds = jobIngestionHotels.map((hotel) => hotel.id)
+				const jobIngestionIds = jobIngestionHotels.map(
+					(hotel) => hotel.jobIngestionId
+				)
 
 				const params = {
 					FunctionName:
