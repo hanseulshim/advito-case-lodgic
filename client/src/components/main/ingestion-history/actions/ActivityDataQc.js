@@ -36,7 +36,7 @@ const ExportPolling = ({
 }) => {
 	const { data, error } = useQuery(CHECK_EXPORT_ACTIVITY_DATA_QC, {
 		variables: { ...variables },
-		pollInterval: 10000,
+		pollInterval: 5000,
 		fetchPolicy: 'network-only'
 	})
 
